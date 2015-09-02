@@ -158,5 +158,22 @@ public class User implements Cloneable, Serializable {
 			cloned.roles.add(new Role(this.roles.get(0).getRole()));
 		return cloned;
 	}
+        
+        /**
+         * hasRole will check whether login User has the Authorization that 
+         * particular feature requires. 
+         * @param role
+         * @return false: does not have the access right
+         */
+        public boolean hasRole(String role){
+            boolean result = false;
+            for(Role r:this.roles){
+                if (role.equals(r.getRole())){
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        }
 
 }
