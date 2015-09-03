@@ -3,10 +3,12 @@ package sg.edu.nus.iss.phoenix.schedule.dao;
 import sg.edu.nus.iss.phoenix.radioprogram.dao.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
 public interface ScheduleDAO {
 
@@ -16,7 +18,7 @@ public interface ScheduleDAO {
 	 * that sometimes the programmer may want to extend also the valueObject and
 	 * then this method can be over-rided to return extended valueObject.
 	 */
-	public abstract RadioProgram createValueObject();
+	public abstract ProgramSlot createValueObject();
 
 	/**
 	 * getObject-method. This will create and load valueObject contents from
@@ -25,7 +27,7 @@ public interface ScheduleDAO {
 	 * as a parameter. Returned valueObject will be created using the
 	 * createValueObject() method.
 	 */
-	public abstract RadioProgram getObject(String name)
+	public abstract ProgramSlot getObject(Time duration, Date dateOfProgram)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -43,7 +45,7 @@ public interface ScheduleDAO {
 	 *            This parameter contains the class instance to be loaded.
 	 *            Primary-key field must be set for this to work properly.
 	 */
-	public abstract void load(RadioProgram valueObject)
+	public abstract void load(ProgramSlot valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -55,7 +57,7 @@ public interface ScheduleDAO {
 	 * @param conn
 	 *            This method requires working database connection.
 	 */
-	public abstract List<RadioProgram> loadAll() throws SQLException;
+	public abstract List<ProgramSlot> loadAll() throws SQLException;
 
 	/**
 	 * create-method. This will create new row in database according to supplied
@@ -72,7 +74,7 @@ public interface ScheduleDAO {
 	 *            automatic surrogate-keys are not used the Primary-key field
 	 *            must be set for this to work properly.
 	 */
-	public abstract void create(RadioProgram valueObject) throws SQLException;
+	public abstract void create(ProgramSlot valueObject) throws SQLException;
 
 	/**
 	 * save-method. This method will save the current state of valueObject to
@@ -88,7 +90,7 @@ public interface ScheduleDAO {
 	 *            This parameter contains the class instance to be saved.
 	 *            Primary-key field must be set for this to work properly.
 	 */
-	public abstract void save(RadioProgram valueObject)
+	public abstract void save(ProgramSlot valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -106,7 +108,7 @@ public interface ScheduleDAO {
 	 *            This parameter contains the class instance to be deleted.
 	 *            Primary-key field must be set for this to work properly.
 	 */
-	public abstract void delete(RadioProgram valueObject)
+	public abstract void delete(ProgramSlot valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -152,7 +154,7 @@ public interface ScheduleDAO {
 	 *            This parameter contains the class instance where search will
 	 *            be based. Primary-key field should not be set.
 	 */
-	public abstract List<RadioProgram> searchMatching(RadioProgram valueObject)
+	public abstract List<ProgramSlot> searchMatching(ProgramSlot valueObject)
 			throws SQLException;
 
 }

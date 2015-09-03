@@ -3,23 +3,27 @@ package sg.edu.nus.iss.phoenix.schedule.entity;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.*;
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.Date;
+import sg.edu.nus.iss.phoenix.user.entity.Presenter;
+import sg.edu.nus.iss.phoenix.user.entity.Producer;
 
 public class ProgramSlot implements Cloneable, Serializable {
 
     /**
-	 * eclipse identifier
-	 */
-	private static final long serialVersionUID = -5500218812568593553L;
+    * eclipse identifier
+    */
+    private static final long serialVersionUID = -5500218812568593553L;
 	
-	/** 
+    /** 
      * Persistent Instance variables. This data is directly 
      * mapped to the columns of database table.
      */
-    private String name;
-    private String description;
-    private Time typicalDuration;
-
-
+    private Time duration;
+    private Date dateOfProgram;
+    private Date startTime;
+    private RadioProgram program;
+    private Presenter persenter;
+    private Producer producer;
 
     /** 
      * Constructors. 
@@ -32,125 +36,89 @@ public class ProgramSlot implements Cloneable, Serializable {
 
     }
 
-    public ProgramSlot (String nameIn) {
-
-          this.name = nameIn;
-
+    public ProgramSlot (Time duration, Date dateOfProgram) {
+        this.duration = duration;
+        this.dateOfProgram = dateOfProgram;
     }
 
-
-    /** 
-     * Get- and Set-methods for persistent variables. The default
-     * behaviour does not make any checks against malformed data,
-     * so these might require some manual additions.
-     */
-
-    public String getName() {
-          return this.name;
-    }
-    public void setName(String nameIn) {
-          this.name = nameIn;
+    public Time getDuration() {
+        return duration;
     }
 
-    public String getDescription() {
-          return this.description;
-    }
-    public void setDescription(String descriptionIn) {
-          this.description = descriptionIn;
+    public void setDuration(Time duration) {
+        this.duration = duration;
     }
 
-    public Time getTypicalDuration() {
-          return this.typicalDuration;
-    }
-    public void setTypicalDuration(Time typicalDurationIn) {
-          this.typicalDuration = typicalDurationIn;
+    public Date getDateOfProgram() {
+        return dateOfProgram;
     }
 
-
-
-    /** 
-     * setAll allows to set all persistent variables in one method call.
-     * This is useful, when all data is available and it is needed to 
-     * set the initial state of this object. Note that this method will
-     * directly modify instance variables, without going trough the 
-     * individual set-methods.
-     */
-
-    public void setAll(String nameIn,
-          String descriptionIn,
-          Time typicalDurationIn) {
-          this.name = nameIn;
-          this.description = descriptionIn;
-          this.typicalDuration = typicalDurationIn;
+    public void setDateOfProgram(Date dateOfProgram) {
+        this.dateOfProgram = dateOfProgram;
     }
 
-
-    /** 
-     * hasEqualMapping-method will compare two RadioProgram instances
-     * and return true if they contain same values in all persistent instance 
-     * variables. If hasEqualMapping returns true, it does not mean the objects
-     * are the same instance. However it does mean that in that moment, they 
-     * are mapped to the same row in database.
-     */
-    public boolean hasEqualMapping(ProgramSlot valueObject) {
-
-          if (this.name == null) {
-                    if (valueObject.getName() != null)
-                           return(false);
-          } else if (!this.name.equals(valueObject.getName())) {
-                    return(false);
-          }
-          if (this.description == null) {
-                    if (valueObject.getDescription() != null)
-                           return(false);
-          } else if (!this.description.equals(valueObject.getDescription())) {
-                    return(false);
-          }
-          if (this.typicalDuration == null) {
-                    if (valueObject.getTypicalDuration() != null)
-                           return(false);
-          } else if (!this.typicalDuration.equals(valueObject.getTypicalDuration())) {
-                    return(false);
-          }
-
-          return true;
+    public Date getStartTime() {
+        return startTime;
     }
 
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
 
+    public RadioProgram getProgram() {
+        return program;
+    }
 
-    /**
-     * toString will return String object representing the state of this 
-     * valueObject. This is useful during application development, and 
-     * possibly when application is writing object states in text log.
-     */
+    public void setProgram(RadioProgram program) {
+        this.program = program;
+    }
+
+    public Presenter getPersenter() {
+        return persenter;
+    }
+
+    public void setPersenter(Presenter persenter) {
+        this.persenter = persenter;
+    }
+
+    public Producer getProducer() {
+        return producer;
+    }
+
+    public void setProducer(Producer producer) {
+        this.producer = producer;
+    }
+
+    public void setAll(Time duration, Date dateOfProgram, Date startTime, RadioProgram program, Presenter persenter, Producer producer) {
+        this.duration = duration;
+        this.dateOfProgram = dateOfProgram;
+        this.startTime = startTime;
+        this.program = program;
+        this.persenter = persenter;
+        this.producer = producer;
+    }
+    
+    @Override
     public String toString() {
-        StringBuffer out = new StringBuffer();
-        out.append("\nRadioProgram class, mapping to table radio-program\n");
-        out.append("Persistent attributes: \n"); 
-        out.append("name = " + this.name + "\n"); 
-        out.append("description = " + this.description + "\n"); 
-        out.append("typicalDuration = " + this.typicalDuration + "\n"); 
-        return out.toString();
+        return super.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode(); //To change body of generated methods, choose Tools | Templates.
     }
 
 
-    /**
-     * Clone will return identical deep copy of this valueObject.
-     * Note, that this method is different than the clone() which
-     * is defined in java.lang.Object. Here, the returned cloned object
-     * will also have all its attributes cloned.
-     */
-    public Object clone() {
-        ProgramSlot cloned = new ProgramSlot();
-
-        if (this.name != null)
-             cloned.setName(new String(this.name)); 
-        if (this.description != null)
-             cloned.setDescription(new String(this.description)); 
-        if (this.typicalDuration != null)
-             cloned.setTypicalDuration((Time)this.typicalDuration.clone()); 
-        return cloned;
-    }
 
 
 
