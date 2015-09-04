@@ -18,7 +18,7 @@ public class ProgramService {
 		factory = new DAOFactoryImpl();
 		rpdao = factory.getProgramDAO();
 	}
-/*
+
 	public ArrayList<RadioProgram> searchPrograms(RadioProgram rpso) {
 		ArrayList<RadioProgram> list = new ArrayList<RadioProgram>();
 		try {
@@ -70,7 +70,7 @@ public class ProgramService {
 		return currentList;
 
 	}
-*/
+
 	public void processCreate(RadioProgram rp) {
 		try {
 			rpdao.create(rp);

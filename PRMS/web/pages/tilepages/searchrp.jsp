@@ -23,11 +23,11 @@
 				</tr>
 				<tr>
 					<td><fmt:message key="fieldLabel.name" /></td>
-					<td><input type="text" name="name" size=45 maxlength=45></td>
+                                        <td><input type="text" name="name" size=45 maxlength=45 value="${name}"></td>
 				</tr>
 				<tr>
 					<td><fmt:message key="fieldLabel.description" /></td>
-					<td><input type="text" name="description" size=45 maxlength=45></td>
+					<td><input type="text" name="description" size=45 maxlength=45 value="${description}"></td>
 				</tr>
 				<tr>
 					<td colspan="2" align="center"><input type="submit" value="Submit"> <input
