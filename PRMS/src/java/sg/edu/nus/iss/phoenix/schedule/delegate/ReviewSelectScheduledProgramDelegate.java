@@ -4,16 +4,18 @@ import sg.edu.nus.iss.phoenix.radioprogram.delegate.*;
 import java.util.List;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.radioprogram.service.ReviewSelectProgramService;
+import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.service.ReviewSelectScheduledProgramService;
 
 public class ReviewSelectScheduledProgramDelegate {
-    private ReviewSelectProgramService service;
+    private ReviewSelectScheduledProgramService service;
     
 	public ReviewSelectScheduledProgramDelegate() {
-		service = new ReviewSelectProgramService();
+		service = new ReviewSelectScheduledProgramService();
 	}
 	
-	public List<RadioProgram> reviewSelectRadioProgram() {
-		return service.reviewSelectRadioProgram();	
+	public List<ProgramSlot> reviewSelectScheduledProgram() {
+		return service.reviewSelectScheduledProgram();	
 	}
 
 }

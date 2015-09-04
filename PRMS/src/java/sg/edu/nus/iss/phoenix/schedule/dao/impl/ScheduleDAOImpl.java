@@ -15,6 +15,7 @@ import sg.edu.nus.iss.phoenix.core.dao.DBConstants;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.schedule.dao.ScheduleDAO;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.util.Util;
 
 /**
  * ProgramSlot Data Access Object (DAO). This class contains all database
@@ -172,8 +173,8 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 		openConnection();
 		try {
 			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, valueObject.getDuration().toString());
-                        stmt.setString(2, valueObject.getDateOfProgram().toString());
+			stmt.setTime(1, valueObject.getDuration());
+                        stmt.setString(2, Util.dateToString(valueObject.getDateOfProgram()));
 
 			int rowcount = databaseUpdate(stmt);
 			if (rowcount == 0) {

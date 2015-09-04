@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import sg.edu.nus.iss.phoenix.radioprogram.delegate.ReviewSelectProgramDelegate;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectScheduledProgramDelegate;
+import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
 /**
  *
@@ -27,11 +29,13 @@ import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 public class ManageScheduleCmd implements Perform {
     @Override
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        ReviewSelectProgramDelegate del = new ReviewSelectProgramDelegate();
-        List<RadioProgram> data = del.reviewSelectRadioProgram();
-        req.setAttribute("rps", data);
+        ReviewSelectScheduledProgramDelegate del = new ReviewSelectScheduledProgramDelegate();
+        List<ProgramSlot> data = del.reviewSelectScheduledProgram();
+        req.setAttribute("pss", data);
+        
         Object o = new SimpleDateFormat("w").format(new java.util.Date());
         System.out.println(o.toString());
+        
         return "/pages/crudsc.jsp";
     }
 }

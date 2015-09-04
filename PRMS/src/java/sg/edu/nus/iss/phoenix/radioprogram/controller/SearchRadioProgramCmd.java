@@ -34,7 +34,8 @@ public class SearchRadioProgramCmd implements Perform {
         
         ArrayList<RadioProgram> data = null;
         
-        if (!rpso.getName().isEmpty() || !rpso.getDescription().isEmpty() )
+        if ((rpso.getName() != null && !rpso.getName().isEmpty()) || 
+                (rpso.getDescription()!= null && !rpso.getDescription().isEmpty()))
             data = del.findRPByCriteria(rpso);
         else 
             data = del.findAllRP();
