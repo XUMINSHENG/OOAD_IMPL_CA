@@ -38,7 +38,7 @@ public class Util {
         return formatter.format(date);
     }
     
-    public static String dateToString(Time time){
+    public static String timeToString(Time time){
         DateFormat formatter = new SimpleDateFormat(C_Time_Format); 
         return formatter.format(time);
     }

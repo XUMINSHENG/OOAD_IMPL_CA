@@ -98,10 +98,10 @@ public class ScheduleService {
 //		
 	}
 
-	public void processDelete(Time duration, Date dateOfProgram) {
+	public void processDelete(Date dateOfProgram, Time startTime) {
 
             try {
-                ProgramSlot ps = new ProgramSlot(duration,dateOfProgram);
+                ProgramSlot ps = new ProgramSlot(dateOfProgram, startTime);
                 scdao.delete(ps);
             } catch (NotFoundException e) {
                 // TODO Auto-generated catch block

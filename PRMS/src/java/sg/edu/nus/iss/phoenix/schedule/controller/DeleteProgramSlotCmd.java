@@ -34,12 +34,12 @@ public class DeleteProgramSlotCmd implements Perform {
         ScheduleDelegate del = new ScheduleDelegate();
         
         Date dateOfProgram;
-        Time duration;
+        Time startTime;
         try {
             dateOfProgram = Util.stringToDate(req.getParameter("dateOfProgram"));
-            duration = Util.stringToTime(req.getParameter("duration"));
+            startTime = Util.stringToTime(req.getParameter("startTime"));
             
-            del.processDelete(duration, dateOfProgram);
+            del.processDelete(dateOfProgram, startTime);
         } catch (ParseException ex) {
             Logger.getLogger(DeleteProgramSlotCmd.class.getName()).log(Level.SEVERE, null, ex);
         }

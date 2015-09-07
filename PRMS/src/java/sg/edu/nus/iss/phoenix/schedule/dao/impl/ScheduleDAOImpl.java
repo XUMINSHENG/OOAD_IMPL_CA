@@ -163,18 +163,18 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	public void delete(ProgramSlot valueObject) throws NotFoundException,
 			SQLException {
 
-		if (valueObject.getDuration()== null || valueObject.getDateOfProgram() == null) {
+		if (valueObject.getDateOfProgram() == null || valueObject.getStartTime()== null) {
 			// System.out.println("Can not select without Primary-Key!");
 			throw new NotFoundException("Can not select without Primary-Key!");
 		}
 
-		String sql = "DELETE FROM `program-slot` WHERE (`duration` = ? ) AND (`dateOfProgram` = ?); ";
+		String sql = "DELETE FROM `program-slot` WHERE (`dateOfProgram` = ? ) AND (`startTime` = ?); ";
 		PreparedStatement stmt = null;
 		openConnection();
 		try {
 			stmt = connection.prepareStatement(sql);
-			stmt.setTime(1, valueObject.getDuration());
-                        stmt.setString(2, Util.dateToString(valueObject.getDateOfProgram()));
+			stmt.setString(1, Util.dateToString(valueObject.getDateOfProgram()));
+                        stmt.setTime(2, valueObject.getStartTime());
 
 			int rowcount = databaseUpdate(stmt);
 			if (rowcount == 0) {
@@ -373,11 +373,11 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 			while (result.next()) {
 				ProgramSlot temp = createValueObject();
 
-				temp.setDuration(result.getTime("duration"));
 				temp.setDateOfProgram(result.getDate("dateOfProgram"));
-				temp.setStartTime(result.getDate("startTime"));
+				temp.setStartTime(result.getTime("startTime"));
+                                temp.setDuration(result.getTime("duration"));
 
-				searchResults.add(temp);
+                                searchResults.add(temp);
 			}
 
 		} finally {

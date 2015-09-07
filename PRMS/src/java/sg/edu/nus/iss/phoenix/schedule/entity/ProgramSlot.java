@@ -18,13 +18,13 @@ public class ProgramSlot implements Cloneable, Serializable {
      * Persistent Instance variables. This data is directly 
      * mapped to the columns of database table.
      */
-    private Time duration;
     private Date dateOfProgram;
-    private Date startTime;
+    private Time startTime;
+    private Time duration;
     private RadioProgram program;
-    private Presenter persenter;
     private Producer producer;
-
+    private Presenter presenter;
+    
     /** 
      * Constructors. 
      * The first one takes no arguments and provides the most simple
@@ -36,9 +36,9 @@ public class ProgramSlot implements Cloneable, Serializable {
 
     }
 
-    public ProgramSlot (Time duration, Date dateOfProgram) {
-        this.duration = duration;
+    public ProgramSlot (Date dateOfProgram, Time startTime) {
         this.dateOfProgram = dateOfProgram;
+        this.startTime = startTime;
     }
 
     public Time getDuration() {
@@ -57,11 +57,11 @@ public class ProgramSlot implements Cloneable, Serializable {
         this.dateOfProgram = dateOfProgram;
     }
 
-    public Date getStartTime() {
+    public Time getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(Time startTime) {
         this.startTime = startTime;
     }
 
@@ -74,11 +74,11 @@ public class ProgramSlot implements Cloneable, Serializable {
     }
 
     public Presenter getPersenter() {
-        return persenter;
+        return presenter;
     }
 
-    public void setPersenter(Presenter persenter) {
-        this.persenter = persenter;
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
     }
 
     public Producer getProducer() {
@@ -89,37 +89,111 @@ public class ProgramSlot implements Cloneable, Serializable {
         this.producer = producer;
     }
 
-    public void setAll(Time duration, Date dateOfProgram, Date startTime, RadioProgram program, Presenter persenter, Producer producer) {
-        this.duration = duration;
+    public void setAll(Date dateOfProgram, Time startTime, Time duration, RadioProgram program, Presenter presenter, Producer producer) {
         this.dateOfProgram = dateOfProgram;
         this.startTime = startTime;
+        this.duration = duration;
         this.program = program;
-        this.persenter = persenter;
+        this.presenter = presenter;
         this.producer = producer;
     }
     
-    @Override
+    /** 
+     * hasEqualMapping-method will compare two RadioProgram instances
+     * and return true if they contain same values in all persistent instance 
+     * variables. If hasEqualMapping returns true, it does not mean the objects
+     * are the same instance. However it does mean that in that moment, they 
+     * are mapped to the same row in database.
+     */
+    public boolean hasEqualMapping(ProgramSlot valueObject) {
+
+          if (this.dateOfProgram == null) {
+                    if (valueObject.getDateOfProgram()!= null)
+                           return(false);
+          } else if (!this.dateOfProgram.equals(valueObject.getDateOfProgram())) {
+                    return(false);
+          }
+          
+          if (this.startTime == null) {
+                    if (valueObject.getStartTime()!= null)
+                           return(false);
+          } else if (!this.startTime.equals(valueObject.getStartTime())) {
+                    return(false);
+          }
+          
+          if (this.duration == null) {
+                    if (valueObject.getDateOfProgram()!= null)
+                           return(false);
+          } else if (!this.duration.equals(valueObject.getDateOfProgram())) {
+                    return(false);
+          }
+          
+          if (this.program == null) {
+                    if (valueObject.getProgram()!= null)
+                           return(false);
+          } else if (!this.program.equals(valueObject.getProgram())) {
+                    return(false);
+          }
+          
+          if (this.producer == null) {
+                    if (valueObject.getProducer()!= null)
+                           return(false);
+          } else if (!this.producer.equals(valueObject.getProducer())) {
+                    return(false);
+          }
+          
+          if (this.presenter == null) {
+                    if (valueObject.getPersenter()!= null)
+                           return(false);
+          } else if (!this.presenter.equals(valueObject.getPersenter())) {
+                    return(false);
+          }
+
+          return true;
+    }
+
+
+    /**
+     * toString will return String object representing the state of this 
+     * valueObject. This is useful during application development, and 
+     * possibly when application is writing object states in text log.
+     */
     public String toString() {
-        return super.toString(); //To change body of generated methods, choose Tools | Templates.
+        StringBuffer out = new StringBuffer();
+        out.append("\nProgramSlot class, mapping to table program-slot\n");
+        out.append("Persistent attributes: \n"); 
+        out.append("dateOfProgram = " + this.dateOfProgram + "\n"); 
+        out.append("startTime = " + this.startTime + "\n"); 
+        out.append("duration = " + this.duration + "\n"); 
+        out.append("program = " + this.program + "\n"); 
+        out.append("presenter = " + this.presenter + "\n"); 
+        out.append("producer = " + this.producer + "\n"); 
+        return out.toString();
     }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Clone will return identical deep copy of this valueObject.
+     * Note, that this method is different than the clone() which
+     * is defined in java.lang.Object. Here, the returned cloned object
+     * will also have all its attributes cloned.
+     */
+    public Object clone() {
+        ProgramSlot cloned = new ProgramSlot();
+
+        if (this.dateOfProgram != null)
+             cloned.setDateOfProgram((Date)this.dateOfProgram.clone()); 
+        if (this.startTime != null)
+             cloned.setStartTime((Time)this.startTime.clone()); 
+        if (this.duration != null)
+             cloned.setDuration((Time)this.duration.clone()); 
+        if (this.program != null)
+             cloned.setProgram((RadioProgram)this.program.clone()); 
+        if (this.producer != null)
+             cloned.setProducer((Producer)this.producer.clone()); 
+        if (this.presenter != null)
+             cloned.setPresenter((Presenter)this.presenter.clone()); 
+        return cloned;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode(); //To change body of generated methods, choose Tools | Templates.
-    }
-
-
-
 
 
 }
