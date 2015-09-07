@@ -32,9 +32,9 @@ public class ManageScheduleCmd implements Perform {
         ReviewSelectScheduledProgramDelegate del = new ReviewSelectScheduledProgramDelegate();
         List<ProgramSlot> data = del.reviewSelectScheduledProgram();
         req.setAttribute("pss", data);
-        
-        Object o = new SimpleDateFormat("w").format(new java.util.Date());
-        System.out.println(o.toString());
+//        System.out.println(data.get(0).toString());
+//        Object o = new SimpleDateFormat("w").format(new java.util.Date());
+//        System.out.println(o.toString());
         
         return "/pages/crudsc.jsp";
     }

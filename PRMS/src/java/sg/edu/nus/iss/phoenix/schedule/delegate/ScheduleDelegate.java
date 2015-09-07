@@ -56,9 +56,9 @@ public class ScheduleDelegate {
 		
 	}
 
-	public void processDelete(Time duration, Date dateOfProgram) {
+	public void processDelete(Date dateOfProgram, Time startTime) {
 		ScheduleService service = new ScheduleService();
-		service.processDelete(duration, dateOfProgram);
+		service.processDelete(dateOfProgram, startTime);
 	}
         
         public void processCopy() {

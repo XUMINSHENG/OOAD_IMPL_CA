@@ -36,16 +36,15 @@
                     <td class="nowrap"><fmt:formatDate pattern="HH:mm:ss" value="${crudsc.duration}" /></td>
                     <td class="nowrap">
                         <c:url var="updurl" scope="page" value="/nocturne/addeditrp">
-                            <c:param name="name" value="${crudsc.dateOfProgram}"/>
-                            <c:param name="description" value="${crudsc.startTime}"/>
-                            <c:param name="typicalDuration" value="${crudsc.duration}"/>
+                            <c:param name="dateOfProgram" value="${crudsc.dateOfProgram}" />
+                            <c:param name="startTime" value="${crudsc.startTime}"/>
                             <c:param name="insert" value="false"/>
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.crudsc.edit"/></a>
                         &nbsp;&nbsp;&nbsp;
                         <c:url var="delurl" scope="page" value="/nocturne/deleteps">
-                            <c:param name="duration" value="${crudsc.duration}" />
-                            <c:param name="dateOfProgram" value="${crudsc.dateOfProgram}"/>
+                            <c:param name="dateOfProgram" value="${crudsc.dateOfProgram}" />
+                            <c:param name="startTime" value="${crudsc.startTime}"/>
                         </c:url>
                         <a href="${delurl}"><fmt:message key="label.crudsc.delete"/></a>
                     </td>
