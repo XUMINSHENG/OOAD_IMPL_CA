@@ -10,6 +10,13 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
+import javax.ejb.Stateless;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 import sg.edu.nus.iss.phoenix.core.dao.DBConstants;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
@@ -22,8 +29,25 @@ import sg.edu.nus.iss.phoenix.util.Util;
  * handling that is needed to permanently store and retrieve ProgramSlot object
  * instances.
  */
+@Stateless(mappedName = "ScheduleDAOImpl")
 public class ScheduleDAOImpl implements ScheduleDAO {
 
+        
+        private DataSource phoenix;
+
+        public ScheduleDAOImpl() {
+            try {
+                this.phoenix = (DataSource)InitialContext.doLookup("jdbc/phoenix");
+            } catch (NamingException ex) {
+                Logger.getLogger(ScheduleDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        @Resource(name = "jdbc/phoenix", type=javax.sql.DataSource.class) 
+        public void setPhoenix(DataSource ds) {
+            phoenix = ds;
+        }
+        
 	Connection connection;
 
 	/* (non-Javadoc)
@@ -400,8 +424,9 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 		}
 
 		try {
-			this.connection = DriverManager.getConnection(DBConstants.dbUrl,
-					DBConstants.dbUserName, DBConstants.dbPassword);
+//			this.connection = DriverManager.getConnection(DBConstants.dbUrl,
+//					DBConstants.dbUserName, DBConstants.dbPassword);
+                        this.connection = phoenix.getConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
