@@ -87,4 +87,5 @@ insert into `phoenix`.`presenter` values("dilbert, the hero", "dilbert");
 -- -----------------------------------------------------
 -- dateOfProgram, startTime, duration, program-name, producer-name, presenter-name
 insert into `phoenix`.`program-slot` values("2015/09/15", "07:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
+insert into `phoenix`.`program-slot` values("2015/09/15", "19:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
 

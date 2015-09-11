@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.phoenix.user.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 
 public class Producer implements Cloneable, Serializable {
@@ -14,6 +15,7 @@ public class Producer implements Cloneable, Serializable {
      * Persistent Instance variables. This data is directly 
      * mapped to the columns of database table.
      */
+    private String userId;
     private String name;
     
 
@@ -34,65 +36,52 @@ public class Producer implements Cloneable, Serializable {
 
     }
 
+    public String getUserId() {
+        return userId;
+    }
 
-    /** 
-     * Get- and Set-methods for persistent variables. The default
-     * behaviour does not make any checks against malformed data,
-     * so these might require some manual additions.
-     */
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getName() {
-          return this.name;
-    }
-   
-
-    /** 
-     * setAll allows to set all persistent variables in one method call.
-     * This is useful, when all data is available and it is needed to 
-     * set the initial state of this object. Note that this method will
-     * directly modify instance variables, without going trough the 
-     * individual set-methods.
-     */
-
-    public void setName(String nameIn) {
-          this.name = nameIn;
+        return name;
     }
 
-    
-
-    /** 
-     * hasEqualMapping-method will compare two RadioProgram instances
-     * and return true if they contain same values in all persistent instance 
-     * variables. If hasEqualMapping returns true, it does not mean the objects
-     * are the same instance. However it does mean that in that moment, they 
-     * are mapped to the same row in database.
-     */
-    public boolean hasEqualMapping(Producer valueObject) {
-
-          if (this.name == null) {
-                    if (valueObject.getName() != null)
-                           return(false);
-          } else if (!this.name.equals(valueObject.getName())) {
-                    return(false);
-          }
-
-          return true;
+    public void setName(String name) {
+        this.name = name;
     }
 
-
-
-    /**
-     * toString will return String object representing the state of this 
-     * valueObject. This is useful during application development, and 
-     * possibly when application is writing object states in text log.
-     */
+    @Override
     public String toString() {
-        StringBuffer out = new StringBuffer();
-        out.append("\nRadioProgram class, mapping to table radio-program\n");
-        out.append("Persistent attributes: \n"); 
-        out.append("name = " + this.name + "\n"); 
-        return out.toString();
+        return "Producer{" + "userId=" + userId + ", name=" + name + '}';
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 71 * hash + Objects.hashCode(this.userId);
+        hash = 71 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Producer other = (Producer) obj;
+        if (!Objects.equals(this.userId, other.userId)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Clone will return identical deep copy of this valueObject.
@@ -104,10 +93,12 @@ public class Producer implements Cloneable, Serializable {
         Producer cloned = new Producer();
 
         if (this.name != null)
-             cloned.setName(new String(this.name)); 
+             cloned.setName(this.name);
+        if (this.userId != null)
+             cloned.setName(this.userId);
+        
         return cloned;
     }
-
 
 
 }

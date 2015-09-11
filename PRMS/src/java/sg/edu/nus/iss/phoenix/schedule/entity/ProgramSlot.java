@@ -4,6 +4,7 @@ import sg.edu.nus.iss.phoenix.radioprogram.entity.*;
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.Date;
+import java.util.Objects;
 import sg.edu.nus.iss.phoenix.user.entity.Presenter;
 import sg.edu.nus.iss.phoenix.user.entity.Producer;
 
@@ -96,6 +97,48 @@ public class ProgramSlot implements Cloneable, Serializable {
         this.program = program;
         this.presenter = presenter;
         this.producer = producer;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.dateOfProgram);
+        hash = 23 * hash + Objects.hashCode(this.startTime);
+        hash = 23 * hash + Objects.hashCode(this.duration);
+        hash = 23 * hash + Objects.hashCode(this.program);
+        hash = 23 * hash + Objects.hashCode(this.producer);
+        hash = 23 * hash + Objects.hashCode(this.presenter);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ProgramSlot other = (ProgramSlot) obj;
+        if (!Objects.equals(this.dateOfProgram, other.dateOfProgram)) {
+            return false;
+        }
+        if (!Objects.equals(this.startTime, other.startTime)) {
+            return false;
+        }
+        if (!Objects.equals(this.duration, other.duration)) {
+            return false;
+        }
+        if (!Objects.equals(this.program, other.program)) {
+            return false;
+        }
+        if (!Objects.equals(this.producer, other.producer)) {
+            return false;
+        }
+        if (!Objects.equals(this.presenter, other.presenter)) {
+            return false;
+        }
+        return true;
     }
     
     /** 
