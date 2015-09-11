@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.phoenix.user.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 
 public class Presenter implements Cloneable, Serializable {
@@ -14,7 +15,26 @@ public class Presenter implements Cloneable, Serializable {
      * Persistent Instance variables. This data is directly 
      * mapped to the columns of database table.
      */
+    private String userId;
     private String name;
+
+    /**
+     * Get the value of userId
+     *
+     * @return the value of userId
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * Set the value of userId
+     *
+     * @param userId new value of userId
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
     
 
     /** 
@@ -78,19 +98,9 @@ public class Presenter implements Cloneable, Serializable {
           return true;
     }
 
-
-
-    /**
-     * toString will return String object representing the state of this 
-     * valueObject. This is useful during application development, and 
-     * possibly when application is writing object states in text log.
-     */
+    @Override
     public String toString() {
-        StringBuffer out = new StringBuffer();
-        out.append("\nRadioProgram class, mapping to table radio-program\n");
-        out.append("Persistent attributes: \n"); 
-        out.append("name = " + this.name + "\n"); 
-        return out.toString();
+        return "Presenter{" + "userId=" + userId + ", name=" + name + '}';
     }
 
 
@@ -105,7 +115,35 @@ public class Presenter implements Cloneable, Serializable {
 
         if (this.name != null)
              cloned.setName(new String(this.name)); 
+        if (this.userId != null)
+             cloned.setName(new String(this.userId)); 
         return cloned;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 71 * hash + Objects.hashCode(this.userId);
+        hash = 71 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Presenter other = (Presenter) obj;
+        if (!Objects.equals(this.userId, other.userId)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return true;
     }
 
 

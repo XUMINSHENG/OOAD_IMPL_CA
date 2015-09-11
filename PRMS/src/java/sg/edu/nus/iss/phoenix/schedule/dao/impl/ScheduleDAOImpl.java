@@ -10,6 +10,12 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 import sg.edu.nus.iss.phoenix.core.dao.DBConstants;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
@@ -24,7 +30,17 @@ import sg.edu.nus.iss.phoenix.util.Util;
  */
 public class ScheduleDAOImpl implements ScheduleDAO {
 
-	Connection connection;
+        private final static String dataSourceName = "jdbc/phoenix";
+        private DataSource phoenix;
+        Connection connection;
+        
+        public ScheduleDAOImpl() {
+            try {
+                this.phoenix = (DataSource)InitialContext.doLookup(dataSourceName);
+            } catch (NamingException ex) {
+                Logger.getLogger(ScheduleDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
 	/* (non-Javadoc)
 	 * @see sg.edu.nus.iss.phoenix.radioprogram.dao.impl.ProgramDAO#createValueObject()
@@ -400,8 +416,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 		}
 
 		try {
-			this.connection = DriverManager.getConnection(DBConstants.dbUrl,
-					DBConstants.dbUserName, DBConstants.dbPassword);
+                        this.connection = phoenix.getConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
