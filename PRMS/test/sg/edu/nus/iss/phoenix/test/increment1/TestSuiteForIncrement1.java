@@ -1,3 +1,4 @@
+package sg.edu.nus.iss.phoenix.test.increment1;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,13 +11,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import sg.edu.nus.iss.phoenix.test.DeleteProgramSlotCmdTest;
 
 /**
  *
- * @author A0134434m
+ * @author Xu Minsheng
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({})
+@Suite.SuiteClasses({
+    DeleteProgramSlotCmdTest.class
+})
+
 public class TestSuiteForIncrement1 {
 
     @BeforeClass
