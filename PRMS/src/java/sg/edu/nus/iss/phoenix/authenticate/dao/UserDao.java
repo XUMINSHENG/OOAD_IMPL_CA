@@ -37,8 +37,6 @@ public interface UserDao {
 	 * runtime variables. If load can not find matching row, NotFoundException
 	 * will be thrown.
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
 	 * @param valueObject
 	 *            This parameter contains the class instance to be loaded.
 	 *            Primary-key field must be set for this to work properly.
@@ -52,8 +50,6 @@ public interface UserDao {
 	 * consume huge amounts of resources if table has lot's of rows. This should
 	 * only be used when target tables have only small amounts of data.
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
 	 */
 	public abstract List<User> loadAll() throws SQLException;
 
@@ -65,8 +61,6 @@ public interface UserDao {
 	 * this method will read the generated primary-key back to valueObject if
 	 * automatic surrogate-keys were used.
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
 	 * @param valueObject
 	 *            This parameter contains the class instance to be created. If
 	 *            automatic surrogate-keys are not used the Primary-key field
@@ -83,8 +77,6 @@ public interface UserDao {
 	 * database. If save can not find matching row, NotFoundException will be
 	 * thrown.
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
 	 * @param valueObject
 	 *            This parameter contains the class instance to be saved.
 	 *            Primary-key field must be set for this to work properly.
@@ -101,8 +93,6 @@ public interface UserDao {
 	 * what it was in the deleted object. If delete can not find matching row,
 	 * NotFoundException will be thrown.
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
 	 * @param valueObject
 	 *            This parameter contains the class instance to be deleted.
 	 *            Primary-key field must be set for this to work properly.
@@ -121,8 +111,6 @@ public interface UserDao {
 	 * implementation of this method should be different with different DB
 	 * backends.)
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
 	 */
 	public abstract void deleteAll() throws SQLException;
 
@@ -133,8 +121,6 @@ public interface UserDao {
 	 * value is 0. This method should be used before calling loadAll, to make
 	 * sure table has not too many rows.
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
 	 */
 	public abstract int countAll() throws SQLException;
 
@@ -147,8 +133,6 @@ public interface UserDao {
 	 * those criteria you specified. Those instance-variables that have NULL
 	 * values are excluded in search-criteria.
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
 	 * @param valueObject
 	 *            This parameter contains the class instance where search will
 	 *            be based. Primary-key field should not be set.

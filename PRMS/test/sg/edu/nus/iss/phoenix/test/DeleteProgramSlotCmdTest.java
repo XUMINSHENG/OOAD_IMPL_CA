@@ -11,7 +11,6 @@ import java.util.List;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.AfterClass;
@@ -27,7 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 import org.junit.Before;
-import sg.edu.nus.iss.phoenix.authenticate.entity.Role;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
@@ -35,9 +33,10 @@ import sg.edu.nus.iss.phoenix.schedule.dao.impl.ScheduleDAOImpl;
 import sg.edu.nus.iss.phoenix.user.entity.Presenter;
 import sg.edu.nus.iss.phoenix.user.entity.Producer;
 import sg.edu.nus.iss.phoenix.util.Util;
+
 /**
  *
- * @author A0134434m
+ * @author Xu Minsheng
  */
 public class DeleteProgramSlotCmdTest {
     

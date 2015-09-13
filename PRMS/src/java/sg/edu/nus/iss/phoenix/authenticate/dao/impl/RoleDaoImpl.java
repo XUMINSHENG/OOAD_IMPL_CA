@@ -333,8 +333,6 @@ public class RoleDaoImpl implements RoleDao {
 	 * value indicates how many rows were affected. This method will also make
 	 * sure that if cache is used, it will reset when data changes.
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
 	 * @param stmt
 	 *            This parameter contains the SQL statement to be excuted.
 	 */
@@ -351,8 +349,6 @@ public class RoleDaoImpl implements RoleDao {
 	 * resultset will be converted to valueObject. If no rows were found,
 	 * NotFoundException will be thrown.
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
 	 * @param stmt
 	 *            This parameter contains the SQL statement to be excuted.
 	 * @param valueObject
@@ -391,8 +387,6 @@ public class RoleDaoImpl implements RoleDao {
 	 * resultset will be converted to the List of valueObjects. If no rows were
 	 * found, an empty List will be returned.
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
 	 * @param stmt
 	 *            This parameter contains the SQL statement to be excuted.
 	 */

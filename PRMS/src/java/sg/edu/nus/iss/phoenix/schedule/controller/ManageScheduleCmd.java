@@ -18,7 +18,7 @@ import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
 /**
  *
- * @
+ * 
  */
 @Action("managesc")
 public class ManageScheduleCmd implements Perform {
