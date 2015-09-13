@@ -7,8 +7,8 @@
 <c:set var="t" value="true" />
 <title><fmt:message key="title.error" /></title>
 </head>
+
 <body>
-	<h2>
-		<fmt:message key="error.incorrectLogin" />
-	</h2>
+	<h2><fmt:message key="error.bizException" /></h2>
+        <h3>${requestScope.errorMsg}</h3>
 </body>

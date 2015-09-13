@@ -5,19 +5,14 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.controller;
 
-import sg.edu.nus.iss.phoenix.radioprogram.controller.*;
 import at.nocturne.api.Action;
 import at.nocturne.api.Perform;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import sg.edu.nus.iss.phoenix.radioprogram.delegate.ReviewSelectProgramDelegate;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectScheduledProgramDelegate;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
@@ -29,6 +24,12 @@ import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 public class ManageScheduleCmd implements Perform {
     @Override
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        
+        User user = (User)req.getSession().getAttribute("user");
+        if ((null==user)||!user.hasRole("manager")){
+            return "/pages/error.jsp";
+        }
+        
         ReviewSelectScheduledProgramDelegate del = new ReviewSelectScheduledProgramDelegate();
         List<ProgramSlot> data = del.reviewSelectScheduledProgram();
         req.setAttribute("pss", data);
