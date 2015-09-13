@@ -1,9 +1,11 @@
 package sg.edu.nus.iss.phoenix.schedule.delegate;
 
+import java.sql.SQLException;
 import java.sql.Time;
 import sg.edu.nus.iss.phoenix.radioprogram.delegate.*;
 import java.util.ArrayList;
 import java.util.Date;
+import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RPSearchObject;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
@@ -56,7 +58,7 @@ public class ScheduleDelegate {
 		
 	}
 
-	public void processDelete(Date dateOfProgram, Time startTime) {
+	public void processDelete(Date dateOfProgram, Time startTime) throws NotFoundException, SQLException {
 		ScheduleService service = new ScheduleService();
 		service.processDelete(dateOfProgram, startTime);
 	}
