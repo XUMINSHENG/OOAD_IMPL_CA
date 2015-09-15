@@ -7,5 +7,5 @@ to setup the Mysql connection pool
 
 4. View Domain Admin Console -> Resource -> JDBC -> set up connection pool then Resource
 
-5. Netbeans -> project broswer -> lib -> add lib -> UnitTestingLib
+5. Netbeans -> project broswer -> lib -> add lib -> UnitTestLib
    -> right click -> edit -> add all jar in /lib/testing/*
