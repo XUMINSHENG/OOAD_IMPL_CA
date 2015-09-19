@@ -20,12 +20,13 @@ import javax.sql.DataSource;
 import sg.edu.nus.iss.phoenix.core.dao.DBConstants;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.schedule.dao.ScheduleDAO;
+import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 import sg.edu.nus.iss.phoenix.util.Util;
 
 /**
- * ProgramSlot Data Access Object (DAO). This class contains all database
- * handling that is needed to permanently store and retrieve ProgramSlot object
+ * ProgramSlot Data Access Object (DAO). This claere and retrieve ProgramSlot object
  * instances.
  */
 public class ScheduleDAOImpl implements ScheduleDAO {
@@ -426,4 +427,93 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 			e.printStackTrace();
 		}
 	}
+        
+        protected List<AnnualSchedule> annualListQuery(PreparedStatement stmt) throws SQLException{
+            ArrayList<AnnualSchedule> searchResults = new ArrayList<AnnualSchedule>();
+		ResultSet result = null;
+		openConnection();
+		try {
+                    result = stmt.executeQuery();
+
+                    while (result.next()) {
+			AnnualSchedule temp = createValueObject();
+
+			temp.setDateOfProgram(result.getDate("dateOfProgram"));
+			temp.setStartTime(result.getTime("startTime"));
+                        temp.setDuration(result.getTime("duration"));
+                        
+                        searchResults.add(temp);
+			}
+
+		} finally {
+			if (result != null)
+				result.close();
+			if (stmt != null)
+				stmt.close();
+			closeConnection();
+		}
+
+            return (List<ProgramSlot>) searchResults;
+        }
+        
+
+    @Override
+    public AnnualSchedule createAnnualSchedule() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public AnnualSchedule getAnnualSchedule(int year) throws NotFoundException, SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void loadAnnualSchedule(AnnualSchedule valueObject) throws NotFoundException, SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (valueObject.getYear()== 0 || valueObject.getAssignedBy() == null) {
+			// System.out.println("Can not select without Primary-Key!");
+			throw new NotFoundException("Can not select without Primary-Key!");
+		}
+
+		String sql = "SELECT * FROM `annual-schedule` WHERE (`year` = ? ) AND (`assignedBy` = ?); ";
+		PreparedStatement stmt = null;
+		openConnection();
+		try {
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, Integer.toString(valueObject.getYear()));
+                        stmt.setString(2, valueObject.getAssignedBy().toString());
+                        
+			singleQuery(stmt, valueObject);
+
+		} finally {
+			if (stmt != null)
+				stmt.close();
+			closeConnection();
+		}
+    }
+
+    @Override
+    public List<AnnualSchedule> loadAllAnnualSchedule() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public WeeklySchedule createWeeklySchedule() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public WeeklySchedule getWeeklySchedule(int year) throws NotFoundException, SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void loadWeeklySchedule(WeeklySchedule valueObject) throws NotFoundException, SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<WeeklySchedule> loadAllWeeklySchedule() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -27,5 +27,7 @@
         <definition name="crudscPage" extends="homePage">
 		<put-attribute name="body" value="/pages/tilepages/crudsc.jsp" />
 	</definition>
-	
+	<definition name="searchspPage" extends="homePage">
+		<put-attribute name="body" value="/pages/tilepages/searchsp.jsp" />
+	</definition>
 </tiles-definitions>
