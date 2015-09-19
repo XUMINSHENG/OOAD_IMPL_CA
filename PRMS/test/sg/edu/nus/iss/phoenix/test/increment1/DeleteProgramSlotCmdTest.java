@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sg.edu.nus.iss.phoenix.test;
+package sg.edu.nus.iss.phoenix.test.increment1;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import java.util.ArrayList;
