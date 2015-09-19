@@ -3,6 +3,7 @@ use phoenix;
 DROP TABLE IF EXISTS `phoenix`.`program-slot` ;
 DROP TABLE IF EXISTS `phoenix`.`producer` ;
 DROP TABLE IF EXISTS `phoenix`.`presenter` ;
+DROP TABLE IF exists `phoenix`.`user`;
 
 -- -----------------------------------------------------
 -- Table `phoenix`.`producer`
@@ -65,6 +66,37 @@ CREATE  TABLE IF NOT EXISTS `phoenix`.`program-slot` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION )
 ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- ALTER Table `phoenix`.`user`
+-- -----------------------------------------------------
+
+alter table `phoenix`.`user` 
+	 add `address` varchar(100) null after `name`,
+	add `joining_date` date null after `role`;
+    
+-- -----------------------------------------------------
+-- UPDATE Table `phoenix`.`user`
+-- -----------------------------------------------------
+update `phoenix`.`user` set
+	`address`="jurong east",
+    `joining_date`="2014-03-10" where `id`="catbert";
+
+update `phoenix`.`user` set
+	`address`="clementi",
+    `joining_date`="2014-11-10" where `id`="dilbert";
+
+update `phoenix`.`user` set
+	`address`="Lakeside",
+    `joining_date`="2013-11-10" where `id`="dogbert";
+
+update `phoenix`.`user` set
+	`address`="clementi",
+    `joining_date`="2015-01-10" where `id`="pointyhead";
+    
+update `phoenix`.`user` set
+	`address`="boon lay",
+    `joining_date`="2014-11-10" where `id`="wally";
 
 -- -----------------------------------------------------
 -- Insert Data For Table `phoenix`.`producer`
