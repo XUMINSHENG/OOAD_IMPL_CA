@@ -3,7 +3,7 @@ use phoenix;
 DROP TABLE IF EXISTS `phoenix`.`program-slot` ;
 DROP TABLE IF EXISTS `phoenix`.`producer` ;
 DROP TABLE IF EXISTS `phoenix`.`presenter` ;
-DROP TABLE IF exists `phoenix`.`user`;
+
 
 -- -----------------------------------------------------
 -- Table `phoenix`.`producer`
