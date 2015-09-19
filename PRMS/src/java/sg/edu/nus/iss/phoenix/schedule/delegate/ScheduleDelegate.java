@@ -47,7 +47,7 @@ public class ScheduleDelegate {
 //		service.processCreate(rp);
 	}
         
-        public void processCreate(ProgramSlot ps) {
+        public void processCreate(ProgramSlot ps) throws SQLException {
 		ScheduleService service = new ScheduleService();
 		service.processCreate(ps);
 	}

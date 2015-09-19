@@ -115,26 +115,29 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	public synchronized void create(ProgramSlot valueObject)
 			throws SQLException {
 
-//		String sql = "";
-//		PreparedStatement stmt = null;
-//		openConnection();
-//		try {
-//			sql = "INSERT INTO `radio-program` (`name`, `desc`, `typicalDuration`) VALUES (?,?,?); ";
-//			stmt = connection.prepareStatement(sql);
-//			stmt.setString(1, valueObject.getName());
-//			stmt.setString(2, valueObject.getDescription());
-//			stmt.setTime(3, valueObject.getTypicalDuration());
-//			int rowcount = databaseUpdate(stmt);
-//			if (rowcount != 1) {
-//				// System.out.println("PrimaryKey Error when updating DB!");
-//				throw new SQLException("PrimaryKey Error when updating DB!");
-//			}
-//
-//		} finally {
-//			if (stmt != null)
-//				stmt.close();
-//			closeConnection();
-//		}
+		String sql = "";
+		PreparedStatement stmt = null;
+		openConnection();
+		try {
+			sql = "INSERT INTO `program-slot` (`dateOfProgram`, `startTime`, `duration`, `program-name`, `producer-name`, `presenter-name`) VALUES (?,?,?,?,?,?); ";
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, Util.dateToString(valueObject.getDateOfProgram()));
+			stmt.setTime(2, valueObject.getStartTime());
+			stmt.setTime(3, valueObject.getDuration());
+                        stmt.setString(4, valueObject.getProgram().getName());
+			stmt.setString(5, valueObject.getProducer().getName());
+                        stmt.setString(6, valueObject.getPersenter().getName());
+			int rowcount = databaseUpdate(stmt);
+			if (rowcount != 1) {
+				// System.out.println("PrimaryKey Error when updating DB!");
+				throw new SQLException("PrimaryKey Error when updating DB!");
+			}
+
+		} finally {
+			if (stmt != null)
+				stmt.close();
+			closeConnection();
+		}
 
 	}
 
@@ -145,32 +148,33 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	public void save(ProgramSlot valueObject) throws NotFoundException,
 			SQLException {
 
-//		String sql = "UPDATE `radio-program` SET `desc` = ?, `typicalDuration` = ? WHERE (`name` = ? ); ";
-//		PreparedStatement stmt = null;
-//		openConnection();
-//		try {
-//			stmt = connection.prepareStatement(sql);
-//			stmt.setString(1, valueObject.getDescription());
-//			stmt.setTime(2, valueObject.getTypicalDuration());
-//
-//			stmt.setString(3, valueObject.getName());
-//
-//			int rowcount = databaseUpdate(stmt);
-//			if (rowcount == 0) {
-//				// System.out.println("Object could not be saved! (PrimaryKey not found)");
-//				throw new NotFoundException(
-//						"Object could not be saved! (PrimaryKey not found)");
-//			}
-//			if (rowcount > 1) {
-//				// System.out.println("PrimaryKey Error when updating DB! (Many objects were affected!)");
-//				throw new SQLException(
-//						"PrimaryKey Error when updating DB! (Many objects were affected!)");
-//			}
-//		} finally {
-//			if (stmt != null)
-//				stmt.close();
-//			closeConnection();
-//		}
+		String sql = "UPDATE `program-slot` SET `program-name` = ?, `producer-name` = ?, `presenter-name` = ? WHERE (`dateOfProgram` = ? ) AND (`startTime` = ?); ";
+		PreparedStatement stmt = null;
+		openConnection();
+		try {
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, valueObject.getProgram().getName());
+			stmt.setString(2, valueObject.getProducer().getName());
+			stmt.setString(3, valueObject.getPersenter().getName());
+                        stmt.setString(4, Util.dateToString(valueObject.getDateOfProgram()));
+                        stmt.setTime(5,valueObject.getStartTime());
+                        
+			int rowcount = databaseUpdate(stmt);
+			if (rowcount == 0) {
+				// System.out.println("Object could not be saved! (PrimaryKey not found)");
+				throw new NotFoundException(
+						"Object could not be saved! (PrimaryKey not found)");
+			}
+			if (rowcount > 1) {
+				// System.out.println("PrimaryKey Error when updating DB! (Many objects were affected!)");
+				throw new SQLException(
+						"PrimaryKey Error when updating DB! (Many objects were affected!)");
+			}
+		} finally {
+			if (stmt != null)
+				stmt.close();
+			closeConnection();
+		}
 	}
 
 	/* (non-Javadoc)
