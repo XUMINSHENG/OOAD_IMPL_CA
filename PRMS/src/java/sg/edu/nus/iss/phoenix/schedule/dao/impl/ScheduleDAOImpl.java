@@ -428,6 +428,32 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 		}
 	}
         
+        protected void annualSingleQuery(PreparedStatement stmt, AnnualSchedule valueObject)
+			throws NotFoundException, SQLException {
+
+		ResultSet result = null;
+		openConnection();
+		try {
+			result = stmt.executeQuery();
+
+			if (result.next()) {
+
+				valueObject.setYear(result.getInt("year"));
+				valueObject.setAssignedBy(result.getString("assignedBy"));
+				
+			} else {
+				// System.out.println("ProgramSlot Object Not Found!");
+				throw new NotFoundException("AnnualSchedule Object Not Found!");
+			}
+		} finally {
+			if (result != null)
+				result.close();
+			if (stmt != null)
+				stmt.close();
+			closeConnection();
+		}
+	}
+        
         protected List<AnnualSchedule> annualListQuery(PreparedStatement stmt) throws SQLException{
             ArrayList<AnnualSchedule> searchResults = new ArrayList<AnnualSchedule>();
 		ResultSet result = null;
@@ -436,11 +462,11 @@ public class ScheduleDAOImpl implements ScheduleDAO {
                     result = stmt.executeQuery();
 
                     while (result.next()) {
-			AnnualSchedule temp = createValueObject();
+			AnnualSchedule temp = createAnnualSchedule();
 
-			temp.setDateOfProgram(result.getDate("dateOfProgram"));
-			temp.setStartTime(result.getTime("startTime"));
-                        temp.setDuration(result.getTime("duration"));
+                        temp.setYear(Integer.parseInt(result.getString("year")));
+                        temp.setAssignedBy(result.getString("assingedBy"));
+                        
                         
                         searchResults.add(temp);
 			}
@@ -453,13 +479,13 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 			closeConnection();
 		}
 
-            return (List<ProgramSlot>) searchResults;
+            return (List<AnnualSchedule>) searchResults;
         }
         
 
     @Override
     public AnnualSchedule createAnnualSchedule() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new AnnualSchedule();
     }
 
     @Override
@@ -469,8 +495,8 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 
     @Override
     public void loadAnnualSchedule(AnnualSchedule valueObject) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        if (valueObject.getYear()== 0 || valueObject.getAssignedBy() == null) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (valueObject.getYear() == 0 || valueObject.getAssignedBy() == null) {
 			// System.out.println("Can not select without Primary-Key!");
 			throw new NotFoundException("Can not select without Primary-Key!");
 		}
@@ -481,9 +507,9 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 		try {
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, Integer.toString(valueObject.getYear()));
-                        stmt.setString(2, valueObject.getAssignedBy().toString());
+                        stmt.setString(2, valueObject.getAssignedBy());
                         
-			singleQuery(stmt, valueObject);
+			annualSingleQuery(stmt, valueObject);
 
 		} finally {
 			if (stmt != null)
@@ -494,12 +520,73 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 
     @Override
     public List<AnnualSchedule> loadAllAnnualSchedule() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        openConnection();
+        String sql = "SELECT * FROM `annual-schedule` ORDER BY `year` ASC; ";
+	List<AnnualSchedule> searchResults = annualListQuery(connection
+                .prepareStatement(sql));
+	closeConnection();
+	System.out.println("record size"+searchResults.size());
+        return searchResults;
     }
+    
+        protected void weeklySingleQuery(PreparedStatement stmt, WeeklySchedule valueObject)
+			throws NotFoundException, SQLException {
+
+		ResultSet result = null;
+		openConnection();
+		try {
+			result = stmt.executeQuery();
+
+			if (result.next()) {
+
+				valueObject.setStartDate(result.getTimestamp("startDate"));
+				valueObject.setAssignedBy(result.getString("assignedBy"));
+				
+			} else {
+				// System.out.println("ProgramSlot Object Not Found!");
+				throw new NotFoundException("WeeklySchedule Object Not Found!");
+			}
+		} finally {
+			if (result != null)
+				result.close();
+			if (stmt != null)
+				stmt.close();
+			closeConnection();
+		}
+	}
+        
+        protected List<WeeklySchedule> weeklyListQuery(PreparedStatement stmt) throws SQLException{
+            ArrayList<WeeklySchedule> searchResults = new ArrayList<WeeklySchedule>();
+		ResultSet result = null;
+		openConnection();
+		try {
+                    result = stmt.executeQuery();
+
+                    while (result.next()) {
+			WeeklySchedule temp = createWeeklySchedule();
+
+                        temp.setStartDate(result.getTimestamp("startDate"));
+                        temp.setAssignedBy(result.getString("assignedBy"));
+                        
+                        
+                        searchResults.add(temp);
+			}
+
+		} finally {
+			if (result != null)
+				result.close();
+			if (stmt != null)
+				stmt.close();
+			closeConnection();
+		}
+
+            return (List<WeeklySchedule>) searchResults;
+        }
 
     @Override
     public WeeklySchedule createWeeklySchedule() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new WeeklySchedule();
     }
 
     @Override
@@ -509,7 +596,30 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 
     @Override
     public void loadWeeklySchedule(WeeklySchedule valueObject) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (valueObject.getStartDate() == null || valueObject.getAssignedBy() == null) {
+			// System.out.println("Can not select without Primary-Key!");
+			throw new NotFoundException("Can not select without Primary-Key!");
+		}
+
+	String sql = "SELECT * FROM `annual-schedule` WHERE (`startDate` = ? ) AND (`assignedBy` = ?); ";
+	PreparedStatement stmt = null;
+	openConnection();
+	try {
+		stmt = connection.prepareStatement(sql);
+		stmt.setString(1, valueObject.getStartDate().toString());
+                stmt.setString(2, valueObject.getAssignedBy());
+                        
+		weeklySingleQuery(stmt, valueObject);
+
+	} finally {
+            if (stmt != null)
+		stmt.close();
+        }
+        sql = "SELECT * FROM `program-slot` ORDER BY `dateOfProgram`, `startTime` ASC; ";
+	List<ProgramSlot> searchResults = listQuery(connection
+			.prepareStatement(sql));
+        
+	closeConnection();
     }
 
     @Override

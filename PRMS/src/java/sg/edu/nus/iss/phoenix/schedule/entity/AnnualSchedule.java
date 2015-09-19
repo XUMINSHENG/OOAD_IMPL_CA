@@ -3,6 +3,7 @@ package sg.edu.nus.iss.phoenix.schedule.entity;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.*;
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.List;
 
 public class AnnualSchedule implements Cloneable, Serializable {
 
@@ -17,7 +18,7 @@ public class AnnualSchedule implements Cloneable, Serializable {
      */
     private int year;
     private String assignedBy;
-
+    List<WeeklySchedule> listOfWeeklySchedule;
 
 
     /** 
@@ -56,6 +57,14 @@ public class AnnualSchedule implements Cloneable, Serializable {
     }
     public void setAssignedBy(String assignedByIn) {
           this.assignedBy = assignedByIn;
+    }
+
+    public List<WeeklySchedule> getListOfWeeklySchedule() {
+        return listOfWeeklySchedule;
+    }
+
+    public void setListOfWeeklySchedule(List<WeeklySchedule> listOfWeeklySchedule) {
+        this.listOfWeeklySchedule = listOfWeeklySchedule;
     }
 
 

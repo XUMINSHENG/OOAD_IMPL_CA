@@ -8,12 +8,14 @@ package sg.edu.nus.iss.phoenix.schedule.controller;
 import at.nocturne.api.Action;
 import at.nocturne.api.Perform;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectScheduledProgramDelegate;
+import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
 /**
@@ -29,9 +31,15 @@ public class ManageScheduleCmd implements Perform {
         if ((null==user)||!user.hasRole("manager")){
             return "/pages/error.jsp";
         }
-        
+        String year = req.getParameter("year");
+        String week = req.getParameter("week");
         ReviewSelectScheduledProgramDelegate del = new ReviewSelectScheduledProgramDelegate();
-        List<ProgramSlot> data = del.reviewSelectScheduledProgram();
+//        List<int> years = 
+        List<AnnualSchedule> yearList = del.reviewSelectAnnualSchedule();
+        List<ProgramSlot> data = del.reviewSelectScheduledProgram(1,2);
+        req.setAttribute("year",year);
+        req.setAttribute("week", week);
+        req.setAttribute("yearlist", yearList);
         req.setAttribute("pss", data);
 //        System.out.println(data.get(0).toString());
 //        Object o = new SimpleDateFormat("w").format(new java.util.Date());
