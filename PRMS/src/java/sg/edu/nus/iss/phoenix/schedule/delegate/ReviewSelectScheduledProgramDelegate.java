@@ -19,7 +19,7 @@ public class ReviewSelectScheduledProgramDelegate {
 		return service.reviewSelectAnnualSchedule();	
 	}
 	
-	public List<ProgramSlot> reviewSelectScheduledProgram(int year, String week) {
+	public List<ProgramSlot> reviewSelectScheduledProgram(int year, int week) {
 		return service.reviewSelectScheduledProgram(year, week);	
 	}
         
