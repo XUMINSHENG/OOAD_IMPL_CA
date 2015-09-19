@@ -21,6 +21,9 @@
         &nbsp;
         &nbsp;
         <a href="${url}"><fmt:message key="label.crudsc.add"/></a>
+        &nbsp;
+        &nbsp;
+        <a href="${url}"><fmt:message key="label.crudsc.copy"/></a>
         <br/><br/>
         <c:if test="${! empty yearlist}">
             <form action="${pageContext.request.contextPath}/nocturne/managesc"
