@@ -3,6 +3,7 @@ package sg.edu.nus.iss.phoenix.schedule.entity;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.*;
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.List;
 
 public class AnnualSchedule implements Cloneable, Serializable {
 
@@ -15,10 +16,9 @@ public class AnnualSchedule implements Cloneable, Serializable {
      * Persistent Instance variables. This data is directly 
      * mapped to the columns of database table.
      */
-    private String name;
-    private String description;
-    private Time typicalDuration;
-
+    private int year;
+    private String assignedBy;
+    List<WeeklySchedule> listOfWeeklySchedule;
 
 
     /** 
@@ -32,9 +32,9 @@ public class AnnualSchedule implements Cloneable, Serializable {
 
     }
 
-    public AnnualSchedule (String nameIn) {
+    public AnnualSchedule (int yearIn) {
 
-          this.name = nameIn;
+          this.year = yearIn;
 
     }
 
@@ -45,25 +45,26 @@ public class AnnualSchedule implements Cloneable, Serializable {
      * so these might require some manual additions.
      */
 
-    public String getName() {
-          return this.name;
+    public int getYear() {
+          return this.year;
     }
-    public void setName(String nameIn) {
-          this.name = nameIn;
-    }
-
-    public String getDescription() {
-          return this.description;
-    }
-    public void setDescription(String descriptionIn) {
-          this.description = descriptionIn;
+    public void setYear(int yearIn) {
+          this.year = yearIn;
     }
 
-    public Time getTypicalDuration() {
-          return this.typicalDuration;
+    public String getAssignedBy() {
+          return this.assignedBy;
     }
-    public void setTypicalDuration(Time typicalDurationIn) {
-          this.typicalDuration = typicalDurationIn;
+    public void setAssignedBy(String assignedByIn) {
+          this.assignedBy = assignedByIn;
+    }
+
+    public List<WeeklySchedule> getListOfWeeklySchedule() {
+        return listOfWeeklySchedule;
+    }
+
+    public void setListOfWeeklySchedule(List<WeeklySchedule> listOfWeeklySchedule) {
+        this.listOfWeeklySchedule = listOfWeeklySchedule;
     }
 
 
@@ -76,12 +77,10 @@ public class AnnualSchedule implements Cloneable, Serializable {
      * individual set-methods.
      */
 
-    public void setAll(String nameIn,
-          String descriptionIn,
-          Time typicalDurationIn) {
-          this.name = nameIn;
-          this.description = descriptionIn;
-          this.typicalDuration = typicalDurationIn;
+    public void setAll(int yearIn,
+          String assignedByIn) {
+          this.year = yearIn;
+          this.assignedBy = assignedByIn;
     }
 
 
@@ -94,22 +93,16 @@ public class AnnualSchedule implements Cloneable, Serializable {
      */
     public boolean hasEqualMapping(AnnualSchedule valueObject) {
 
-          if (this.name == null) {
-                    if (valueObject.getName() != null)
+          if (this.year == 0) {
+                    if (valueObject.getYear() != 0)
                            return(false);
-          } else if (!this.name.equals(valueObject.getName())) {
+          } else if (this.year != valueObject.getYear()) {
                     return(false);
           }
-          if (this.description == null) {
-                    if (valueObject.getDescription() != null)
+          if (this.assignedBy == null) {
+                    if (valueObject.getAssignedBy() != null)
                            return(false);
-          } else if (!this.description.equals(valueObject.getDescription())) {
-                    return(false);
-          }
-          if (this.typicalDuration == null) {
-                    if (valueObject.getTypicalDuration() != null)
-                           return(false);
-          } else if (!this.typicalDuration.equals(valueObject.getTypicalDuration())) {
+          } else if (!this.assignedBy.equals(valueObject.getAssignedBy())) {
                     return(false);
           }
 
@@ -125,11 +118,10 @@ public class AnnualSchedule implements Cloneable, Serializable {
      */
     public String toString() {
         StringBuffer out = new StringBuffer();
-        out.append("\nRadioProgram class, mapping to table radio-program\n");
+        out.append("\nAnnualSchedule class, mapping to table annual-schedule\n");
         out.append("Persistent attributes: \n"); 
-        out.append("name = " + this.name + "\n"); 
-        out.append("description = " + this.description + "\n"); 
-        out.append("typicalDuration = " + this.typicalDuration + "\n"); 
+        out.append("year = " + this.year + "\n"); 
+        out.append("assignedBy = " + this.assignedBy + "\n");
         return out.toString();
     }
 
@@ -143,12 +135,10 @@ public class AnnualSchedule implements Cloneable, Serializable {
     public Object clone() {
         AnnualSchedule cloned = new AnnualSchedule();
 
-        if (this.name != null)
-             cloned.setName(new String(this.name)); 
-        if (this.description != null)
-             cloned.setDescription(new String(this.description)); 
-        if (this.typicalDuration != null)
-             cloned.setTypicalDuration((Time)this.typicalDuration.clone()); 
+        if (this.year != 0)
+             cloned.setYear(this.year); 
+        if (this.assignedBy != null)
+             cloned.setAssignedBy(new String(this.assignedBy)); 
         return cloned;
     }
 

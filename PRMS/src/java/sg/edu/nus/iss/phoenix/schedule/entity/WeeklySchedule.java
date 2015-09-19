@@ -3,6 +3,8 @@ package sg.edu.nus.iss.phoenix.schedule.entity;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.*;
 import java.io.Serializable;
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.List;
 
 public class WeeklySchedule implements Cloneable, Serializable {
 
@@ -15,10 +17,9 @@ public class WeeklySchedule implements Cloneable, Serializable {
      * Persistent Instance variables. This data is directly 
      * mapped to the columns of database table.
      */
-    private String name;
-    private String description;
-    private Time typicalDuration;
-
+    private Timestamp startDate;
+    private String assignedBy;
+    private List<ProgramSlot> listOfProgramSlot;
 
 
     /** 
@@ -32,9 +33,9 @@ public class WeeklySchedule implements Cloneable, Serializable {
 
     }
 
-    public WeeklySchedule (String nameIn) {
+    public WeeklySchedule (Timestamp startDateIn) {
 
-          this.name = nameIn;
+          this.startDate = startDateIn;
 
     }
 
@@ -45,27 +46,29 @@ public class WeeklySchedule implements Cloneable, Serializable {
      * so these might require some manual additions.
      */
 
-    public String getName() {
-          return this.name;
+    public Timestamp getStartDate() {
+          return this.startDate;
     }
-    public void setName(String nameIn) {
-          this.name = nameIn;
-    }
-
-    public String getDescription() {
-          return this.description;
-    }
-    public void setDescription(String descriptionIn) {
-          this.description = descriptionIn;
+    public void setStartDate(Timestamp startDateIn) {
+          this.startDate = startDateIn;
     }
 
-    public Time getTypicalDuration() {
-          return this.typicalDuration;
+    public String getAssignedBy() {
+          return this.assignedBy;
     }
-    public void setTypicalDuration(Time typicalDurationIn) {
-          this.typicalDuration = typicalDurationIn;
+    public void setAssignedBy(String assignedByIn) {
+          this.assignedBy = assignedByIn;
     }
 
+    public List<ProgramSlot> getListOfProgramSlot() {
+        return listOfProgramSlot;
+    }
+
+    public void setListOfProgramSlot(List<ProgramSlot> listOfProgramSlot) {
+        this.listOfProgramSlot = listOfProgramSlot;
+    }
+
+    
 
 
     /** 
@@ -76,12 +79,10 @@ public class WeeklySchedule implements Cloneable, Serializable {
      * individual set-methods.
      */
 
-    public void setAll(String nameIn,
-          String descriptionIn,
-          Time typicalDurationIn) {
-          this.name = nameIn;
-          this.description = descriptionIn;
-          this.typicalDuration = typicalDurationIn;
+    public void setAll(Timestamp startDateIn,
+          String assignedByIn) {
+          this.startDate = startDateIn;
+          this.assignedBy = assignedByIn;
     }
 
 
@@ -94,22 +95,16 @@ public class WeeklySchedule implements Cloneable, Serializable {
      */
     public boolean hasEqualMapping(WeeklySchedule valueObject) {
 
-          if (this.name == null) {
-                    if (valueObject.getName() != null)
+          if (this.startDate == null) {
+                    if (valueObject.getStartDate() != null)
                            return(false);
-          } else if (!this.name.equals(valueObject.getName())) {
+          } else if (!this.startDate.equals(valueObject.getStartDate())) {
                     return(false);
           }
-          if (this.description == null) {
-                    if (valueObject.getDescription() != null)
+          if (this.assignedBy == null) {
+                    if (valueObject.getAssignedBy() != null)
                            return(false);
-          } else if (!this.description.equals(valueObject.getDescription())) {
-                    return(false);
-          }
-          if (this.typicalDuration == null) {
-                    if (valueObject.getTypicalDuration() != null)
-                           return(false);
-          } else if (!this.typicalDuration.equals(valueObject.getTypicalDuration())) {
+          } else if (!this.assignedBy.equals(valueObject.getAssignedBy())) {
                     return(false);
           }
 
@@ -127,9 +122,8 @@ public class WeeklySchedule implements Cloneable, Serializable {
         StringBuffer out = new StringBuffer();
         out.append("\nRadioProgram class, mapping to table radio-program\n");
         out.append("Persistent attributes: \n"); 
-        out.append("name = " + this.name + "\n"); 
-        out.append("description = " + this.description + "\n"); 
-        out.append("typicalDuration = " + this.typicalDuration + "\n"); 
+        out.append("name = " + this.startDate.toString() + "\n"); 
+        out.append("description = " + this.assignedBy + "\n"); 
         return out.toString();
     }
 
@@ -143,12 +137,11 @@ public class WeeklySchedule implements Cloneable, Serializable {
     public Object clone() {
         WeeklySchedule cloned = new WeeklySchedule();
 
-        if (this.name != null)
-             cloned.setName(new String(this.name)); 
-        if (this.description != null)
-             cloned.setDescription(new String(this.description)); 
-        if (this.typicalDuration != null)
-             cloned.setTypicalDuration((Time)this.typicalDuration.clone()); 
+        if (this.startDate != null)
+             cloned.setStartDate(this.startDate); 
+        if (this.assignedBy != null)
+             cloned.setAssignedBy(new String(this.assignedBy)); 
+        
         return cloned;
     }
 

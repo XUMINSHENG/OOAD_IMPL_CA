@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import sg.edu.nus.iss.phoenix.core.dao.DAOFactoryImpl;
 import sg.edu.nus.iss.phoenix.schedule.dao.ScheduleDAO;
+import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
 public class ReviewSelectScheduledProgramService {
@@ -19,8 +20,18 @@ public class ReviewSelectScheduledProgramService {
 		factory = new DAOFactoryImpl();
 		rpdao = factory.getScheduleDAO();
 	}
-
-	public List<ProgramSlot> reviewSelectScheduledProgram() {
+        
+        public List<AnnualSchedule> reviewSelectAnnualSchedule() {
+            List<AnnualSchedule> data = null;
+            try {
+                data = rpdao.loadAllAnnualSchedule();
+            } catch (SQLException ex) {
+                Logger.getLogger(ReviewSelectScheduledProgramService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return data; 
+        }
+ 
+	public List<ProgramSlot> reviewSelectScheduledProgram(int yearIn, int weekIn) {
             List<ProgramSlot> data = null;
             try {
                 data = rpdao.loadAll();

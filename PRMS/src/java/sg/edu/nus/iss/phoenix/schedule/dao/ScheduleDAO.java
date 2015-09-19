@@ -8,10 +8,35 @@ import java.util.Date;
 import java.util.List;
 
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
+import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 
 public interface ScheduleDAO {
+    
+        
+        public abstract AnnualSchedule createAnnualSchedule();
+        
+        public abstract AnnualSchedule getAnnualSchedule(int year)
+                throws NotFoundException, SQLException;
+        
+        public abstract void loadAnnualSchedule(AnnualSchedule valueObject)
+                throws NotFoundException, SQLException;
 
+        public abstract List<AnnualSchedule> loadAllAnnualSchedule() 
+                throws SQLException;
+        
+        public abstract WeeklySchedule createWeeklySchedule();
+        
+        public abstract WeeklySchedule getWeeklySchedule(int year)
+                throws NotFoundException, SQLException;
+        
+        public abstract void loadWeeklySchedule(WeeklySchedule valueObject)
+                throws NotFoundException, SQLException;
+
+        public abstract List<WeeklySchedule> loadAllWeeklySchedule() 
+                throws SQLException;
+        
 	/**
 	 * createValueObject-method. This method is used when the Dao class needs to
 	 * create new value object instance. The reason why this method exists is

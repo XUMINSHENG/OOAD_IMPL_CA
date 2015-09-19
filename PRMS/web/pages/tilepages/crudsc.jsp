@@ -21,7 +21,51 @@
         &nbsp;
         &nbsp;
         <a href="${url}"><fmt:message key="label.crudsc.add"/></a>
+        &nbsp;
+        &nbsp;
+        <a href="${url}"><fmt:message key="label.crudsc.copy"/></a>
         <br/><br/>
+        <c:if test="${! empty yearlist}">
+            <form action="${pageContext.request.contextPath}/nocturne/managesc"
+		method=post>
+		<center>
+			<table class="framed">
+				<tr>
+					<th width="30%"><fmt:message key="caption.schedule" /></th>
+                                        <th width="30%"></th>
+                                        <th></th>
+				</tr>
+				<tr>
+					<td><fmt:message key="fieldLabel.year" />
+                                            <select naem="year" style="width: 100px;">
+                                                <c:forEach var="item" items="${yearlist}" varStatus="loop">
+                                                    <option value="<c:out value="${item.getYear()}" />">
+                                                        <c:out value="${item.getYear()}" />
+                                                    </option>
+                                                </c:forEach>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <fmt:message key="fieldLabel.week" />
+                                            <select name="week" style="width:100px;">
+                                                <c:forEach begin="1" end="52" varStatus="loop">
+                                                    <option value="<c:out value="${loop.index}" />" >
+                                                        <c:out value="${loop.index}" />
+                                                    </option>
+                                                </c:forEach>
+                                            </select>
+                                        </td>
+                                        <td><input type="submit" value="Submit"></td>
+				</tr>
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td></td>
+                                </tr>
+			</table>
+		</center>
+            </form>
+        </c:if>
+        
         <table class="borderAll">
             <tr>
                 <th><fmt:message key="label.crudsc.date"/></th>
