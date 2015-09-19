@@ -17,13 +17,14 @@ import javax.servlet.http.HttpServletResponse;
  * @author achyut
  */
 
-@Action("deleteuser")
-public class DeleteUserCmd implements Perform {
+@Action("addmodifyuser")
+public class AddModifyUserCmd implements Perform {
 
     @Override
     public String perform(String string, HttpServletRequest hsr, HttpServletResponse hsr1) throws IOException, ServletException {
         
-        return "/pages/cruduser.jsp";
+        return "/pages/setupuser.jsp";
+        
     }
     
 }

@@ -5,10 +5,25 @@
  */
 package sg.edu.nus.iss.phoenix.user.controller;
 
+import at.nocturne.api.Action;
+import at.nocturne.api.Perform;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  *
  * @author achyut
  */
-public class ManageUserCmd {
+
+@Action("manageuser")
+public class ManageUserCmd implements Perform  {
+
+    @Override
+    public String perform(String string, HttpServletRequest hsr, HttpServletResponse hsr1) throws IOException, ServletException {
+        
+        return "/pages/cruduser.jsp";
+    }
     
 }
