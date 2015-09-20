@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.phoenix.radioprogram.dao;
+package sg.edu.nus.iss.phoenix.user.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
