@@ -10,19 +10,15 @@
 
 <fmt:setBundle basename="ApplicationResources" />
 
-<title><fmt:message key="title.setuprp" /></title>
+<title><fmt:message key="title.setupps" /></title>
 </head>
 <body>
-	<form action="${pageContext.request.contextPath}/nocturne/enterrp" method=post>
+	<form action="${pageContext.request.contextPath}/nocturne/enterps" method=post>
 		<center>
-			<table cellpadding=4 cellspacing=2 border=0>
-				<tr>
-					<th width="30%"><fmt:message key="label.crudrp.name" /></th>
-					<th width="45%"><fmt:message key="label.crudrp.description" /></th>
-					<th width="25%"><fmt:message key="label.crudrp.duration" /></th>
-				</tr>
-				<tr>
-					<td><fmt:message key="label.crudrp.name" /></td>
+			<table cellpadding=6 cellspacing=2 border=0>
+				<!--Date-->
+                                <tr>
+					<td><fmt:message key="label.programslot.dateOfProgram" /></td>
 					<td><c:if test="${param['insert'] == 'true'}">
 							<input type="text" name="name" value="${param['name']}" size=15
 								maxlength=20>
@@ -32,18 +28,92 @@
 							<input type="text" name="name" value="${param['name']}" size=15
 								maxlength=20 readonly="readonly">
 							<input type="hidden" name="ins" value="false" />
-						</c:if></td>
+						</c:if>
+                                        </td>
 				</tr>
-				<tr>
-					<td><fmt:message key="label.crudrp.description" /></td>
-					<td><input type="text" name="description"
-						value="${param['description']}" size=45 maxlength=20></td>
+                                
+                                <!--Start Time-->
+                                <tr>
+					<td><fmt:message key="label.programslot.startTime" /></td>
+					<td><c:if test="${param['insert'] == 'true'}">
+							<input type="text" name="name" value="${param['name']}" size=15
+								maxlength=20>
+							<input type="hidden" name="ins" value="true" />
+						</c:if> 
+						<c:if test="${param['insert']=='false'}">
+							<input type="text" name="name" value="${param['name']}" size=15
+								maxlength=20 readonly="readonly">
+							<input type="hidden" name="ins" value="false" />
+						</c:if>
+                                        </td>
 				</tr>
-				<tr>
-					<td><fmt:message key="label.crudrp.duration" /></td>
-					<td><input type="text" name="typicalDuration"
-						value="${param['typicalDuration']}" size=15 maxlength=20></td>
+                                
+                                <!--Duration-->
+                                <tr>
+					<td><fmt:message key="label.programslot.duration" /></td>
+					<td><c:if test="${param['insert'] == 'true'}">
+							<input type="text" name="name" value="${param['name']}" size=15
+								maxlength=20>
+							<input type="hidden" name="ins" value="true" />
+						</c:if> 
+						<c:if test="${param['insert']=='false'}">
+							<input type="text" name="name" value="${param['name']}" size=15
+								maxlength=20 readonly="readonly">
+							<input type="hidden" name="ins" value="false" />
+						</c:if>
+                                        </td>
 				</tr>
+                                
+                                <!--Program-->
+                                <tr>
+					<td><fmt:message key="label.programslot.name" /></td>
+					<td><c:if test="${param['insert'] == 'true'}">
+							<input type="text" name="name" value="${param['name']}" size=15
+								maxlength=20>
+							<input type="hidden" name="ins" value="true" />
+						</c:if> 
+						<c:if test="${param['insert']=='false'}">
+							<input type="text" name="name" value="${param['name']}" size=15
+								maxlength=20 readonly="readonly">
+							<input type="hidden" name="ins" value="false" />
+						</c:if>
+                                        </td>
+				</tr>
+                                
+                                <!--Producer-->
+                                <tr>
+					<td><fmt:message key="label.programslot.producer" /></td>
+					<td><c:if test="${param['insert'] == 'true'}">
+							<input type="text" name="name" value="${param['name']}" size=15
+								maxlength=20>
+							<input type="hidden" name="ins" value="true" />
+						</c:if> 
+						<c:if test="${param['insert']=='false'}">
+							<input type="text" name="name" value="${param['name']}" size=15
+								maxlength=20 readonly="readonly">
+							<input type="hidden" name="ins" value="false" />
+						</c:if>
+                                        </td>
+				</tr>
+                                
+                                <!--Presenter-->
+                                <tr>
+					<td><fmt:message key="label.programslot.presenter" /></td>
+					<td><c:if test="${param['insert'] == 'true'}">
+							<input type="text" name="name" value="${param['name']}" size=15
+								maxlength=20>
+							<input type="hidden" name="ins" value="true" />
+						</c:if> 
+						<c:if test="${param['insert']=='false'}">
+							<input type="text" name="name" value="${param['name']}" size=15
+								maxlength=20 readonly="readonly">
+							<input type="hidden" name="ins" value="false" />
+						</c:if>
+                                        </td>
+				</tr>
+                                
+                                
+				
 			</table>
 		</center>
 		<input type="submit" value="Submit"> <input type="reset"
