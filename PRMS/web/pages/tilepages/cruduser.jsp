@@ -51,7 +51,7 @@
                             <c:param name="address" value="${cruduser.address}"/>
                              <c:param name="insert" value="false"/>
                         </c:url>
-                        <a href="${updurl}"><fmt:message key="label.cruduser.add"/></a>
+                        <a href="${updurl}"><fmt:message key="label.cruduser.edit"/></a>
                         &nbsp;&nbsp;&nbsp;
                         <c:url var="delurl" scope="page" value="/nocturne/deleteuser">
                             <c:param name="name" value="${cruduser.name}"/>
