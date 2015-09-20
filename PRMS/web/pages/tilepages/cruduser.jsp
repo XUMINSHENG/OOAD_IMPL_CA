@@ -38,7 +38,7 @@
                     <td class="nowrap">${cruduser.name}</td>
                     <td class="nowrap">
                         
-                        <c:forEach var="role" items="${cruduser.roles}" varStatus="status">
+                        <c:forEach var="role" items="${cruduser.roles}" varStatus="status"> 
                             
                             ${role.role} 
                         </c:forEach>
