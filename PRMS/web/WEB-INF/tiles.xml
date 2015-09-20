@@ -36,4 +36,7 @@
 	<definition name="searchspPage" extends="homePage">
 		<put-attribute name="body" value="/pages/tilepages/searchsp.jsp" />
 	</definition>
+        <definition name="setupps" extends="homePage">
+		<put-attribute name="body" value="/pages/tilepages/setupps.jsp" />
+	</definition>
 </tiles-definitions>
