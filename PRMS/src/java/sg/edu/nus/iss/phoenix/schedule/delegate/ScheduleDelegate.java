@@ -52,7 +52,7 @@ public class ScheduleDelegate {
 		service.processCreate(ps);
 	}
         
-	public void processModify(ProgramSlot ps) {
+	public void processModify(ProgramSlot ps) throws NotFoundException, SQLException {
 		ScheduleService service = new ScheduleService();
 		service.processModify(ps);
 		
