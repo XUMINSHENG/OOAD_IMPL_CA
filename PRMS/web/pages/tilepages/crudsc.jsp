@@ -20,10 +20,31 @@
                 <c:param name="presenter-name" value=""/>
                 <c:param name="insert" value="true"/>
         </c:url>
+        
+        <c:url var="addurl" scope="page" value="/nocturne/addeditps">
+        	<c:param name="dataOfProgram" value=""/>
+                <c:param name="startTime" value=""/>
+                <c:param name="duration" value=""/>
+                <c:param name="program-name" value=""/>
+                <c:param name="producer-name" value=""/>
+                <c:param name="presenter-name" value=""/>
+                <c:param name="insert" value="true"/>
+        </c:url>
+        
+        <c:url var="updurl" scope="page" value="/nocturne/addeditps">
+        	<c:param name="dataOfProgram" value=""/>
+                <c:param name="startTime" value=""/>
+                <c:param name="duration" value=""/>
+                <c:param name="program-name" value=""/>
+                <c:param name="producer-name" value=""/>
+                <c:param name="presenter-name" value=""/>
+                <c:param name="insert" value="false"/>
+        </c:url>
+        
         <a href="${url}"><fmt:message key="label.crudsc.createAnSc"/></a>
         &nbsp;
         &nbsp;
-        <a href="${url}"><fmt:message key="label.crudsc.add"/></a>
+        <a href="${addurl}"><fmt:message key="label.crudsc.add"/></a>
         &nbsp;
         &nbsp;
         <a href="${url}"><fmt:message key="label.crudsc.copy"/></a>
@@ -82,11 +103,6 @@
                     <td class="nowrap"><fmt:formatDate pattern="hh:mm:ss a" value="${crudsc.startTime}" /></td>
                     <td class="nowrap"><fmt:formatDate pattern="HH:mm:ss" value="${crudsc.duration}" /></td>
                     <td class="nowrap">
-                        <c:url var="updurl" scope="page" value="/nocturne/addeditrp">
-                            <c:param name="dateOfProgram" value="${crudsc.dateOfProgram}" />
-                            <c:param name="startTime" value="${crudsc.startTime}"/>
-                            <c:param name="insert" value="false"/>
-                        </c:url>
                         <a href="${updurl}"><fmt:message key="label.crudsc.edit"/></a>
                         &nbsp;&nbsp;&nbsp;
                         <c:url var="delurl" scope="page" value="/nocturne/deleteps">
