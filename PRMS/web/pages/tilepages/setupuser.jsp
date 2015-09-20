@@ -18,7 +18,7 @@
         <title><fmt:message key="title.setupuser" /></title>
     </head>
     <body>
-        <form action="${pageContext.request.contextPath}/nocturne/enteruser" method=post>
+        <form action="${pageContext.request.contextPath}/nocturne/addmodifyuser" method=post>
 		<center>
 			<table cellpadding=4 cellspacing=2 border=0>
 				<!-- <tr>
@@ -41,13 +41,23 @@
 				</tr>
 				<tr>
 					<td><fmt:message key="label.cruduser.role" /></td>
-					<td><input type="text" name="description"
-						value="${param['description']}" size=15 maxlength=20></td>
+					<td><input type="text" name="role"
+						value="${param['role']}" size=15 maxlength=20></td>
 				</tr>
 				<tr>
 					<td><fmt:message key="label.cruduser.address" /></td>
-					<td><input type="text" name="typicalDuration"
+					<td><input type="text" name="address"
 						value="${param['typicalDuration']}" size=15 maxlength=20></td>
+				</tr>
+                                 <tr>
+					<td><fmt:message key="label.cruduser.password" /></td>
+					<td><input type="text" name="password"
+						value="${param['role']}" size=15 maxlength=20></td>
+				</tr>
+                                 <tr>
+					<td><fmt:message key="label.cruduser.joiningdate" /></td>
+					<td><input type="text" name="joiningdate"
+						value="${param['role']}" size=15 maxlength=20></td>
 				</tr>
 			</table>
                         <input type="submit" value="Submit"> <input type="reset"
