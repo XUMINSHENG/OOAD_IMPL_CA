@@ -42,7 +42,7 @@ public class EnterUserDetailsCmd implements Perform {
         Logger.getLogger(getClass().getName()).log(Level.INFO,
                         "Insert Flag: " + ins);
         if (ins.equalsIgnoreCase("true")) {
-                del.processCreate(user);
+               // del.processCreate(user);
         } else {
                 del.processModify(user);
         }
