@@ -99,7 +99,7 @@ public class UserDaoImpl implements UserDao {
 		String sql = "SELECT * FROM user ORDER BY id ASC ";
 		List<User> searchResults = listQuery(this.connection
 				.prepareStatement(sql));
-
+                System.out.println("exited loadAll()");
 		return searchResults;
 	}
 
@@ -373,6 +373,7 @@ public class UserDaoImpl implements UserDao {
 				valueObject.setId(result.getString("id"));
 				valueObject.setPassword(result.getString("password"));
 				valueObject.setName(result.getString("name"));
+                                valueObject.setAddress(result.getString("address"));
 				valueObject.setRoles(createRoles(result.getString("role")));
 				//Role e = new Role(result.getString("role"));
 				//ArrayList<Role> roles = new ArrayList<Role>();
@@ -407,14 +408,13 @@ public class UserDaoImpl implements UserDao {
 
 		try {
 			result = stmt.executeQuery();
-
 			while (result.next()) {
 				User temp = createValueObject();
-
 				temp.setId(result.getString("id"));
 				temp.setPassword(result.getString("password"));
 				temp.setName(result.getString("name"));
-				temp.setRoles(createRoles(result.getString("role")));
+                                temp.setAddress(result.getString("address"));
+                                temp.setRoles(createRoles(result.getString("role")));
 				//Role e = new Role(result.getString("role"));
 				//ArrayList<Role> roles = new ArrayList<Role>();
 				//roles.add(e);

@@ -36,12 +36,18 @@
             <c:forEach var="cruduser" items="${rps}" varStatus="status">
                 <tr class="${status.index%2==0?'even':'odd'}">
                     <td class="nowrap">${cruduser.name}</td>
-                    <td class="nowrap">${cruduser.role}</td>
+                    <td class="nowrap">
+                        
+                        <c:forEach var="role" items="${cruduser.roles}" varStatus="status">
+                            
+                            ${role.role} 
+                        </c:forEach>
+                    </td>
                     <td class="nowrap">${cruduser.address}</td>
                     <td class="nowrap">
                         <c:url var="updurl" scope="page" value="/nocturne/addmodifyuser">
                             <c:param name="name" value="${cruduser.name}"/>
-                            <c:param name="role" value="${cruduser.role}"/>
+                            <c:param name="roles" value="${cruduser.roles}"/>
                             <c:param name="address" value="${cruduser.address}"/>
                              <c:param name="insert" value="false"/>
                         </c:url>
