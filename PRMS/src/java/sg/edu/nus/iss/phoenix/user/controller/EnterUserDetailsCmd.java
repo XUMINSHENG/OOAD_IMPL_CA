@@ -32,11 +32,12 @@ public class EnterUserDetailsCmd implements Perform {
         UserDelegate del = new UserDelegate();
         User user = new User();
         user.setName(hsr.getParameter("name"));
-        user.setAddress(hsr.getParameter("role"));
-        String dur = hsr.getParameter("typicalDuration");
-        System.out.println(user.toString());
-        Time t = Time.valueOf(dur);
-        user.setTypicalDuration(t);
+        user.setRoles(hsr.getParameter("role"));
+        user.setAddress(hsr.getParameter("address"));
+        String dur = hsr.getParameter("joiningdate");
+//        System.out.println(user.toString());
+//        Time t = Time.valueOf(dur);
+//        user.setTypicalDuration(t);
         String ins = (String) hsr.getParameter("ins");
         Logger.getLogger(getClass().getName()).log(Level.INFO,
                         "Insert Flag: " + ins);

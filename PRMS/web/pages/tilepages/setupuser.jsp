@@ -47,21 +47,21 @@
 				<tr>
 					<td><fmt:message key="label.cruduser.address" /></td>
 					<td><input type="text" name="address"
-						value="${param['typicalDuration']}" size=15 maxlength=20></td>
+						value="${param['address']}" size=15 maxlength=20></td>
 				</tr>
                                  <tr>
 					<td><fmt:message key="label.cruduser.password" /></td>
-					<td><input type="text" name="password"
+					<td><input type="password" name="password"
 						value="${param['role']}" size=15 maxlength=20></td>
 				</tr>
                                  <tr>
 					<td><fmt:message key="label.cruduser.joiningdate" /></td>
 					<td><input type="text" name="joiningdate"
-						value="${param['role']}" size=15 maxlength=20></td>
+						value="${param['joiningdate']}" size=15 maxlength=20>YYYY-MM-DD</td>
 				</tr>
 			</table>
-                        <input type="submit" value="Submit"> <input type="reset"
-			value="Reset">
+                        <input type="submit" value="Submit"> 
+                        <input type="reset" value="Reset">
 		</center>
 		
 	</form>
