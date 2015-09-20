@@ -11,10 +11,13 @@
 </head>
 <body>
         <h1><fmt:message key="label.crudsc"/></h1>
-        <c:url var="url" scope="page" value="/nocturne/addeditrp">
-        		<c:param name="name" value=""/>
-                <c:param name="description" value=""/>
+        <c:url var="url" scope="page" value="/nocturne/addeditps">
+        	<c:param name="dataOfProgram" value=""/>
+                <c:param name="startTime" value=""/>
                 <c:param name="duration" value=""/>
+                <c:param name="program-name" value=""/>
+                <c:param name="producer-name" value=""/>
+                <c:param name="presenter-name" value=""/>
                 <c:param name="insert" value="true"/>
         </c:url>
         <a href="${url}"><fmt:message key="label.crudsc.createAnSc"/></a>

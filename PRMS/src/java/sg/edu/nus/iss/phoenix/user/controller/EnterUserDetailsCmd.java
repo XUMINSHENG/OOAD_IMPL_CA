@@ -32,7 +32,7 @@ public class EnterUserDetailsCmd implements Perform {
         UserDelegate del = new UserDelegate();
         User user = new User();
         user.setName(hsr.getParameter("name"));
-        user.setRoles(hsr.getParameter("role"));
+//        user.setRoles(hsr.getParameter("role"));
         user.setAddress(hsr.getParameter("address"));
         String dur = hsr.getParameter("joiningdate");
 //        System.out.println(user.toString());
@@ -42,14 +42,14 @@ public class EnterUserDetailsCmd implements Perform {
         Logger.getLogger(getClass().getName()).log(Level.INFO,
                         "Insert Flag: " + ins);
         if (ins.equalsIgnoreCase("true")) {
-               del.processCreate(user);
+//              del.processCreate(user);
         } else {
-                del.processModify(user);
+//                del.processModify(user);
         }
         
-        ReviewSelectProgramDelegate rsdel = new ReviewSelectProgramDelegate();
-        List<RadioProgram> data = rsdel.reviewSelectRadioProgram();
-        hsr.setAttribute("rps", data);
+//        ReviewSelectProgramDelegate rsdel = new ReviewSelectProgramDelegate();
+//        List<RadioProgram> data = rsdel.reviewSelectRadioProgram();
+//        hsr.setAttribute("rps", data);
         return "/pages/cruduser.jsp";
     }
     
