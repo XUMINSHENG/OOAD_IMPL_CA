@@ -18,6 +18,43 @@
         <title><fmt:message key="title.setupuser" /></title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <form action="${pageContext.request.contextPath}/nocturne/enteruser" method=post>
+		<center>
+			<table cellpadding=4 cellspacing=2 border=0>
+				<!-- <tr>
+					<th width="30%"><fmt:message key="label.cruduser.name" /></th>
+					<th width="45%"><fmt:message key="label.cruduser.role" /></th>
+					<th width="25%"><fmt:message key="label.cruduser.address" /></th>
+				</tr> -->
+				<tr>
+					<td><fmt:message key="label.cruduser.name" /></td>
+					<td><c:if test="${param['insert'] == 'true'}">
+							<input type="text" name="name" value="${param['name']}" size=15
+								maxlength=20>
+							<input type="hidden" name="ins" value="true" />
+						</c:if> 
+						<c:if test="${param['insert']=='false'}">
+							<input type="text" name="name" value="${param['name']}" size=15
+								maxlength=20 readonly="readonly">
+							<input type="hidden" name="ins" value="false" />
+						</c:if></td>
+				</tr>
+				<tr>
+					<td><fmt:message key="label.cruduser.role" /></td>
+					<td><input type="text" name="description"
+						value="${param['description']}" size=15 maxlength=20></td>
+				</tr>
+				<tr>
+					<td><fmt:message key="label.cruduser.address" /></td>
+					<td><input type="text" name="typicalDuration"
+						value="${param['typicalDuration']}" size=15 maxlength=20></td>
+				</tr>
+			</table>
+                        <input type="submit" value="Submit"> <input type="reset"
+			value="Reset">
+		</center>
+		
+	</form>
+
     </body>
 </html>

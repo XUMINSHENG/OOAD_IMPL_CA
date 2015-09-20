@@ -16,11 +16,11 @@
         <title> <fmt:message key="title.cruduser"/> </title>
     </head>
     <body>
-        <h1><fmt:message key="label.crudrp"/></h1>
-        <c:url var="url" scope="page" value="/nocturne/addeditrp">
+        <h1><fmt:message key="label.cruduser"/></h1>
+        <c:url var="url" scope="page" value="/nocturne/addmodifyuser">
         		<c:param name="name" value=""/>
-                <c:param name="description" value=""/>
-                <c:param name="duration" value=""/>
+                <c:param name="role" value=""/>
+                <c:param name="address" value=""/>
                 <c:param name="insert" value="true"/>
         </c:url>
         <a href="${url}"><fmt:message key="label.cruduser.add"/></a>
@@ -33,16 +33,16 @@
                 <th><fmt:message key="label.cruduser.edit"/>
                 <fmt:message key="label.cruduser.delete"/></th>
             </tr>
-            <c:forEach var="crudrp" items="${rps}" varStatus="status">
+            <c:forEach var="cruduser" items="${rps}" varStatus="status">
                 <tr class="${status.index%2==0?'even':'odd'}">
                     <td class="nowrap">${cruduser.name}</td>
                     <td class="nowrap">${cruduser.role}</td>
                     <td class="nowrap">${cruduser.address}</td>
                     <td class="nowrap">
-                        <c:url var="updurl" scope="page" value="/nocturne/addeditrp">
+                        <c:url var="updurl" scope="page" value="/nocturne/addmodifyuser">
                             <c:param name="name" value="${cruduser.name}"/>
-                            <c:param name="description" value="${cruduser.role}"/>
-                            <c:param name="typicalDuration" value="${cruduser.address}"/>
+                            <c:param name="role" value="${cruduser.role}"/>
+                            <c:param name="address" value="${cruduser.address}"/>
                              <c:param name="insert" value="false"/>
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.cruduser.add"/></a>
