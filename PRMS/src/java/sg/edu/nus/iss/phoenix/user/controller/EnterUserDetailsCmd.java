@@ -7,6 +7,7 @@ package sg.edu.nus.iss.phoenix.user.controller;
 
 import at.nocturne.api.Action;
 import at.nocturne.api.Perform;
+import static com.sun.xml.ws.security.addressing.impl.policy.Constants.logger;
 import java.io.IOException;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -47,8 +48,26 @@ public class EnterUserDetailsCmd implements Perform {
             user.setId(id);
         }
         
+        String[] s_roles = request.getParameterValues("rolelist");
+        String roleList= "";
+        int count=0;
+        for(String Roles : s_roles ){
+            count++;
+            //roleList.add(Roles);
+            if(count>1){
+                roleList=roleList+":";
+                roleList=roleList+Roles;
+            }else{
+            roleList=roleList+Roles;
+            }
+        }
+        //logger.log(Level.WARNING, "s_roles:", s_roles);
+       
+         
+        //user.setRoles(createRoles(request.getParameter("rolelist")));
         
-        user.setRoles(createRoles(request.getParameter("role")));
+        
+        user.setRoles(createRoles(roleList));
         user.setAddress(request.getParameter("address"));   
         user.setPassword(request.getParameter("password"));
         user.setJoiningDate(request.getParameter("joiningdate"));
@@ -56,9 +75,9 @@ public class EnterUserDetailsCmd implements Perform {
         Logger.getLogger(getClass().getName()).log(Level.INFO,
                         "Insert Flag: " + ins);
         if (ins.equalsIgnoreCase("true")) {
-                del.processCreate(user);
+              del.processCreate(user);
         } else {
-                del.processModify(user);
+               //del.processModify(user);
         }
         
         

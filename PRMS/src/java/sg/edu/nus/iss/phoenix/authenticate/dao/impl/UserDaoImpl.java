@@ -123,15 +123,49 @@ public class UserDaoImpl implements UserDao {
 			stmt.setString(2, valueObject.getPassword());
 			stmt.setString(3, valueObject.getName());
                         stmt.setString(4, valueObject.getAddress());
+                        ArrayList<Role> a_role =  valueObject.getRoles();
+                        String s_role="";
+                        for(int i=0;i<a_role.size();i++){
+                            if(i>0){
+                                s_role=s_role+":";
+                                s_role=s_role+a_role.get((i)).getRole().toString();
+                                                                                             
+                            }else{
+                            s_role=s_role+a_role.get((i)).getRole().toString();
+                            
+                            }
+                        }
+                       // stmt.setString(5, valueObject.getRoles().get(0).getRole());
+                        stmt.setString(5, s_role);
                         
-                        stmt.setString(5, valueObject.getRoles().get(0).getRole());
                         stmt.setString(6, valueObject.getJoiningDate());
-
-			int rowcount = databaseUpdate(stmt);
+                        int rowcount = databaseUpdate(stmt);
 			if (rowcount != 1) {
 				// System.out.println("PrimaryKey Error when updating DB!");
 				throw new SQLException("PrimaryKey Error when updating DB!");
 			}
+                        
+                        for(int i=0;i<a_role.size();i++){
+                            String switchRole = a_role.get((i)).getRole().toString();
+                            
+                            switch (switchRole){
+                                case "presenter":
+                                    insertIntoPresenter(valueObject);
+                                    break;
+                                case "producer":
+                                    insertIntoProducer(valueObject);
+                                    break;
+                                case "station manager":
+                                    insertIntoStationManager(valueObject);
+                                    break;
+                                default:
+                                    break;
+                                    
+                            }
+                        }
+                        
+
+			
 
 		} finally {
 			if (stmt != null)
@@ -139,6 +173,8 @@ public class UserDaoImpl implements UserDao {
 		}
 
 	}
+        
+        
 
 	/*
 	 * (non-Javadoc)
@@ -159,7 +195,21 @@ public class UserDaoImpl implements UserDao {
                         stmt.setString(2, valueObject.getAddress()); 
                         stmt.setString(3, valueObject.getPassword());
                         stmt.setString(4, valueObject.getJoiningDate());
-			stmt.setString(5, valueObject.getId());
+			ArrayList<Role> a_role =  valueObject.getRoles();
+                        String s_role="";
+                        for(int i=0;i<a_role.size();i++){
+                            if(i>0){
+                                s_role=s_role+":";
+                                s_role=s_role+a_role.get((i)).getRole().toString();
+                                                                                             
+                            }else{
+                            s_role=s_role+a_role.get((i)).getRole().toString();
+                            
+                            }
+                        }
+                       // stmt.setString(5, valueObject.getRoles().get(0).getRole());
+                        stmt.setString(5, s_role);
+                        
 			
 			//stmt.setString(3, valueObject.getName());
                         int rowcount = databaseUpdate(stmt);
@@ -173,6 +223,26 @@ public class UserDaoImpl implements UserDao {
 				throw new SQLException(
 						"PrimaryKey Error when updating DB! (Many objects were affected!)");
 			}
+                        for(int i=0;i<a_role.size();i++){
+                            String switchRole = a_role.get((i)).getRole().toString();
+                            
+                            switch (switchRole){
+                                case "presenter":
+                                    updateIntoPresenter(valueObject);
+                                    break;
+                                case "producer":
+                                    updateIntoProducer(valueObject);
+                                    break;
+                                case "station manager":
+                                    updateIntoStationManager(valueObject);
+                                    break;
+                                default:
+                                    break;
+                                    
+                            }
+                        }
+                        
+                        
 		} finally {
 			if (stmt != null)
 				stmt.close();
@@ -463,4 +533,70 @@ public class UserDaoImpl implements UserDao {
 		}
 		return conn;
 	}
+
+    private void insertIntoPresenter(User user) throws SQLException {
+        
+                System.out.println("inside presenter: "+user.getName()+user.getId());
+                String sql = "";
+		PreparedStatement stmt = null;
+		try {
+			sql = "INSERT INTO presenter ( name,`user-id`) VALUES (?, ?) ";
+			stmt = this.connection.prepareStatement(sql);
+                        stmt.setString(1, user.getName());
+			stmt.setString(2, user.getId());
+			
+                
+                int rowcount = databaseUpdate(stmt);
+			if (rowcount != 1) {
+				// System.out.println("PrimaryKey Error when updating DB!");
+				throw new SQLException("PrimaryKey Error when updating DB!");
+			}
+
+		} finally {
+			if (stmt != null)
+				stmt.close();
+		}
+                
+    }
+
+    private void insertIntoProducer(User user) throws SQLException {
+        System.out.println("inside presenter: "+user.getName()+user.getId());
+                String sql = "";
+		PreparedStatement stmt = null;
+		try {
+			sql = "INSERT INTO producer ( name,`user-id`) VALUES (?, ?) ";
+			stmt = this.connection.prepareStatement(sql);
+                        stmt.setString(1, user.getName());
+			stmt.setString(2, user.getId());
+			
+                
+                int rowcount = databaseUpdate(stmt);
+			if (rowcount != 1) {
+				// System.out.println("PrimaryKey Error when updating DB!");
+				throw new SQLException("PrimaryKey Error when updating DB!");
+			}
+
+		} finally {
+			if (stmt != null)
+				stmt.close();
+		}
+    }
+    private void insertIntoStationManager(User user) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void updateIntoPresenter(User valueObject) {
+        //UPDATE user SET role = ?, address =?,  password = ?,  joining_date = ?  WHERE (id = ? ) ";
+        
+        
+                
+    }
+
+    private void updateIntoProducer(User valueObject) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void updateIntoStationManager(User valueObject) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

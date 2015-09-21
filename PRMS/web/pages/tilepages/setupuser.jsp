@@ -17,6 +17,7 @@
 
         <title><fmt:message key="title.setupuser" /></title>
     </head>
+    
     <body>
         <form action="${pageContext.request.contextPath}/nocturne/enteruser" method=post>
 		<center>
@@ -41,8 +42,13 @@
 				</tr>
 				<tr>
 					<td><fmt:message key="label.cruduser.role" /></td>
-					<td><input type="text" name="role"
-						value="${param['role']}" size=15 maxlength=20></td>
+<!--					<td><input type="text" name="role"
+						value="${param['role']}" size=15 maxlength=20></td>-->
+                                        <td><select multiple name="rolelist">
+                                                <option value="presenter">Presenter</option>
+                                                <option value="producer">Producer</option>
+                                                <option value="station manager">Station Manager</option>
+                                            </select>
 				</tr>
 				<tr>
 					<td><fmt:message key="label.cruduser.address" /></td>
