@@ -20,12 +20,12 @@
                                 <tr>
 					<td><fmt:message key="label.programslot.dateOfProgram" /></td>
 					<td><c:if test="${param['insert'] == 'true'}">
-							<input type="text" name="name" value="${param['name']}" size=15
+							<input type="text" name="dateOfProgram" value="${param['dateOfProgram']}" size=15
 								maxlength=20>
 							<input type="hidden" name="ins" value="true" />
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
-							<input type="text" name="name" value="${param['name']}" size=15
+							<input type="text" name="dateOfProgram" value="${param['dateOfProgram']}" size=15
 								maxlength=20 readonly="readonly">
 							<input type="hidden" name="ins" value="false" />
 						</c:if>
@@ -36,12 +36,12 @@
                                 <tr>
 					<td><fmt:message key="label.programslot.startTime" /></td>
 					<td><c:if test="${param['insert'] == 'true'}">
-							<input type="text" name="name" value="${param['name']}" size=15
-								maxlength=20>
+							<input type="text" name="startTime" value="${param['startTime']}" size=15
+								maxlength=20 >
 							<input type="hidden" name="ins" value="true" />
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
-							<input type="text" name="name" value="${param['name']}" size=15
+							<input type="text" name="startTime" value="${param['startTime']}" size=15
 								maxlength=20 readonly="readonly">
 							<input type="hidden" name="ins" value="false" />
 						</c:if>
@@ -52,12 +52,12 @@
                                 <tr>
 					<td><fmt:message key="label.programslot.duration" /></td>
 					<td><c:if test="${param['insert'] == 'true'}">
-							<input type="text" name="name" value="${param['name']}" size=15
+							<input type="text" name="duration" value="${param['duration']}" size=15
 								maxlength=20>
 							<input type="hidden" name="ins" value="true" />
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
-							<input type="text" name="name" value="${param['name']}" size=15
+							<input type="text" name="duration" value="${param['duration']}" size=15
 								maxlength=20 readonly="readonly">
 							<input type="hidden" name="ins" value="false" />
 						</c:if>
@@ -84,12 +84,12 @@
                                 <tr>
 					<td><fmt:message key="label.programslot.producer" /></td>
 					<td><c:if test="${param['insert'] == 'true'}">
-							<input type="text" name="name" value="${param['name']}" size=15
+							<input type="text" name="producer" value="${param['producer']}" size=15
 								maxlength=20>
 							<input type="hidden" name="ins" value="true" />
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
-							<input type="text" name="name" value="${param['name']}" size=15
+							<input type="text" name="producer" value="${param['producer']}" size=15
 								maxlength=20 readonly="readonly">
 							<input type="hidden" name="ins" value="false" />
 						</c:if>
@@ -100,12 +100,12 @@
                                 <tr>
 					<td><fmt:message key="label.programslot.presenter" /></td>
 					<td><c:if test="${param['insert'] == 'true'}">
-							<input type="text" name="name" value="${param['name']}" size=15
+							<input type="text" name="presenter" value="${param['presenter']}" size=15
 								maxlength=20>
 							<input type="hidden" name="ins" value="true" />
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
-							<input type="text" name="name" value="${param['name']}" size=15
+							<input type="text" name="presenter" value="${param['presenter']}" size=15
 								maxlength=20 readonly="readonly">
 							<input type="hidden" name="ins" value="false" />
 						</c:if>

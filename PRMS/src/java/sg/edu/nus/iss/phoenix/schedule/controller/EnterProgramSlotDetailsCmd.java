@@ -5,84 +5,69 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.controller;
 
+import at.nocturne.api.Action;
+import at.nocturne.api.Perform;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
+import sg.edu.nus.iss.phoenix.schedule.delegate.ScheduleDelegate;
+import sg.edu.nus.iss.phoenix.radioprogram.delegate.ReviewSelectProgramDelegate;
+import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.user.entity.*;
+import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.util.Util;
 
 /**
  *
- * @author Liu Xinzhuo
+ * @author boonkui
  */
-@WebServlet(name = "EnterProgramSlotDetailsCmd", urlPatterns = {"/EnterProgramSlotDetailsCmd"})
-public class EnterProgramSlotDetailsCmd extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EnterProgramSlotDetailsCmd</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EnterProgramSlotDetailsCmd at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+@Action("enterps")
+public class EnterProgramSlotDetailsCmd implements Perform {
+    @Override
+    public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        ScheduleDelegate del = new ScheduleDelegate();
+        ProgramSlot ps = new ProgramSlot();
+        try {
+            ps.setDateOfProgram(Util.stringToDate(req.getParameter("dateOfProgram")));
+        } catch (ParseException ex) {
+            Logger.getLogger(EnterProgramSlotDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
         }
+        ps.setStartTime(Util.stringToTime(req.getParameter("startTime")));
+        ps.setDuration(Util.stringToTime(req.getParameter("duration")));
+        RadioProgram trp = new RadioProgram();
+        trp.setName("TestRadio");
+        ps.setProgram(trp);
+        Presenter presenter = new Presenter();
+        presenter.setName("TestPresenter");
+        ps.setPresenter(presenter);
+        Producer producer = new Producer();
+        producer.setName("TestProducer");
+        ps.setProducer(producer);
+        String ins = (String) req.getParameter("ins");
+        Logger.getLogger(getClass().getName()).log(Level.INFO,
+                        "Insert Flag: " + ins);
+        if (ins.equalsIgnoreCase("true")) {
+            try {
+                del.processCreate(ps);
+            } catch (SQLException ex) {
+                Logger.getLogger(EnterProgramSlotDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            try {
+                del.processModify(ps);
+            } catch (NotFoundException | SQLException ex) {
+                Logger.getLogger(EnterProgramSlotDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return "/pages/crudps.jsp";
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }
