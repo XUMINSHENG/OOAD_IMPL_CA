@@ -20,14 +20,9 @@ public class ReviewSelectScheduledProgramDelegate {
         public List<AnnualSchedule> reviewSelectAnnualSchedule() {
 		return service.reviewSelectAnnualSchedule();	
 	}
-	
-<<<<<<< HEAD
-	public List<ProgramSlot> reviewSelectScheduledProgram(int year, int week) {
-		return service.reviewSelectScheduledProgram(year, week);	
-=======
+        
 	public List<ProgramSlot> reviewSelectScheduledProgram() {
 		return service.reviewSelectScheduledProgram();	
->>>>>>> master
 	}
         
         public WeeklySchedule reviewSelectWeeklySchedule(Timestamp dateOfWeek) {
