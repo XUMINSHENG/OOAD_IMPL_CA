@@ -53,33 +53,20 @@ public class EnterUserDetailsCmd implements Perform {
         user.setPassword(request.getParameter("password"));
         user.setJoiningDate(request.getParameter("joiningdate"));
         String ins = (String) request.getParameter("ins");
-        Logger.getLogger(getClass().getName()).log(Level.INFO,  "Insert Flag: " + ins);
-        del.processCreate(user);
+        Logger.getLogger(getClass().getName()).log(Level.INFO,
+                        "Insert Flag: " + ins);
+        if (ins.equalsIgnoreCase("true")) {
+                del.processCreate(user);
+        } else {
+                del.processModify(user);
+        }
+        
         
         UserDelegate delegate = new UserDelegate();
         List<User> data = delegate.FetchUsers();
         request.setAttribute("rps", data);
         return "/pages/cruduser.jsp";
-        
-//        user.setRoles(hsr.getParameter("role"));
-        
-       // String joiningDate = request.getParameter("joiningdate");
-//        System.out.println(user.toString());
-//        Time t = Time.valueOf(dur);
-//        user.setTypicalDuration(t);
-     //   String ins = (String) request.getParameter("ins");
-        //String password = 
-        
-//        if (ins.equalsIgnoreCase("true")) {
-////              del.processCreate(user);
-//        } else {
-////                del.processModify(user);
-//        }
-        
-//        ReviewSelectProgramDelegate rsdel = new ReviewSelectProgramDelegate();
-//        List<RadioProgram> data = rsdel.reviewSelectRadioProgram();
-//        hsr.setAttribute("rps", data);
-       
+    
     }
     
     

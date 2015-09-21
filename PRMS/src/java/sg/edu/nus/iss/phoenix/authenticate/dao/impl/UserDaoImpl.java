@@ -124,7 +124,7 @@ public class UserDaoImpl implements UserDao {
 			stmt.setString(3, valueObject.getName());
                         stmt.setString(4, valueObject.getAddress());
                         
-			stmt.setString(5, valueObject.getRoles().get(0).getRole());
+                        stmt.setString(5, valueObject.getRoles().get(0).getRole());
                         stmt.setString(6, valueObject.getJoiningDate());
 
 			int rowcount = databaseUpdate(stmt);
@@ -149,19 +149,20 @@ public class UserDaoImpl implements UserDao {
 	 */
 	@Override
 	public void save(User valueObject) throws NotFoundException, SQLException {
+		String sql = "UPDATE user SET role = ?, address =?,  password = ?,  joining_date = ?  WHERE (id = ? ) ";
+                //String sql = "UPDATE `program-slot` SET `program-name` = ?, `producer-name` = ?, `presenter-name` = ? WHERE (`dateOfProgram` = ? ) AND (`startTime` = ?); ";
 
-		String sql = "UPDATE user SET password = ?, name = ?, role = ? WHERE (id = ? ) ";
 		PreparedStatement stmt = null;
-
-		try {
-			stmt = this.connection.prepareStatement(sql);
-			stmt.setString(1, valueObject.getPassword());
-			stmt.setString(2, valueObject.getName());
-			stmt.setString(3, valueObject.getRoles().get(0).getRole());
-
-			stmt.setString(4, valueObject.getId());
-
-			int rowcount = databaseUpdate(stmt);
+		try {                        
+                        stmt = this.connection.prepareStatement(sql);
+                        stmt.setString(1, valueObject.getRoles().get(0).getRole());
+                        stmt.setString(2, valueObject.getAddress()); 
+                        stmt.setString(3, valueObject.getPassword());
+                        stmt.setString(4, valueObject.getJoiningDate());
+			stmt.setString(5, valueObject.getId());
+			
+			//stmt.setString(3, valueObject.getName());
+                        int rowcount = databaseUpdate(stmt);
 			if (rowcount == 0) {
 				// System.out.println("Object could not be saved! (PrimaryKey not found)");
 				throw new NotFoundException(
