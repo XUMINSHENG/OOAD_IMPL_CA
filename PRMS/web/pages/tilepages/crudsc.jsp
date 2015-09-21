@@ -16,7 +16,7 @@
                 <c:param name="description" value=""/>
                 <c:param name="duration" value=""/>
                 <c:param name="insert" value="true"/>
-        </c:url>
+        </c:url>        
         <c:url var="url" scope="page" value="/nocturne/addasc">
                 <c:param name="insert" value="true"/>
         </c:url>
@@ -44,7 +44,7 @@
         <a href="${url}"><fmt:message key="label.crudsc.createAnSc"/></a>
         &nbsp;
         &nbsp;
-        <a href="${url}"><fmt:message key="label.crudsc.add"/></a>
+        <a href="${addurl}"><fmt:message key="label.crudsc.add"/></a>
         &nbsp;
         &nbsp;
         <a href="${url}"><fmt:message key="label.crudsc.copy"/></a>
@@ -115,6 +115,10 @@
                     <td class="nowrap"><c:out value="${crudsc.producer.name}" /></td>
                     <td class="nowrap"><c:out value="${crudsc.presenter.name}" /></td>
                     <td class="nowrap">
+<<<<<<< HEAD
+
+=======
+>>>>>>> fix
                         <c:url var="updurl" scope="page" value="/nocturne/addeditps">
                         <c:param name="dataOfProgram" value="${crudsc.dateOfProgram}"/>
                         <c:param name="startTime" value="${crudsc.startTime}"/>
@@ -123,6 +127,10 @@
                         <c:param name="producer-name" value="${crudsc.producer.name}"/>
                         <c:param name="presenter-name" value="${crudsc.presenter.name}"/>
                         <c:param name="insert" value="false"/>
+<<<<<<< HEAD
+
+=======
+>>>>>>> fix
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.crudsc.edit"/></a>
                         &nbsp;&nbsp;&nbsp;
