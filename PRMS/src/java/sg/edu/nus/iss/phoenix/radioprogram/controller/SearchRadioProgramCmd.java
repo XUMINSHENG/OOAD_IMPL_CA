@@ -13,9 +13,9 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import sg.edu.nus.iss.phoenix.schedule.delegate.ScheduleDelegate;
-import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
-import sg.edu.nus.iss.phoenix.schedule.entity.SPSearchObject;
+import sg.edu.nus.iss.phoenix.radioprogram.delegate.ProgramDelegate;
+import sg.edu.nus.iss.phoenix.radioprogram.entity.RPSearchObject;
+import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 
 /**
  *
@@ -25,20 +25,22 @@ import sg.edu.nus.iss.phoenix.schedule.entity.SPSearchObject;
 public class SearchRadioProgramCmd implements Perform {
     @Override
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        ScheduleDelegate del = new ScheduleDelegate();
-        SPSearchObject rpso = new SPSearchObject();
+        ProgramDelegate del = new ProgramDelegate();
+        RPSearchObject rpso = new RPSearchObject();
         rpso.setName(req.getParameter("name"));
-        
+        rpso.setDescription(req.getParameter("description"));
         System.out.println(rpso.toString());
         
-        ArrayList<ProgramSlot> data = null;
+        ArrayList<RadioProgram> data = null;
         
-        if (rpso.getName() != null && !rpso.getName().isEmpty())
-            data = del.findSPByCriteria(rpso);
+        if ((rpso.getName() != null && !rpso.getName().isEmpty()) || 
+                (rpso.getDescription()!= null && !rpso.getDescription().isEmpty()))
+            data = del.findRPByCriteria(rpso);
         else 
-            data = del.findAllSP();
+            data = del.findAllRP();
                 
         req.setAttribute("name", rpso.getName());
+        req.setAttribute("description", rpso.getDescription());
         req.setAttribute("searchrplist", data);
         return "/pages/searchrp.jsp";
     }

@@ -63,8 +63,8 @@
                         <th><fmt:message key="label.programslot.producer"/></th>
 		</tr>
                 <c:choose>
-                    <c:when test="${! empty  searchrplist}">
-                            <c:forEach var="slot" items="${searchrplist}" varStatus="status">
+                    <c:when test="${! empty  searchsplist}">
+                            <c:forEach var="slot" items="${searchsplist}" varStatus="status">
 				<tr class="${status.index%2==0?'even':'odd'}">
 					<td class="nowrap"><c:out value="${slot.program.name}" /></td>
                                         <td class="nowrap"><fmt:formatDate pattern="yyyy-MM-dd" value="${slot.dateOfProgram}" /></td>
@@ -76,7 +76,7 @@
                             </c:forEach>
                     </c:when>
                     <c:otherwise>
-                        <tr><td colspan="6"><p style='color:grey'><i>No Scheduled Program</i></p></td></tr>
+                        <tr><td colspan="6"><p style='color:grey;text-align: center;'><i>No Scheduled Program</i></p></td></tr>
                     </c:otherwise>
                 </c:choose>
             </tbody>
