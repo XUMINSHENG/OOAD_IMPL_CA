@@ -11,14 +11,12 @@
 </head>
 <body>
         <h1><fmt:message key="label.crudsc"/></h1>
-<<<<<<< Updated upstream
         <c:url var="url" scope="page" value="/nocturne/addeditrp">
         		<c:param name="name" value=""/>
                 <c:param name="description" value=""/>
                 <c:param name="duration" value=""/>
                 <c:param name="insert" value="true"/>
         </c:url>
-=======
         <c:url var="url" scope="page" value="/nocturne/addasc">
                 <c:param name="insert" value="true"/>
         </c:url>
@@ -43,7 +41,6 @@
                 <c:param name="insert" value="false"/>
         </c:url>
         
->>>>>>> Stashed changes
         <a href="${url}"><fmt:message key="label.crudsc.createAnSc"/></a>
         &nbsp;
         &nbsp;
@@ -118,12 +115,6 @@
                     <td class="nowrap"><c:out value="${crudsc.producer.name}" /></td>
                     <td class="nowrap"><c:out value="${crudsc.presenter.name}" /></td>
                     <td class="nowrap">
-<<<<<<< Updated upstream
-                        <c:url var="updurl" scope="page" value="/nocturne/addeditrp">
-                            <c:param name="dateOfProgram" value="${crudsc.dateOfProgram}" />
-                            <c:param name="startTime" value="${crudsc.startTime}"/>
-                            <c:param name="insert" value="false"/>
-=======
                         <c:url var="updurl" scope="page" value="/nocturne/addeditps">
                         <c:param name="dataOfProgram" value="${crudsc.dateOfProgram}"/>
                         <c:param name="startTime" value="${crudsc.startTime}"/>
@@ -132,7 +123,6 @@
                         <c:param name="producer-name" value="${crudsc.producer.name}"/>
                         <c:param name="presenter-name" value="${crudsc.presenter.name}"/>
                         <c:param name="insert" value="false"/>
->>>>>>> Stashed changes
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.crudsc.edit"/></a>
                         &nbsp;&nbsp;&nbsp;
