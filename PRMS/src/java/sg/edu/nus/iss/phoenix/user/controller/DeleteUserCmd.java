@@ -30,8 +30,11 @@ public class DeleteUserCmd implements Perform {
         List<User> data1 = del.FetchUsers();
         System.out.println(data1.toString());
         String name = hsr.getParameter("name");
+        if(name.contains(",")){
         String id = name.substring(0, name.indexOf(','));
-        del.processDelete(id);
+        name = id;
+        }
+        del.processDelete(name);
         
         List<User> data = del.FetchUsers();
         hsr.setAttribute("rps", data);
