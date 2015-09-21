@@ -22,29 +22,10 @@
 					<th width="55%"><fmt:message key="caption.desc" /></th>
 				</tr>
 				<tr>
-					<td><fmt:message key="fieldLabel.year" /></td>
-                                        <td>
-                                            <select naem="year" style="width: 300px;">
-                                                <c:forEach var="item" items="${searchrplist}">
-                                                    <option value="<c:out value="${item}" />">
-                                                        <c:out value="${item.name}" />
-                                                    </option>
-                                                </c:forEach>
-                                            </select>
-                                        </td>
+					<td><fmt:message key="fieldLabel.name" /></td>
+                                        <td><input type="text" name="name" size=45 maxlength=45 value="${name}"></td>
 				</tr>
-				<tr>
-					<td><fmt:message key="fieldLabel.week" /></td>
-					<td>
-                                            <select name="week" style="width:300px;">
-                                                <c:forEach begin="1" end="32" varStatus="loop">
-                                                    <option value="<c:out value="${loop.index}" />" >
-                                                        <c:out value="${loop.index}" />
-                                                    </option>
-                                                </c:forEach>
-                                            </select>
-                                        </td>
-				</tr>
+				
 				<tr>
 					<td colspan="2" align="center"><input type="submit" value="Submit"> <input
 						type="reset" value="Reset"></td>

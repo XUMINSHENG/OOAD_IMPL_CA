@@ -4,7 +4,8 @@ import sg.edu.nus.iss.phoenix.radioprogram.dao.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.util.Date;
+import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.List;
 
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
@@ -28,7 +29,7 @@ public interface ScheduleDAO {
         
         public abstract WeeklySchedule createWeeklySchedule();
         
-        public abstract WeeklySchedule getWeeklySchedule(int year)
+        public abstract WeeklySchedule getWeeklySchedule(Timestamp date)
                 throws NotFoundException, SQLException;
         
         public abstract void loadWeeklySchedule(WeeklySchedule valueObject)
@@ -168,4 +169,6 @@ public interface ScheduleDAO {
 	public abstract List<ProgramSlot> searchMatching(ProgramSlot valueObject)
 			throws SQLException;
 
+        public List<ProgramSlot> searchScheduledProgramSlot(int year, int week)
+                        throws NotFoundException, SQLException;
 }
