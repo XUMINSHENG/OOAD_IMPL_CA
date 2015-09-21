@@ -41,6 +41,8 @@ public class ManageScheduleCmd implements Perform {
         if(req.getParameter("year") != null && req.getParameter("week") != null){
             year = Integer.parseInt(req.getParameter("year"));
             week = Integer.parseInt(req.getParameter("week"));
+            System.out.println("test year");
+            System.out.println(year+week);
         }else{
             if((year <= 0 || week <= 0 || week > 52)){
                 Calendar now = Calendar.getInstance();
@@ -48,12 +50,7 @@ public class ManageScheduleCmd implements Perform {
                 week = now.get(Calendar.WEEK_OF_YEAR);
             }
         }
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.WEEK_OF_YEAR, week);
-        Timestamp dateOfWeek = new Timestamp(cal.getTime().getTime());
-        System.out.println("hellp");
-//        System.out.println(dateOfWeek.getTime());
+        
         List<ProgramSlot> data = del.searchScheduledProgramSlot(year, week);
         req.setAttribute("year",year);
         req.setAttribute("week", week);

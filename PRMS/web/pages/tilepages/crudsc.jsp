@@ -61,7 +61,7 @@
 				</tr>
 				<tr>
 					<td><fmt:message key="fieldLabel.year" />
-                                            <select naem="year" style="width: 100px;">
+                                            <select name="year" style="width: 100px;">
                                                 <c:forEach var="item" items="${yearlist}" varStatus="loop">
                                                     <option value="<c:out value="${item.getYear()}" />">
                                                         <c:out value="${item.getYear()}" />
@@ -81,11 +81,7 @@
                                         </td>
                                         <td><input type="submit" value="Submit"></td>
 				</tr>
-                                <tr>
-                                    <td colspan="2"></td>
-                                    <td></td>
-                                </tr>
-			</table>
+                        </table>
 		</center>
             </form>
         </c:if>
