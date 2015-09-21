@@ -116,14 +116,16 @@ public class UserDaoImpl implements UserDao {
 		String sql = "";
 		PreparedStatement stmt = null;
 		try {
-			sql = "INSERT INTO user ( id, password, name, "
-					+ "role) VALUES (?, ?, ?, ?) ";
+			sql = "INSERT INTO user ( id, password, name,address,role, joining_date) VALUES (?, ?, ?, ?,?,?) ";
 			stmt = this.connection.prepareStatement(sql);
 
 			stmt.setString(1, valueObject.getId());
 			stmt.setString(2, valueObject.getPassword());
 			stmt.setString(3, valueObject.getName());
-			stmt.setString(4, valueObject.getRoles().get(0).getRole());
+                        stmt.setString(4, valueObject.getAddress());
+                        
+			stmt.setString(5, valueObject.getRoles().get(0).getRole());
+                        stmt.setString(6, valueObject.getJoiningDate());
 
 			int rowcount = databaseUpdate(stmt);
 			if (rowcount != 1) {

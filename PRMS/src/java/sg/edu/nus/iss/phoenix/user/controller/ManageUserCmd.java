@@ -31,8 +31,5 @@ public class ManageUserCmd implements Perform  {
         return "/pages/cruduser.jsp";
     }
         
-        
-        
     }
-    
-
+ 

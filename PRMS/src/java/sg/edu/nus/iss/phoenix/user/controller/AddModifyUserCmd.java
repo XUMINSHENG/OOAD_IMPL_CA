@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
 
 /**
  *
@@ -22,9 +23,9 @@ public class AddModifyUserCmd implements Perform {
 
     @Override
     public String perform(String string, HttpServletRequest hsr, HttpServletResponse hsr1) throws IOException, ServletException {
-        
+              
         return "/pages/setupuser.jsp";
-        
+            
     }
     
 }

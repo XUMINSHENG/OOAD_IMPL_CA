@@ -18,7 +18,7 @@
         <title><fmt:message key="title.setupuser" /></title>
     </head>
     <body>
-        <form action="${pageContext.request.contextPath}/nocturne/addmodifyuser" method=post>
+        <form action="${pageContext.request.contextPath}/nocturne/enteruser" method=post>
 		<center>
 			<table cellpadding=4 cellspacing=2 border=0>
 				<!-- <tr>
@@ -52,7 +52,7 @@
                                  <tr>
 					<td><fmt:message key="label.cruduser.password" /></td>
 					<td><input type="password" name="password"
-						value="${param['role']}" size=15 maxlength=20></td>
+						value="${param['password']}" size=15 maxlength=20></td>
 				</tr>
                                  <tr>
 					<td><fmt:message key="label.cruduser.joiningdate" /></td>

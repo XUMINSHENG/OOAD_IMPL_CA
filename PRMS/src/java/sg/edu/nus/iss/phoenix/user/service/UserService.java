@@ -12,6 +12,7 @@ import sg.edu.nus.iss.phoenix.user.service.UserService;
 import sg.edu.nus.iss.phoenix.core.dao.DAOFactoryImpl;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.authenticate.dao.UserDao;
+import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 
 /**
  *
@@ -39,6 +40,29 @@ public class UserService {
 		}
 		return currentList;
 
+	}
+        
+        public void processCreate(User user) {
+		try {
+			usrdao.create(user);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void processModify(User user) {
+		
+			try {
+				usrdao.save(user);
+			} catch (NotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 	}
 
     
