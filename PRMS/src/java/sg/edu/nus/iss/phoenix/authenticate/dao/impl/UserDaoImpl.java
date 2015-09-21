@@ -116,14 +116,16 @@ public class UserDaoImpl implements UserDao {
 		String sql = "";
 		PreparedStatement stmt = null;
 		try {
-			sql = "INSERT INTO user ( id, password, name, "
-					+ "role) VALUES (?, ?, ?, ?) ";
+			sql = "INSERT INTO user ( id, password, name,address,role, joining_date) VALUES (?, ?, ?, ?,?,?) ";
 			stmt = this.connection.prepareStatement(sql);
 
 			stmt.setString(1, valueObject.getId());
 			stmt.setString(2, valueObject.getPassword());
 			stmt.setString(3, valueObject.getName());
-			stmt.setString(4, valueObject.getRoles().get(0).getRole());
+                        stmt.setString(4, valueObject.getAddress());
+                        
+                        stmt.setString(5, valueObject.getRoles().get(0).getRole());
+                        stmt.setString(6, valueObject.getJoiningDate());
 
 			int rowcount = databaseUpdate(stmt);
 			if (rowcount != 1) {
@@ -147,19 +149,20 @@ public class UserDaoImpl implements UserDao {
 	 */
 	@Override
 	public void save(User valueObject) throws NotFoundException, SQLException {
+		String sql = "UPDATE user SET role = ?, address =?,  password = ?,  joining_date = ?  WHERE (id = ? ) ";
+                //String sql = "UPDATE `program-slot` SET `program-name` = ?, `producer-name` = ?, `presenter-name` = ? WHERE (`dateOfProgram` = ? ) AND (`startTime` = ?); ";
 
-		String sql = "UPDATE user SET password = ?, name = ?, role = ? WHERE (id = ? ) ";
 		PreparedStatement stmt = null;
-
-		try {
-			stmt = this.connection.prepareStatement(sql);
-			stmt.setString(1, valueObject.getPassword());
-			stmt.setString(2, valueObject.getName());
-			stmt.setString(3, valueObject.getRoles().get(0).getRole());
-
-			stmt.setString(4, valueObject.getId());
-
-			int rowcount = databaseUpdate(stmt);
+		try {                        
+                        stmt = this.connection.prepareStatement(sql);
+                        stmt.setString(1, valueObject.getRoles().get(0).getRole());
+                        stmt.setString(2, valueObject.getAddress()); 
+                        stmt.setString(3, valueObject.getPassword());
+                        stmt.setString(4, valueObject.getJoiningDate());
+			stmt.setString(5, valueObject.getId());
+			
+			//stmt.setString(3, valueObject.getName());
+                        int rowcount = databaseUpdate(stmt);
 			if (rowcount == 0) {
 				// System.out.println("Object could not be saved! (PrimaryKey not found)");
 				throw new NotFoundException(
@@ -185,15 +188,8 @@ public class UserDaoImpl implements UserDao {
 	 */
 	@Override
 	public void delete(User valueObject) throws NotFoundException, SQLException {
-            
-            
 
-                if (valueObject.equals(null)) {
-			// System.out.println("Can not delete without Primary-Key!");
-			throw new NotFoundException("Can not delete without Primary!");
-		}
-        
-		String sql = "DELETE FROM `user` WHERE (id = ? ) ";
+		String sql = "DELETE FROM user WHERE (id = ? ) ";
 		PreparedStatement stmt = null;
 
 		try {
@@ -440,7 +436,7 @@ public class UserDaoImpl implements UserDao {
 		return (List<User>) searchResults;
 	}
 
-	public ArrayList<Role> createRoles(final String roles) {
+	private ArrayList<Role> createRoles(final String roles) {
 		ArrayList<Role> roleList = new ArrayList<Role>();
 		String[] _r = roles.trim().split(DELIMITER);
 		for (String r: _r)

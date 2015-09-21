@@ -20,9 +20,21 @@ public class UserDelegate {
 		return service.findAllUsers();
 		
 	}
+            public void processCreate(User user) {
+		UserService service = new UserService();
+		service.processCreate(user);
+		
+	}
+            public void processModify(User user) {
+		UserService service = new UserService();
+		service.processModify(user);
+		
+	}
             
             public void processDelete(String name) {
 		UserService service = new UserService();
-		service.processDelete(name);
-	}
+		service.processDelete(name);  
+            }
+
+	
 }

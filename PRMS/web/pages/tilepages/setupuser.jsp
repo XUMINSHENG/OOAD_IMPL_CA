@@ -18,7 +18,7 @@
         <title><fmt:message key="title.setupuser" /></title>
     </head>
     <body>
-        <form action="${pageContext.request.contextPath}/nocturne/addmodifyuser" method=post>
+        <form action="${pageContext.request.contextPath}/nocturne/enteruser" method=post>
 		<center>
 			<table cellpadding=4 cellspacing=2 border=0>
 				<!-- <tr>

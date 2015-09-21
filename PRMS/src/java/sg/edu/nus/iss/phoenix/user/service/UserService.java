@@ -42,6 +42,29 @@ public class UserService {
 
 	}
         
+        public void processCreate(User user) {
+		try {
+			usrdao.create(user);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void processModify(User user) {
+		
+			try {
+				usrdao.save(user);
+			} catch (NotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+	}
+        
         public void processDelete(String name){
             
             try{
@@ -53,6 +76,7 @@ public class UserService {
                 e.printStackTrace();
             }
         }
+
 
     
 }
