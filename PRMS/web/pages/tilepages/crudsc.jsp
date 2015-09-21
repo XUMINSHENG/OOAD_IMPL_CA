@@ -115,22 +115,14 @@
                     <td class="nowrap"><c:out value="${crudsc.producer.name}" /></td>
                     <td class="nowrap"><c:out value="${crudsc.presenter.name}" /></td>
                     <td class="nowrap">
-<<<<<<< HEAD
-
-=======
->>>>>>> fix
                         <c:url var="updurl" scope="page" value="/nocturne/addeditps">
-                        <c:param name="dataOfProgram" value="${crudsc.dateOfProgram}"/>
-                        <c:param name="startTime" value="${crudsc.startTime}"/>
-                        <c:param name="duration" value="${crudsc.duration}"/>
-                        <c:param name="program-name" value="${crudsc.program.name}"/>
-                        <c:param name="producer-name" value="${crudsc.producer.name}"/>
-                        <c:param name="presenter-name" value="${crudsc.presenter.name}"/>
-                        <c:param name="insert" value="false"/>
-<<<<<<< HEAD
-
-=======
->>>>>>> fix
+                            <c:param name="dataOfProgram" value="${crudsc.dateOfProgram}"/>
+                            <c:param name="startTime" value="${crudsc.startTime}"/>
+                            <c:param name="duration" value="${crudsc.duration}"/>
+                            <c:param name="program-name" value="${crudsc.program.name}"/>
+                            <c:param name="producer-name" value="${crudsc.producer.name}"/>
+                            <c:param name="presenter-name" value="${crudsc.presenter.name}"/>
+                            <c:param name="insert" value="false"/>
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.crudsc.edit"/></a>
                         &nbsp;&nbsp;&nbsp;
