@@ -39,7 +39,7 @@
         <a href="${url}"><fmt:message key="label.crudsc.createAnSc"/></a>
         &nbsp;
         &nbsp;
-        <a href="${url}"><fmt:message key="label.crudsc.add"/></a>
+        <a href="${addurl}"><fmt:message key="label.crudsc.add"/></a>
         &nbsp;
         &nbsp;
         <a href="${url}"><fmt:message key="label.crudsc.copy"/></a>
