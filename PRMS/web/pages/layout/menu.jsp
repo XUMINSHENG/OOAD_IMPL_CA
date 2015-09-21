@@ -47,6 +47,13 @@
 			</td>
 	</tr>
         <tr>
+            <td>
+                <a href="<c:url value="/nocturne/manageuser"/>">
+                    <fmt:message key="caption.menu.manageuser"/>
+                </a>
+            </td>
+        </tr>
+        <tr>
 		<td>
 				<a href="<c:url value="/nocturne/searchpp"/>"> <fmt:message
 						key="caption.menu.searchpp" />

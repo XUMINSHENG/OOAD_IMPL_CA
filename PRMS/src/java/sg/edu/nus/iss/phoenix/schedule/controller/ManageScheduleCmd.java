@@ -8,6 +8,7 @@ package sg.edu.nus.iss.phoenix.schedule.controller;
 import at.nocturne.api.Action;
 import at.nocturne.api.Perform;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -17,6 +18,7 @@ import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectScheduledProgramDelegate;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 
 /**
  *
@@ -31,15 +33,29 @@ public class ManageScheduleCmd implements Perform {
         if ((null==user)||!user.hasRole("manager")){
             return "/pages/error.jsp";
         }
-        String year = req.getParameter("year");
-        String week = req.getParameter("week");
+        int year = 0;
+        int week = 0;
         ReviewSelectScheduledProgramDelegate del = new ReviewSelectScheduledProgramDelegate();
-//        List<int> years = 
         List<AnnualSchedule> yearList = del.reviewSelectAnnualSchedule();
-        List<ProgramSlot> data = del.reviewSelectScheduledProgram(1,2);
+        
+        if(req.getParameter("year") != null && req.getParameter("week") != null){
+            year = Integer.parseInt(req.getParameter("year"));
+            week = Integer.parseInt(req.getParameter("week"));
+            System.out.println("test year");
+            System.out.println(year+week);
+        }else{
+            if((year <= 0 || week <= 0 || week > 52)){
+                Calendar now = Calendar.getInstance();
+                year = now.get(Calendar.YEAR);
+                week = now.get(Calendar.WEEK_OF_YEAR);
+            }
+        }
+        
+        List<ProgramSlot> data = del.searchScheduledProgramSlot(year, week);
         req.setAttribute("year",year);
         req.setAttribute("week", week);
         req.setAttribute("yearlist", yearList);
+        System.out.println(data);
         req.setAttribute("pss", data);
 //        System.out.println(data.get(0).toString());
 //        Object o = new SimpleDateFormat("w").format(new java.util.Date());

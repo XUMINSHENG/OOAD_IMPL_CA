@@ -75,27 +75,24 @@ public class ScheduleService {
 
 	}
 
-	public void processCreate(ProgramSlot ps) {
-//		try {
-//			scdao.create(rp);
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+	public void processCreate(ProgramSlot ps) throws SQLException {
+	try {
+		scdao.create(ps);
+		} 
+                catch (SQLException e) {
+			throw e;
+		}
 	}
 
-	public void processModify(ProgramSlot ps) {
-//		
-//			try {
-//				scdao.save(rp);
-//			} catch (NotFoundException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (SQLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		
+	public void processModify(ProgramSlot ps) throws NotFoundException, SQLException {
+		
+			try {
+				scdao.save(ps);
+			} catch (NotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				throw e;
+			}
+		
 	}
 
 	public void processDelete(Date dateOfProgram, Time startTime) throws NotFoundException, SQLException {
@@ -109,5 +106,6 @@ public class ScheduleService {
                 throw e;
             }
 	}
+        
 
 }

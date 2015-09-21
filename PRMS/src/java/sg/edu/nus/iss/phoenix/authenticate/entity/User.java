@@ -20,6 +20,8 @@ public class User implements Cloneable, Serializable {
 	private String id;
 	private String password;
 	private String name;
+        private String address;
+        private String joiningDate;
 	private ArrayList<Role> roles = new ArrayList<Role>();
 
 	/**
@@ -76,6 +78,24 @@ public class User implements Cloneable, Serializable {
 		this.roles = roles;
 	}
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getJoiningDate() {
+        return joiningDate;
+    }
+
+    public void setJoiningDate(String joiningDate) {
+        this.joiningDate = joiningDate;
+    }
+        
+        
+
 	/**
 	 * setAll allows to set all persistent variables in one method call. This is
 	 * useful, when all data is available and it is needed to set the initial
@@ -84,10 +104,12 @@ public class User implements Cloneable, Serializable {
 	 */
 
 	public void setAll(String idIn, String passwordIn, String nameIn,
-			String roleIn) {
+			String addressIn, String joiningDateIn, String roleIn) {
 		this.id = idIn;
 		this.password = passwordIn;
 		this.name = nameIn;
+                this.address = addressIn;
+                this.joiningDate = joiningDateIn;
 		Role e = new Role(roleIn);
 		this.roles.add(e);
 	}

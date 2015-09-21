@@ -74,7 +74,7 @@ public class ProgramSlot implements Cloneable, Serializable {
         this.program = program;
     }
 
-    public Presenter getPersenter() {
+    public Presenter getPresenter() {
         return presenter;
     }
 
@@ -186,9 +186,9 @@ public class ProgramSlot implements Cloneable, Serializable {
           }
           
           if (this.presenter == null) {
-                    if (valueObject.getPersenter()!= null)
+                    if (valueObject.getPresenter()!= null)
                            return(false);
-          } else if (!this.presenter.equals(valueObject.getPersenter())) {
+          } else if (!this.presenter.equals(valueObject.getPresenter())) {
                     return(false);
           }
 

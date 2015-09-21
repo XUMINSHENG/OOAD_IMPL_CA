@@ -7,9 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
@@ -19,10 +22,13 @@ import javax.sql.DataSource;
 
 import sg.edu.nus.iss.phoenix.core.dao.DBConstants;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
+import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.dao.ScheduleDAO;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
+import sg.edu.nus.iss.phoenix.user.entity.Presenter;
+import sg.edu.nus.iss.phoenix.user.entity.Producer;
 import sg.edu.nus.iss.phoenix.util.Util;
 
 /**
@@ -115,26 +121,29 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	public synchronized void create(ProgramSlot valueObject)
 			throws SQLException {
 
-//		String sql = "";
-//		PreparedStatement stmt = null;
-//		openConnection();
-//		try {
-//			sql = "INSERT INTO `radio-program` (`name`, `desc`, `typicalDuration`) VALUES (?,?,?); ";
-//			stmt = connection.prepareStatement(sql);
-//			stmt.setString(1, valueObject.getName());
-//			stmt.setString(2, valueObject.getDescription());
-//			stmt.setTime(3, valueObject.getTypicalDuration());
-//			int rowcount = databaseUpdate(stmt);
-//			if (rowcount != 1) {
-//				// System.out.println("PrimaryKey Error when updating DB!");
-//				throw new SQLException("PrimaryKey Error when updating DB!");
-//			}
-//
-//		} finally {
-//			if (stmt != null)
-//				stmt.close();
-//			closeConnection();
-//		}
+		String sql = "";
+		PreparedStatement stmt = null;
+		openConnection();
+		try {
+			sql = "INSERT INTO `program-slot` (`dateOfProgram`, `startTime`, `duration`, `program-name`, `producer-name`, `presenter-name`) VALUES (?,?,?,?,?,?); ";
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, Util.dateToString(valueObject.getDateOfProgram()));
+			stmt.setTime(2, valueObject.getStartTime());
+			stmt.setTime(3, valueObject.getDuration());
+                        stmt.setString(4, valueObject.getProgram().getName());
+			stmt.setString(5, valueObject.getProducer().getName());
+                        stmt.setString(6, valueObject.getPresenter().getName());
+			int rowcount = databaseUpdate(stmt);
+			if (rowcount != 1) {
+				// System.out.println("PrimaryKey Error when updating DB!");
+				throw new SQLException("PrimaryKey Error when updating DB!");
+			}
+
+		} finally {
+			if (stmt != null)
+				stmt.close();
+			closeConnection();
+		}
 
 	}
 
@@ -145,32 +154,33 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	public void save(ProgramSlot valueObject) throws NotFoundException,
 			SQLException {
 
-//		String sql = "UPDATE `radio-program` SET `desc` = ?, `typicalDuration` = ? WHERE (`name` = ? ); ";
-//		PreparedStatement stmt = null;
-//		openConnection();
-//		try {
-//			stmt = connection.prepareStatement(sql);
-//			stmt.setString(1, valueObject.getDescription());
-//			stmt.setTime(2, valueObject.getTypicalDuration());
-//
-//			stmt.setString(3, valueObject.getName());
-//
-//			int rowcount = databaseUpdate(stmt);
-//			if (rowcount == 0) {
-//				// System.out.println("Object could not be saved! (PrimaryKey not found)");
-//				throw new NotFoundException(
-//						"Object could not be saved! (PrimaryKey not found)");
-//			}
-//			if (rowcount > 1) {
-//				// System.out.println("PrimaryKey Error when updating DB! (Many objects were affected!)");
-//				throw new SQLException(
-//						"PrimaryKey Error when updating DB! (Many objects were affected!)");
-//			}
-//		} finally {
-//			if (stmt != null)
-//				stmt.close();
-//			closeConnection();
-//		}
+		String sql = "UPDATE `program-slot` SET `program-name` = ?, `producer-name` = ?, `presenter-name` = ? WHERE (`dateOfProgram` = ? ) AND (`startTime` = ?); ";
+		PreparedStatement stmt = null;
+		openConnection();
+		try {
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, valueObject.getProgram().getName());
+			stmt.setString(2, valueObject.getProducer().getName());
+			stmt.setString(3, valueObject.getPresenter().getName());
+                        stmt.setString(4, Util.dateToString(valueObject.getDateOfProgram()));
+                        stmt.setTime(5,valueObject.getStartTime());
+                        
+			int rowcount = databaseUpdate(stmt);
+			if (rowcount == 0) {
+				// System.out.println("Object could not be saved! (PrimaryKey not found)");
+				throw new NotFoundException(
+						"Object could not be saved! (PrimaryKey not found)");
+			}
+			if (rowcount > 1) {
+				// System.out.println("PrimaryKey Error when updating DB! (Many objects were affected!)");
+				throw new SQLException(
+						"PrimaryKey Error when updating DB! (Many objects were affected!)");
+			}
+		} finally {
+			if (stmt != null)
+				stmt.close();
+			closeConnection();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -383,10 +393,12 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 
 			while (result.next()) {
 				ProgramSlot temp = createValueObject();
-
+                                temp.setProgram(new RadioProgram(result.getString("program-name")));
 				temp.setDateOfProgram(result.getDate("dateOfProgram"));
 				temp.setStartTime(result.getTime("startTime"));
                                 temp.setDuration(result.getTime("duration"));
+                                temp.setProducer(new Producer(result.getString("producer-name")));
+                                temp.setPresenter(new Presenter(result.getString("presenter-name")));
 
                                 searchResults.add(temp);
 			}
@@ -545,7 +557,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 				
 			} else {
 				// System.out.println("ProgramSlot Object Not Found!");
-				throw new NotFoundException("WeeklySchedule Object Not Found!");
+//				throw new NotFoundException("WeeklySchedule Object Not Found!");
 			}
 		} finally {
 			if (result != null)
@@ -588,10 +600,62 @@ public class ScheduleDAOImpl implements ScheduleDAO {
     public WeeklySchedule createWeeklySchedule() {
         return new WeeklySchedule();
     }
+    
+    @Override
+    public List<ProgramSlot> searchScheduledProgramSlot(int year, int week) throws NotFoundException, SQLException {
+        String sql = "SELECT * FROM `program-slot` WHERE `dateOfProgram` BETWEEN ? AND ? ORDER BY `dateOfProgram`, `startTime` ASC; ";
+        PreparedStatement stmt = null;
+        List<ProgramSlot> searchResults = null;
+        openConnection();
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.WEEK_OF_YEAR, week);
+        Date startOfWeek = new Date(cal.getTimeInMillis());
+        cal.set(Calendar.WEEK_OF_YEAR, week+1);
+        Date endOfWeek = new Date(cal.getTimeInMillis());
+        System.out.println(startOfWeek);
+//        Timestamp dateOfWeek = new Timestamp(cal.getTime().getTime());
+//        Date startOfProgram = new Date(dateOfWeek.getTime());
+//        Date endOfWeek = new Date(startOfProgram.getTime()+TimeUnit.DAYS.toMillis(7));
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setDate(1, startOfWeek);
+            stmt.setDate(2, endOfWeek);
+            searchResults = listQuery(stmt);
+        
+        }   catch (SQLException ex) {
+                Logger.getLogger(ScheduleDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stmt != null)
+		stmt.close();
+        }
+        
+        closeConnection();
+        return searchResults;
+    }
 
     @Override
-    public WeeklySchedule getWeeklySchedule(int year) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public WeeklySchedule getWeeklySchedule(Timestamp dateOfWeek) throws NotFoundException, SQLException {
+        String sql = "SELECT * FROM `weekly-schedule` WHERE (`startDate` = ? ); ";
+	PreparedStatement stmt = null;
+        WeeklySchedule valueObject = new WeeklySchedule(dateOfWeek);
+	openConnection();
+	try {
+		stmt = connection.prepareStatement(sql);
+		stmt.setTimestamp(1, dateOfWeek);
+                        
+		weeklySingleQuery(stmt, valueObject);
+
+	} catch(NotFoundException e){
+                return null;
+        } finally {
+            if (stmt != null)
+		stmt.close();
+        }
+        
+//        valueObject.setListOfProgramSlot(searchScheduledProgramSlot(dateOfWeek));
+	closeConnection();
+        return valueObject;
     }
 
     @Override
@@ -601,7 +665,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 			throw new NotFoundException("Can not select without Primary-Key!");
 		}
 
-	String sql = "SELECT * FROM `annual-schedule` WHERE (`startDate` = ? ) AND (`assignedBy` = ?); ";
+	String sql = "SELECT * FROM `weekly-schedule` WHERE (`startDate` = ? ) AND (`assignedBy` = ?); ";
 	PreparedStatement stmt = null;
 	openConnection();
 	try {
@@ -626,4 +690,5 @@ public class ScheduleDAOImpl implements ScheduleDAO {
     public List<WeeklySchedule> loadAllWeeklySchedule() throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }

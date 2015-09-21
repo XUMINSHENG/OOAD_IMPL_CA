@@ -84,7 +84,7 @@ public class DeleteProgramSlotCmd implements Perform {
         
         // forward
         ReviewSelectScheduledProgramDelegate rsDel = new ReviewSelectScheduledProgramDelegate();
-        List<ProgramSlot> data = rsDel.reviewSelectScheduledProgram(1,2);
+        List<ProgramSlot> data = rsDel.reviewSelectScheduledProgram();
         req.setAttribute("pss", data);
         return "/pages/crudsc.jsp";
     }

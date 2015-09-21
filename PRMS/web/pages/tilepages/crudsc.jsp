@@ -16,11 +16,35 @@
                 <c:param name="description" value=""/>
                 <c:param name="duration" value=""/>
                 <c:param name="insert" value="true"/>
+        </c:url>        
+        <c:url var="url" scope="page" value="/nocturne/addasc">
+                <c:param name="insert" value="true"/>
         </c:url>
+        
+        <c:url var="addurl" scope="page" value="/nocturne/addeditps">
+        	<c:param name="dataOfProgram" value=""/>
+                <c:param name="startTime" value=""/>
+                <c:param name="duration" value=""/>
+                <c:param name="program-name" value=""/>
+                <c:param name="producer-name" value=""/>
+                <c:param name="presenter-name" value=""/>
+                <c:param name="insert" value="true"/>
+        </c:url>
+        
+        <c:url var="cpurl" scope="page" value="/nocturne/copysc">
+        	<c:param name="dataOfProgram" value=""/>
+                <c:param name="startTime" value=""/>
+                <c:param name="duration" value=""/>
+                <c:param name="program-name" value=""/>
+                <c:param name="producer-name" value=""/>
+                <c:param name="presenter-name" value=""/>
+                <c:param name="insert" value="false"/>
+        </c:url>
+        
         <a href="${url}"><fmt:message key="label.crudsc.createAnSc"/></a>
         &nbsp;
         &nbsp;
-        <a href="${url}"><fmt:message key="label.crudsc.add"/></a>
+        <a href="${addurl}"><fmt:message key="label.crudsc.add"/></a>
         &nbsp;
         &nbsp;
         <a href="${url}"><fmt:message key="label.crudsc.copy"/></a>
@@ -37,7 +61,7 @@
 				</tr>
 				<tr>
 					<td><fmt:message key="fieldLabel.year" />
-                                            <select naem="year" style="width: 100px;">
+                                            <select name="year" style="width: 100px;">
                                                 <c:forEach var="item" items="${yearlist}" varStatus="loop">
                                                     <option value="<c:out value="${item.getYear()}" />">
                                                         <c:out value="${item.getYear()}" />
@@ -57,31 +81,43 @@
                                         </td>
                                         <td><input type="submit" value="Submit"></td>
 				</tr>
-                                <tr>
-                                    <td colspan="2"></td>
-                                    <td></td>
-                                </tr>
-			</table>
+                        </table>
 		</center>
             </form>
         </c:if>
         
         <table class="borderAll">
+            <thead>
+                <tr>
+                    <th><c:out value="${year}"/> Year - <c:out value="${week}"/> Week Schedule</th>
+                </tr>
+            </thead>
+            <tbody>
             <tr>
+                <th><fmt:message key="label.radioprogram.name"/></th>
                 <th><fmt:message key="label.crudsc.date"/></th>
                 <th><fmt:message key="label.crudsc.startTime"/></th>
                 <th><fmt:message key="label.crudsc.duration"/></th>
+                <th><fmt:message key="label.programslot.presenter"/></th>
+                <th><fmt:message key="label.programslot.producer"/></th>
                 <th><fmt:message key="label.crudsc.edit"/> <fmt:message key="label.crudsc.delete"/></th>
             </tr>
             <c:forEach var="crudsc" items="${pss}" varStatus="status">
                 <tr class="${status.index%2==0?'even':'odd'}">
+                    <td class="nowrap"><c:out value="${crudsc.program.name}" /></td>
                     <td class="nowrap"><fmt:formatDate pattern="yyyy-MM-dd" value="${crudsc.dateOfProgram}" /></td>
-                    <td class="nowrap"><fmt:formatDate pattern="hh:mm:ss a" value="${crudsc.startTime}" /></td>
+                    <td class="nowrap"><fmt:formatDate pattern="hh:mm:ss" value="${crudsc.startTime}" /></td>
                     <td class="nowrap"><fmt:formatDate pattern="HH:mm:ss" value="${crudsc.duration}" /></td>
+                    <td class="nowrap"><c:out value="${crudsc.producer.name}" /></td>
+                    <td class="nowrap"><c:out value="${crudsc.presenter.name}" /></td>
                     <td class="nowrap">
-                        <c:url var="updurl" scope="page" value="/nocturne/addeditrp">
-                            <c:param name="dateOfProgram" value="${crudsc.dateOfProgram}" />
+                        <c:url var="updurl" scope="page" value="/nocturne/addeditps">
+                            <c:param name="dataOfProgram" value="${crudsc.dateOfProgram}"/>
                             <c:param name="startTime" value="${crudsc.startTime}"/>
+                            <c:param name="duration" value="${crudsc.duration}"/>
+                            <c:param name="program-name" value="${crudsc.program.name}"/>
+                            <c:param name="producer-name" value="${crudsc.producer.name}"/>
+                            <c:param name="presenter-name" value="${crudsc.presenter.name}"/>
                             <c:param name="insert" value="false"/>
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.crudsc.edit"/></a>
@@ -94,6 +130,7 @@
                     </td>
                 </tr>
             </c:forEach>
+            </tbody>
         </table>
 </body>
 </html>
