@@ -26,6 +26,7 @@ import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.dao.ScheduleDAO;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.entity.SPSearchObject;
 import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 import sg.edu.nus.iss.phoenix.user.entity.Presenter;
 import sg.edu.nus.iss.phoenix.user.entity.Producer;
@@ -273,22 +274,22 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	 * @see sg.edu.nus.iss.phoenix.radioprogram.dao.impl.ProgramDAO#searchMatching(sg.edu.nus.iss.phoenix.radioprogram.entity.ProgramSlot)
 	 */
 	@Override
-	public List<ProgramSlot> searchMatching(ProgramSlot valueObject) throws SQLException {
+	public List<ProgramSlot> searchMatching(SPSearchObject valueObject) throws SQLException {
 
 		List<ProgramSlot> searchResults = new ArrayList<ProgramSlot>();
-//		openConnection();
-//		boolean first = true;
-//		StringBuffer sql = new StringBuffer(
-//				"SELECT * FROM `radio-program` WHERE 1=1 ");
-//
-//		if (valueObject.getName() != null) {
-//			if (first) {
-//				first = false;
-//			}
-//			sql.append("AND `name` LIKE '").append(valueObject.getName())
-//					.append("%' ");
-//		}
-//
+		openConnection();
+		boolean first = true;
+		StringBuffer sql = new StringBuffer(
+				"SELECT * FROM `program-slot` WHERE  1=1 ");
+
+		if (valueObject.getName() != null) {
+			if (first) {
+				first = false;
+			}
+			sql.append("AND `program-name` LIKE '").append(valueObject.getName())
+					.append("%' ");
+		}
+
 //		if (valueObject.getDescription() != null) {
 //			if (first) {
 //				first = false;
@@ -304,17 +305,17 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 //			sql.append("AND `typicalDuration` = '")
 //					.append(valueObject.getTypicalDuration()).append("' ");
 //		}
-//
-//		sql.append("ORDER BY `name` ASC ");
-//
-//		// Prevent accidential full table results.
-//		// Use loadAll if all rows must be returned.
-//		if (first)
-//			searchResults = new ArrayList<ProgramSlot>();
-//		else
-//			searchResults = listQuery(connection.prepareStatement(sql
-//					.toString()));
-//		closeConnection();
+
+		sql.append("ORDER BY `dateOfProgram` ASC ");
+
+		// Prevent accidential full table results.
+		// Use loadAll if all rows must be returned.
+		if (first)
+			searchResults = new ArrayList<ProgramSlot>();
+		else
+			searchResults = listQuery(connection.prepareStatement(sql
+					.toString()));
+		closeConnection();
 		return searchResults;
 	}
 

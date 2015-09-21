@@ -11,6 +11,7 @@ import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.dao.ScheduleDAO;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.entity.SPSearchObject;
 
 public class ScheduleService {
 	DAOFactoryImpl factory;
@@ -23,10 +24,10 @@ public class ScheduleService {
 		scdao = factory.getScheduleDAO();
 	}
 
-	public ArrayList<ProgramSlot> searchProgramSlots(ProgramSlot psso) {
+	public ArrayList<ProgramSlot> searchProgramSlots(SPSearchObject spso) {
 		ArrayList<ProgramSlot> list = new ArrayList<ProgramSlot>();
 		try {
-			list = (ArrayList<ProgramSlot>) scdao.searchMatching(psso);
+			list = (ArrayList<ProgramSlot>) scdao.searchMatching(spso);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -34,15 +35,15 @@ public class ScheduleService {
 		return list;
 	}
 
-	public ArrayList<ProgramSlot> findRPByCriteria(ProgramSlot ps) {
+	public ArrayList<ProgramSlot> findRPByCriteria(SPSearchObject ps) {
 		ArrayList<ProgramSlot> currentList = new ArrayList<ProgramSlot>();
 
-		try {
-			currentList = (ArrayList<ProgramSlot>) scdao.searchMatching(ps);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			currentList = (ArrayList<ProgramSlot>) scdao.searchMatching(ps);
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		return currentList;
 
@@ -63,14 +64,14 @@ public class ScheduleService {
 
 	}
 
-	public ArrayList<RadioProgram> findAllRP() {
-		ArrayList<RadioProgram> currentList = new ArrayList<RadioProgram>();
-//		try {
-//			currentList = (ArrayList<RadioProgram>) scdao.loadAll();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+	public ArrayList<ProgramSlot> findAllSP() {
+		ArrayList<ProgramSlot> currentList = new ArrayList<ProgramSlot>();
+		try {
+			currentList = (ArrayList<ProgramSlot>) scdao.loadAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return currentList;
 
 	}

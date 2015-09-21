@@ -12,8 +12,13 @@ package sg.edu.nus.iss.phoenix.schedule.entity;
 public class SPSearchObject {
     private String year;
     private String week;
+    private String name;
 
     public SPSearchObject() {
+    }
+    
+    public SPSearchObject(String nameIn) {
+        this.name = nameIn;
     }
 
     public SPSearchObject(String year, String week) {
@@ -35,6 +40,14 @@ public class SPSearchObject {
 
     public void setWeek(String week) {
         this.week = week;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
     
 }

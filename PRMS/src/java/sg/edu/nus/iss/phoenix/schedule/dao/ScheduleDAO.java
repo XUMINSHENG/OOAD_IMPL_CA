@@ -11,6 +11,7 @@ import java.util.List;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.entity.SPSearchObject;
 import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 
 public interface ScheduleDAO {
@@ -166,7 +167,7 @@ public interface ScheduleDAO {
 	 *            This parameter contains the class instance where search will
 	 *            be based. Primary-key field should not be set.
 	 */
-	public abstract List<ProgramSlot> searchMatching(ProgramSlot valueObject)
+	public abstract List<ProgramSlot> searchMatching(SPSearchObject valueObject)
 			throws SQLException;
 
         public List<ProgramSlot> searchScheduledProgramSlot(int year, int week)

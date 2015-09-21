@@ -27,29 +27,61 @@
 				</tr>
 				
 				<tr>
-					<td colspan="2" align="center"><input type="submit" value="Submit"> <input
+					<td colspan="2" align="center"><input type="submit" value="Search"> <input
 						type="reset" value="Reset"></td>
 				</tr>
 			</table>
 		</center>
 
 	</form>
-	<c:if test="${! empty  searchrplist}">
-		<table class="borderAll">
-			<tr>
-				<th><fmt:message key="label.radioprogram.name" /></th>
-				<th><fmt:message key="label.radioprogram.description" /></th>
-				<th><fmt:message key="label.radioprogram.duration" /></th>
-			</tr>
-			<c:forEach var="rprogram" items="${searchrplist}" varStatus="status">
+	
+	<table class="borderAll">
+            <thead>
+                
+                <tr>
+                        <th colspan="6">
+                            <h3>
+                                <c:choose>
+                                    <c:when test="${name != null}">
+                                        Search '<c:out value="${name}"/>' Program Results
+                                    </c:when>
+                                    <c:otherwise>
+                                        All Scheduled Programs
+                                    </c:otherwise>    
+                                </c:choose>
+                            </h3>
+                        </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                        <th><fmt:message key="label.radioprogram.name"/></th>
+                        <th><fmt:message key="label.crudsc.date"/></th>
+                        <th><fmt:message key="label.crudsc.startTime"/></th>
+                        <th><fmt:message key="label.crudsc.duration"/></th>
+                        <th><fmt:message key="label.programslot.presenter"/></th>
+                        <th><fmt:message key="label.programslot.producer"/></th>
+		</tr>
+                <c:choose>
+                    <c:when test="${! empty  searchrplist}">
+                            <c:forEach var="slot" items="${searchrplist}" varStatus="status">
 				<tr class="${status.index%2==0?'even':'odd'}">
-					<td class="nowrap">${rprogram.name}</td>
-					<td class="nowrap">${rprogram.description}</td>
-					<td class="nowrap">${rprogram.typicalDuration}</td>
-				</tr>
-			</c:forEach>
-		</table>
-	</c:if>
+					<td class="nowrap"><c:out value="${slot.program.name}" /></td>
+                                        <td class="nowrap"><fmt:formatDate pattern="yyyy-MM-dd" value="${slot.dateOfProgram}" /></td>
+                                        <td class="nowrap"><fmt:formatDate pattern="hh:mm:ss" value="${slot.startTime}" /></td>
+                                        <td class="nowrap"><fmt:formatDate pattern="HH:mm:ss" value="${slot.duration}" /></td>
+                                        <td class="nowrap"><c:out value="${slot.producer.name}" /></td>
+                                        <td class="nowrap"><c:out value="${slot.presenter.name}" /></td>
+                                </tr>
+                            </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <tr><td colspan="6"><p style='color:grey'><i>No Scheduled Program</i></p></td></tr>
+                    </c:otherwise>
+                </c:choose>
+            </tbody>
+        </table>
+	
 
 </body>
 </html>
