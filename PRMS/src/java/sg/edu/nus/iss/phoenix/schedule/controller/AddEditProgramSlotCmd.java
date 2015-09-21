@@ -32,7 +32,7 @@ import sg.edu.nus.iss.phoenix.util.Util;
  *
  * @author Liu Xinzhuo
  */
-@Action("createps")
+@Action("addeditps")
 public class AddEditProgramSlotCmd implements Perform {
     @Override
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException 
@@ -48,6 +48,6 @@ public class AddEditProgramSlotCmd implements Perform {
         
         // collect data from requset
         
-        return "/pages/crudsc.jsp";
+        return "/pages/setupps.jsp";
     }
 }
