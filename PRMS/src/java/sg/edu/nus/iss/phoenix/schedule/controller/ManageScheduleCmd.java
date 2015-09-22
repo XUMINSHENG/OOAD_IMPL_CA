@@ -55,7 +55,8 @@ public class ManageScheduleCmd implements Perform {
         req.setAttribute("year",year);
         req.setAttribute("week", week);
         req.setAttribute("yearlist", yearList);
-        System.out.println(data);
+//        System.out.println("test data");
+//        System.out.println(data);
         req.setAttribute("pss", data);
 //        System.out.println(data.get(0).toString());
 //        Object o = new SimpleDateFormat("w").format(new java.util.Date());

@@ -109,7 +109,8 @@
                 <th><fmt:message key="label.programslot.producer"/></th>
                 <th><fmt:message key="label.crudsc.edit"/> <fmt:message key="label.crudsc.delete"/></th>
             </tr>
-            <c:choose><c:when test="${! empty pss}">    
+            <c:choose>
+            <c:when test="${! empty pss}">    
             <c:forEach var="crudsc" items="${pss}" varStatus="status">
                 <tr class="${status.index%2==0?'even':'odd'}">
                     <td class="nowrap"><c:out value="${crudsc.program.name}" /></td>
@@ -140,8 +141,9 @@
             </c:forEach>
             </c:when>
             <c:otherwise>
-                <tr><td colspan="8"><p style="color:grey;text-align: No Schedule"><i></i></p></td></tr>
-            </c:otherwise></c:choose>
+                <tr><td colspan="8"><p style="color:grey;text-align: center"><i>No Schedule</i></p></td></tr>
+            </c:otherwise>
+            </c:choose>
             </tbody>
         </table>
     </c:if>
