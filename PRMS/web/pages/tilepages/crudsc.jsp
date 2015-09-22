@@ -49,7 +49,7 @@
         &nbsp;
         <a href="${url}"><fmt:message key="label.crudsc.copy"/></a>
         <br/><br/>
-        <c:if test="${! empty yearlist}">
+        
             <form action="${pageContext.request.contextPath}/nocturne/managesc"
 		method=post>
 		<center>
@@ -60,6 +60,8 @@
                                         <th></th>
 				</tr>
 				<tr>
+                                    <c:choose>
+                                        <c:when test="${! empty yearlist}">
 					<td><fmt:message key="fieldLabel.year" />
                                             <select name="year" style="width: 100px;">
                                                 <c:forEach var="item" items="${yearlist}" varStatus="loop">
@@ -80,12 +82,17 @@
                                             </select>
                                         </td>
                                         <td><input type="submit" value="Submit"></td>
+                                        </c:when>
+                                        <c:otherwise>
+                                        <td colspan="3"><p style="color:grey;text-align: center;"><i>No Annual Schedule</i></p></td>
+                                        </c:otherwise>
+                                    </c:choose>    
 				</tr>
                         </table>
 		</center>
             </form>
-        </c:if>
         
+    <c:if test="${! empty yearlist}">
         <table class="borderAll">
             <thead>
                 <tr>
@@ -102,6 +109,7 @@
                 <th><fmt:message key="label.programslot.producer"/></th>
                 <th><fmt:message key="label.crudsc.edit"/> <fmt:message key="label.crudsc.delete"/></th>
             </tr>
+            <c:choose><c:when test="${! empty pss}">    
             <c:forEach var="crudsc" items="${pss}" varStatus="status">
                 <tr class="${status.index%2==0?'even':'odd'}">
                     <td class="nowrap"><c:out value="${crudsc.program.name}" /></td>
@@ -130,7 +138,13 @@
                     </td>
                 </tr>
             </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <tr><td colspan="8"><p style="color:grey;text-align: No Schedule"><i></i></p></td></tr>
+            </c:otherwise></c:choose>
             </tbody>
         </table>
+    </c:if>
+        
 </body>
 </html>
