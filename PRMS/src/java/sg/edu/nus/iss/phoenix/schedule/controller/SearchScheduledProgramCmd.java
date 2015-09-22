@@ -16,6 +16,8 @@ import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.radioprogram.delegate.ProgramDelegate;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RPSearchObject;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.schedule.delegate.ScheduleDelegate;
+import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.entity.SPSearchObject;
 
 /**
@@ -26,32 +28,27 @@ import sg.edu.nus.iss.phoenix.schedule.entity.SPSearchObject;
 public class SearchScheduledProgramCmd implements Perform {
     @Override
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        SPSearchObject spso = new SPSearchObject();
-        spso.setYear(req.getParameter("year"));
-        spso.setWeek(req.getParameter("week"));
-        
-        User user = (User)req.getSession().getAttribute("user");
-        if ((null==user)||!user.hasRole("manager")){
-            return "/pages/error.jsp";
-        }
-        
-        ProgramDelegate del = new ProgramDelegate();
-        RPSearchObject rpso = new RPSearchObject();
+ 
+//        User user = (User)req.getSession().getAttribute("user");
+//        if ((null==user)||!user.hasRole("manager")){
+//            return "/pages/error.jsp";
+//        }
+                
+        ScheduleDelegate del = new ScheduleDelegate();
+        SPSearchObject rpso = new SPSearchObject();
         rpso.setName(req.getParameter("name"));
-        rpso.setDescription(req.getParameter("description"));
+        
         System.out.println(rpso.toString());
         
-        ArrayList<RadioProgram> data = null;
+        ArrayList<ProgramSlot> data = null;
         
-        if ((rpso.getName() != null && !rpso.getName().isEmpty()) || 
-                (rpso.getDescription()!= null && !rpso.getDescription().isEmpty()))
-            data = del.findRPByCriteria(rpso);
+        if (rpso.getName() != null && !rpso.getName().isEmpty())
+            data = del.findSPByCriteria(rpso);
         else 
-            data = del.findAllRP();
+            data = del.findAllSP();
                 
         req.setAttribute("name", rpso.getName());
-        req.setAttribute("description", rpso.getDescription());
-        req.setAttribute("searchrplist", data);
+        req.setAttribute("searchsplist", data);
         return "/pages/searchsp.jsp";
     }
 }
