@@ -71,6 +71,7 @@
 							<input type="text" name="name" value="${param['name']}" size=15
 								maxlength=20>
 							<input type="hidden" name="ins" value="true" />
+                                                        <input type="button" name="selectProgram" value="Select">
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
 							<input type="text" name="name" value="${param['name']}" size=15
@@ -87,6 +88,7 @@
 							<input type="text" name="producer" value="${param['producer']}" size=15
 								maxlength=20>
 							<input type="hidden" name="ins" value="true" />
+                                                        <input type="button" name="selectProducer" value="Select">
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
 							<input type="text" name="producer" value="${param['producer']}" size=15
@@ -103,6 +105,7 @@
 							<input type="text" name="presenter" value="${param['presenter']}" size=15
 								maxlength=20>
 							<input type="hidden" name="ins" value="true" />
+                                                        <input type="button" name="selectPresenter" value="Select">
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
 							<input type="text" name="presenter" value="${param['presenter']}" size=15
