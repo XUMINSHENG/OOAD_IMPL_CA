@@ -599,4 +599,11 @@ public class UserDaoImpl implements UserDao {
     private void updateIntoStationManager(User valueObject) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public List<User> getListofPresenterProducer() throws SQLException    {
+		String sql = "SELECT * FROM user WHERE role like '%presenter%' or role like '%producer%' ORDER BY id ASC";
+		List<User> searchResults = listQuery(this.connection
+				.prepareStatement(sql));
+		return searchResults;
+    }
 }
