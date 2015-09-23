@@ -6,17 +6,14 @@
 package sg.edu.nus.iss.phoenix.user.service;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import sg.edu.nus.iss.phoenix.authenticate.entity.User;
-import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
-import sg.edu.nus.iss.phoenix.user.service.UserService;
 import sg.edu.nus.iss.phoenix.core.dao.DAOFactoryImpl;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.authenticate.dao.UserDao;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 
 /**
- *
- * @author achyut
+ * 
+ * @author tanuj
  */
 public class UserService {
     
@@ -34,6 +31,17 @@ public class UserService {
 		ArrayList<User> currentList = new ArrayList<User>();
 		try {
 			currentList = (ArrayList<User>) usrdao.loadAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return currentList;
+
+	}
+        	public ArrayList<User> findAllPresenterProducer() {
+		ArrayList<User> currentList = new ArrayList<User>();
+		try {
+			currentList = (ArrayList<User>) usrdao.getListofPresenterProducer();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
