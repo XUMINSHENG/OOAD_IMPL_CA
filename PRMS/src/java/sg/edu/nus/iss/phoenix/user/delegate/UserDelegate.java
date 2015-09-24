@@ -25,9 +25,9 @@ public class UserDelegate {
 
     }
 
-    public void processCreate_user(User user) {
+    public void processCreate(User user) {
         UserService service = new UserService();
-        service.processCreate_user(user);
+        service.processCreate(user);
 
     }
 

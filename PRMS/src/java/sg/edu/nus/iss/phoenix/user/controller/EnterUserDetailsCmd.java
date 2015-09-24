@@ -89,9 +89,9 @@ public class EnterUserDetailsCmd implements Perform {
         producer.setIsActive("Y");
         
         if (ins.equalsIgnoreCase("true")) {
-              del.processCreate_user(user);
-              del.processCreate_presenter(presenter);
-              del.processCreate_producer(producer);
+              del.processCreate(user);
+            //  del.processCreate_presenter(presenter);
+            //  del.processCreate_producer(producer);
         } else {
                //del.processModify(user);
         }

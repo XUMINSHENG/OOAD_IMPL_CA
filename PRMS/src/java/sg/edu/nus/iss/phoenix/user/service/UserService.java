@@ -52,11 +52,33 @@ public class UserService {
 
     }
 
-    public void processCreate_user(User user) {
+    public void processCreate(User user) {
+
+        String id = user.getId();
+
         try {
-            usrdao.create(user);
+             usrdao.create(user);
+            Presenter presenter = presdao.getObject(id);
+            Producer producer = proddao.getObject(id);
+            ArrayList<Role> a_role = user.getRoles();
+            String s_role = "";
+           
+            for (int i = 0; i < a_role.size(); i++) {
+                s_role = a_role.get((i)).getRole().toString();
+
+                if (s_role.equals("presenter")) {
+                    presdao.create(presenter);
+                }
+                if (s_role.equals("producer")) {
+                   proddao.create(producer);
+                }
+
+            }
+
         } catch (SQLException e) {
             // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -127,7 +149,6 @@ public class UserService {
 
     }
 
-    
     public void processCreate_producer(Producer prod) {
         try {
             proddao.create(prod);
@@ -150,7 +171,5 @@ public class UserService {
         }
 
     }
-
-    
 
 }

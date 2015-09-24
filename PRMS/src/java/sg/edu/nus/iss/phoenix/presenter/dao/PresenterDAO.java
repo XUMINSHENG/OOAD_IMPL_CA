@@ -68,7 +68,7 @@ public interface PresenterDAO {
 	 *            automatic surrogate-keys are not used the Primary-key field
 	 *            must be set for this to work properly.
 	 */
-	public abstract void create(Presenter valueObject)
+	public abstract void create(Presenter presenter)
 			throws SQLException;
 
 	/**

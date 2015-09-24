@@ -38,17 +38,58 @@ public class PresenterDAOImpl implements PresenterDAO {
 
     @Override
     public Presenter createValueObject() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Presenter();
     }
 
     @Override
     public Presenter getObject(String id) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Presenter valueObject = createValueObject();
+        valueObject.setUserId(id);
+        load(valueObject);
+        return valueObject;
     }
 
     @Override
     public void load(Presenter valueObject) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "SELECT * FROM user WHERE (`id` = ? ) ";
+        PreparedStatement stmt = null;
+
+        try {
+            stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, valueObject.getUserId());
+
+            singleQuery(stmt, valueObject);
+
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+    }
+    
+    protected void singleQuery(PreparedStatement stmt, Presenter valueObject)
+			throws NotFoundException, SQLException {
+
+        ResultSet result = null;
+
+        try {
+            result = stmt.executeQuery();
+
+            if (result.next()) {
+
+                valueObject.setUserId(result.getString("id"));
+                valueObject.setName(result.getString("name"));
+                valueObject.setIsActive(result.getString("isActive"));
+
+            } else {
+                // System.out.println("User Object Not Found!");
+                throw new NotFoundException("Presenter Object Not Found!");
+            }
+        } finally {
+            if (result != null) {
+                result.close();
+            }
+        }
     }
 
     @Override

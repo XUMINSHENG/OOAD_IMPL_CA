@@ -96,7 +96,7 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public List<User> loadAll() throws SQLException {
 
-		String sql = "SELECT * FROM user where not isActive = 'N' ORDER BY id ASC ";
+		String sql = "SELECT * FROM user where isActive='Y' ORDER BY id ASC ";
 		List<User> searchResults = listQuery(this.connection
 				.prepareStatement(sql));
                 System.out.println("exited loadAll()");
@@ -116,7 +116,7 @@ public class UserDaoImpl implements UserDao {
 		String sql = "";
 		PreparedStatement stmt = null;
 		try {
-			sql = "INSERT INTO user ( id, password, name,address,role, joining_date) VALUES (?, ?, ?, ?,?,?) ";
+			sql = "INSERT INTO user ( id, password, name,address,role, joining_date, isActive) VALUES (?, ?, ?, ?,?,?,?) ";
 			stmt = this.connection.prepareStatement(sql);
 
 			stmt.setString(1, valueObject.getId());
@@ -139,6 +139,7 @@ public class UserDaoImpl implements UserDao {
                         stmt.setString(5, s_role);
                         
                         stmt.setString(6, valueObject.getJoiningDate());
+                        stmt.setString(7, "Y");
                         int rowcount = databaseUpdate(stmt);
 			if (rowcount != 1) {
 				// System.out.println("PrimaryKey Error when updating DB!");
