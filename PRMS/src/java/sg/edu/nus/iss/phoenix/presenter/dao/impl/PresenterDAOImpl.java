@@ -66,9 +66,9 @@ public class PresenterDAOImpl implements PresenterDAO {
             }
         }
     }
-    
+
     protected void singleQuery(PreparedStatement stmt, Presenter valueObject)
-			throws NotFoundException, SQLException {
+            throws NotFoundException, SQLException {
 
         ResultSet result = null;
 
@@ -101,33 +101,34 @@ public class PresenterDAOImpl implements PresenterDAO {
     public void create(Presenter valueObject) throws SQLException {
         String sql = "";
         PreparedStatement stmt = null;
-        String yes= "Y"; //By default, have it as 'Y'
-        
+        String yes = "Y"; //By default, have it as 'Y'
+
         try {
             sql = "INSERT INTO presenter ( name, `user-id`, isActive) VALUES (?, ?, ?) ";
             stmt = this.connection.prepareStatement(sql);
             stmt.setString(1, valueObject.getName());
             stmt.setString(2, valueObject.getUserId());
             stmt.setString(3, yes);
-            
+
             int rowcount = databaseUpdate(stmt);
             if (rowcount != 1) {
-                    // System.out.println("PrimaryKey Error when updating DB!");
-                    throw new SQLException("PrimaryKey Error when updating DB!");
+                // System.out.println("PrimaryKey Error when updating DB!");
+                throw new SQLException("PrimaryKey Error when updating DB!");
             }
-        }finally {
-			if (stmt != null)
-				stmt.close();
-		}
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
     }
 
     protected int databaseUpdate(PreparedStatement stmt) throws SQLException {
 
-		int result = stmt.executeUpdate();
+        int result = stmt.executeUpdate();
 
-		return result;
-	}
-    
+        return result;
+    }
+
     @Override
     public void save(Presenter valueObject) throws NotFoundException, SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -177,14 +178,13 @@ public class PresenterDAOImpl implements PresenterDAO {
         }
         return conn;
     }
-    
+
 //    protected int databaseUpdate(PreparedStatement stmt) throws SQLException {
 //
 //		int result = stmt.executeUpdate();
 //
 //		return result;
 //	}
-
     @Override
     public void deassign(String id) throws NotFoundException, SQLException {
         String sql = "";
