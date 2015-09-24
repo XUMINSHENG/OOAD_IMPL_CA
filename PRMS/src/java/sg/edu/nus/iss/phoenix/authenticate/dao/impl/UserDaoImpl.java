@@ -96,7 +96,7 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public List<User> loadAll() throws SQLException {
 
-		String sql = "SELECT * FROM user ORDER BY id ASC ";
+		String sql = "SELECT * FROM user where not isActive = 'N' ORDER BY id ASC ";
 		List<User> searchResults = listQuery(this.connection
 				.prepareStatement(sql));
                 System.out.println("exited loadAll()");
@@ -145,24 +145,24 @@ public class UserDaoImpl implements UserDao {
 				throw new SQLException("PrimaryKey Error when updating DB!");
 			}
                         
-                        for(int i=0;i<a_role.size();i++){
-                            String switchRole = a_role.get((i)).getRole().toString();
-                            
-                            switch (switchRole){
-                                case "presenter":
-                                    insertIntoPresenter(valueObject);
-                                    break;
-                                case "producer":
-                                    insertIntoProducer(valueObject);
-                                    break;
-                                case "station manager":
-                                    insertIntoStationManager(valueObject);
-                                    break;
-                                default:
-                                    break;
-                                    
-                            }
-                        }
+//                        for(int i=0;i<a_role.size();i++){
+//                            String switchRole = a_role.get((i)).getRole().toString();
+//                            
+//                            switch (switchRole){
+//                                case "presenter":
+//                                    insertIntoPresenter(valueObject);
+//                                    break;
+//                                case "producer":
+//                                    insertIntoProducer(valueObject);
+//                                    break;
+//                                case "station manager":
+//                                    insertIntoStationManager(valueObject);
+//                                    break;
+//                                default:
+//                                    break;
+//                                    
+//                            }
+//                        }
                         
 
 			
@@ -599,4 +599,28 @@ public class UserDaoImpl implements UserDao {
     private void updateIntoStationManager(User valueObject) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void deassign(User user) throws NotFoundException,SQLException {
+
+        String sql = "";
+        PreparedStatement stmt = null;
+        try {
+            sql = "UPDATE user SET isActive= ?  WHERE (id = ? ) ";
+            stmt = this.connection.prepareStatement(sql);
+
+            stmt.setString(1, "N");
+            stmt.setString(2, user.getId());
+            int rowcount = databaseUpdate(stmt);
+            if (rowcount != 1) {
+                // System.out.println("PrimaryKey Error when updating DB!");
+                throw new SQLException("PrimaryKey Error when updating DB!");
+            }
+
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+}
 }

@@ -17,6 +17,11 @@ public class Producer implements Cloneable, Serializable {
      */
     private String userId;
     private String name;
+
+    
+    private String isActive;
+
+    
     
 
     /** 
@@ -50,6 +55,13 @@ public class Producer implements Cloneable, Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public String getIsActive() {
+        return isActive;
+    }
+    public void setIsActive(String isActive) {
+        this.isActive = isActive;
     }
 
     @Override

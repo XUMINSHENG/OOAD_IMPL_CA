@@ -17,6 +17,8 @@ public class Presenter implements Cloneable, Serializable {
      */
     private String userId;
     private String name;
+    private String isActive;
+
 
     /**
      * Get the value of userId
@@ -78,6 +80,13 @@ public class Presenter implements Cloneable, Serializable {
     }
 
     
+    public void setIsActive(String isActive) {
+        this.isActive = isActive;
+    }
+
+    public String getIsActive() {
+        return isActive;
+    }
 
     /** 
      * hasEqualMapping-method will compare two RadioProgram instances

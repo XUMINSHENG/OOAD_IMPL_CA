@@ -1,12 +1,16 @@
-package sg.edu.nus.iss.phoenix.authenticate.dao;
+package sg.edu.nus.iss.phoenix.producer.dao;
 
+import sg.edu.nus.iss.phoenix.presenter.dao.*;
+import sg.edu.nus.iss.phoenix.authenticate.dao.*;
 import java.sql.SQLException;
 import java.util.List;
 
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
+import sg.edu.nus.iss.phoenix.user.entity.Presenter;
+import sg.edu.nus.iss.phoenix.user.entity.Producer;
 
-public interface UserDao {
+public interface ProducerDAO {
 
 	/**
 	 * createValueObject-method. This method is used when the Dao class needs to
@@ -16,7 +20,7 @@ public interface UserDao {
 	 * If you extend the valueObject class, make sure to override the clone()
 	 * method in it!
 	 */
-	public abstract User createValueObject();
+	public abstract Producer createValueObject();
 
 	/**
 	 * getObject-method. This will create and load valueObject contents from
@@ -25,7 +29,7 @@ public interface UserDao {
 	 * as a parameter. Returned valueObject will be created using the
 	 * createValueObject() method.
 	 */
-	public abstract User getObject(String id)
+	public abstract Producer getObject(String id)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -41,7 +45,7 @@ public interface UserDao {
 	 *            This parameter contains the class instance to be loaded.
 	 *            Primary-key field must be set for this to work properly.
 	 */
-	public abstract void load(User valueObject)
+	public abstract void load(Producer valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -51,7 +55,7 @@ public interface UserDao {
 	 * only be used when target tables have only small amounts of data.
 	 * 
 	 */
-	public abstract List<User> loadAll() throws SQLException;
+	public abstract List<Producer> loadAll() throws SQLException;
 
 	/**
 	 * create-method. This will create new row in database according to supplied
@@ -66,7 +70,7 @@ public interface UserDao {
 	 *            automatic surrogate-keys are not used the Primary-key field
 	 *            must be set for this to work properly.
 	 */
-	public abstract void create(User valueObject)
+	public abstract void create(Producer valueObject)
 			throws SQLException;
 
 	/**
@@ -81,7 +85,7 @@ public interface UserDao {
 	 *            This parameter contains the class instance to be saved.
 	 *            Primary-key field must be set for this to work properly.
 	 */
-	public abstract void save(User valueObject)
+	public abstract void save(Producer valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -97,7 +101,7 @@ public interface UserDao {
 	 *            This parameter contains the class instance to be deleted.
 	 *            Primary-key field must be set for this to work properly.
 	 */
-	public abstract void delete(User valueObject)
+	public abstract void delete(Producer valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -137,11 +141,11 @@ public interface UserDao {
 	 *            This parameter contains the class instance where search will
 	 *            be based. Primary-key field should not be set.
 	 */
-	public abstract List<User> searchMatching(User valueObject)
+	public abstract List<Producer> searchMatching(Producer valueObject)
 			throws SQLException;
 
-	public abstract User searchMatching(String uid)
+	public abstract Producer searchMatching(String uid)
 			throws SQLException;
 
-        public abstract void deassign(User user) throws NotFoundException,SQLException;
+        public abstract void deassign(String id) throws NotFoundException, SQLException;
 }

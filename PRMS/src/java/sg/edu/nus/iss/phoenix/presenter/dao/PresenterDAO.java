@@ -1,21 +1,24 @@
-package sg.edu.nus.iss.phoenix.user.dao;
+package sg.edu.nus.iss.phoenix.presenter.dao;
 
-import java.sql.Connection;
+import sg.edu.nus.iss.phoenix.authenticate.dao.*;
 import java.sql.SQLException;
 import java.util.List;
 
-import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
+import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
+import sg.edu.nus.iss.phoenix.user.entity.Presenter;
 
-public interface UserDAO {
+public interface PresenterDAO {
 
 	/**
 	 * createValueObject-method. This method is used when the Dao class needs to
 	 * create new value object instance. The reason why this method exists is
 	 * that sometimes the programmer may want to extend also the valueObject and
-	 * then this method can be over-rided to return extended valueObject.
+	 * then this method can be overrided to return extended valueObject. NOTE:
+	 * If you extend the valueObject class, make sure to override the clone()
+	 * method in it!
 	 */
-	public abstract User createValueObject();
+	public abstract Presenter createValueObject();
 
 	/**
 	 * getObject-method. This will create and load valueObject contents from
@@ -24,7 +27,7 @@ public interface UserDAO {
 	 * as a parameter. Returned valueObject will be created using the
 	 * createValueObject() method.
 	 */
-	public abstract User getObject(String name)
+	public abstract Presenter getObject(String id)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -40,7 +43,7 @@ public interface UserDAO {
 	 *            This parameter contains the class instance to be loaded.
 	 *            Primary-key field must be set for this to work properly.
 	 */
-	public abstract void load(User valueObject)
+	public abstract void load(Presenter valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -50,7 +53,7 @@ public interface UserDAO {
 	 * only be used when target tables have only small amounts of data.
 	 * 
 	 */
-	public abstract List<User> loadAll() throws SQLException;
+	public abstract List<Presenter> loadAll() throws SQLException;
 
 	/**
 	 * create-method. This will create new row in database according to supplied
@@ -65,7 +68,8 @@ public interface UserDAO {
 	 *            automatic surrogate-keys are not used the Primary-key field
 	 *            must be set for this to work properly.
 	 */
-	public abstract void create(User valueObject) throws SQLException;
+	public abstract void create(Presenter valueObject)
+			throws SQLException;
 
 	/**
 	 * save-method. This method will save the current state of valueObject to
@@ -79,7 +83,7 @@ public interface UserDAO {
 	 *            This parameter contains the class instance to be saved.
 	 *            Primary-key field must be set for this to work properly.
 	 */
-	public abstract void save(User valueObject)
+	public abstract void save(Presenter valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -95,7 +99,7 @@ public interface UserDAO {
 	 *            This parameter contains the class instance to be deleted.
 	 *            Primary-key field must be set for this to work properly.
 	 */
-	public abstract void delete(User valueObject)
+	public abstract void delete(Presenter valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -109,10 +113,8 @@ public interface UserDAO {
 	 * implementation of this method should be different with different DB
 	 * backends.)
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
 	 */
-	public abstract void deleteAll(Connection conn) throws SQLException;
+	public abstract void deleteAll() throws SQLException;
 
 	/**
 	 * coutAll-method. This method will return the number of all rows from table
@@ -137,7 +139,11 @@ public interface UserDAO {
 	 *            This parameter contains the class instance where search will
 	 *            be based. Primary-key field should not be set.
 	 */
-	public abstract List<User> searchMatching(User valueObject)
+	public abstract List<Presenter> searchMatching(Presenter valueObject)
 			throws SQLException;
 
+	public abstract Presenter searchMatching(String uid)
+			throws SQLException;
+
+         public abstract void deassign(String id) throws NotFoundException, SQLException;
 }
