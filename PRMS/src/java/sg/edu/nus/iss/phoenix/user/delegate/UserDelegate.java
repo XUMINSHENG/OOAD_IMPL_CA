@@ -31,9 +31,9 @@ public class UserDelegate {
 
     }
 
-    public void processModify_user(User user) {
+    public void processModify(User user) {
         UserService service = new UserService();
-        service.processModify_user(user);
+        service.processModify(user);
 
     }
 

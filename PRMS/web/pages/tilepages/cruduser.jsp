@@ -49,6 +49,7 @@
                             <c:param name="name" value="${cruduser.name}"/>
                             <c:param name="roles" value="${cruduser.roles}"/>
                             <c:param name="address" value="${cruduser.address}"/>
+                            <c:param name="joiningdate" value="${cruduser.joiningDate}"/>
                              <c:param name="insert" value="false"/>
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.cruduser.edit"/></a>

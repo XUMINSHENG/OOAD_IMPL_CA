@@ -93,7 +93,8 @@ public class EnterUserDetailsCmd implements Perform {
             //  del.processCreate_presenter(presenter);
             //  del.processCreate_producer(producer);
         } else {
-               //del.processModify(user);
+            System.out.println("inside modify");
+               del.processModify(user);
         }
         
         

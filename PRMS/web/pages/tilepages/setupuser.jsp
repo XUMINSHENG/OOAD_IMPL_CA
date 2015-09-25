@@ -47,7 +47,7 @@
                                         <td><select multiple name="rolelist">
                                                 <option value="presenter">Presenter</option>
                                                 <option value="producer">Producer</option>
-                                                <option value="station manager">Station Manager</option>
+                                                
                                             </select>
 				</tr>
 				<tr>

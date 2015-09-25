@@ -83,10 +83,44 @@ public class UserService {
         }
     }
 
-    public void processModify_user(User user) {
+    public void processModify(User user) {
+
+        String id = user.getId();
+        int flagpres =0;
+        int flagprod=0;
 
         try {
             usrdao.save(user);
+            Presenter presenter = presdao.getObject(id);
+            Producer producer = proddao.getObject(id);
+            ArrayList<Role> a_role = user.getRoles();
+            String s_role = "";
+           
+            for (int i = 0; i < a_role.size(); i++) {
+                s_role = a_role.get((i)).getRole().toString();
+
+                if (s_role.equals("presenter")) {
+                    System.out.println("PRESENTER IF");
+                    flagpres =1;
+                    presdao.save(presenter);
+                    
+                    
+                }
+                if (s_role.equals("producer")) {
+                    System.out.println("producer IF");
+                    flagprod =1;
+                   proddao.save(producer);
+                }
+
+            }
+            if(flagpres == 0){
+                presdao.deassign(id);
+            }
+            if(flagprod ==0){
+                proddao.deassign(id);
+            }
+
+            
         } catch (NotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

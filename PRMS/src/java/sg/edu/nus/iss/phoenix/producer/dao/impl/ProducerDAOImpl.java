@@ -86,9 +86,9 @@ public class ProducerDAOImpl implements ProducerDAO {
             }
         }
     }
-    
+
     protected void singleQuery(PreparedStatement stmt, Producer valueObject)
-			throws NotFoundException, SQLException {
+            throws NotFoundException, SQLException {
 
         ResultSet result = null;
 
@@ -151,7 +151,35 @@ public class ProducerDAOImpl implements ProducerDAO {
 
     @Override
     public void save(Producer valueObject) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        String yes = "Y";
+        String sql = "UPDATE producer SET name = ?, isActive =?  WHERE (`user-id` = ? ) ";
+        //String sql = "UPDATE `program-slot` SET `program-name` = ?, `producer-name` = ?, `presenter-name` = ? WHERE (`dateOfProgram` = ? ) AND (`startTime` = ?); ";
+
+        PreparedStatement stmt = null;
+        try {
+            stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, valueObject.getName());
+            stmt.setString(2, yes);
+            stmt.setString(3, valueObject.getUserId());
+
+            int rowcount = databaseUpdate(stmt);
+            if (rowcount == 0) {sql = "INSERT INTO producer ( name, `user-id`, isActive) VALUES (?, ?, ?) ";
+                stmt = this.connection.prepareStatement(sql);
+                stmt.setString(1, valueObject.getName());
+                stmt.setString(2, valueObject.getUserId());
+                stmt.setString(3, yes);
+                
+                int count = databaseUpdate(stmt);
+                if(count == 0){
+                    throw new NotFoundException(
+                      "Presenter could not be saved! (Duplicate PrimaryKey)");
+                }}
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
     }
 
     @Override
