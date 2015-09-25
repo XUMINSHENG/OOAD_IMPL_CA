@@ -19,6 +19,8 @@ public class ProgramSlot implements Cloneable, Serializable {
      * Persistent Instance variables. This data is directly 
      * mapped to the columns of database table.
      */
+    private int year;
+    private int weekNum;
     private Date dateOfProgram;
     private Time startTime;
     private Time duration;
@@ -37,11 +39,34 @@ public class ProgramSlot implements Cloneable, Serializable {
 
     }
 
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getWeekNum() {
+        return weekNum;
+    }
+
+    public void setWeekNum(int weekNum) {
+        this.weekNum = weekNum;
+    }
+
     public ProgramSlot (Date dateOfProgram, Time startTime) {
         this.dateOfProgram = dateOfProgram;
         this.startTime = startTime;
     }
 
+    public ProgramSlot (int year, int weekNum, Date dateOfProgram, Time startTime) {
+        this.year = year;
+        this.weekNum = weekNum;
+        this.dateOfProgram = dateOfProgram;
+        this.startTime = startTime;
+    }
+    
     public Time getDuration() {
         return duration;
     }
@@ -120,6 +145,12 @@ public class ProgramSlot implements Cloneable, Serializable {
             return false;
         }
         final ProgramSlot other = (ProgramSlot) obj;
+        if (!Objects.equals(this.year, other.year)) {
+            return false;
+        }
+        if (!Objects.equals(this.weekNum, other.weekNum)) {
+            return false;
+        }
         if (!Objects.equals(this.dateOfProgram, other.dateOfProgram)) {
             return false;
         }

@@ -63,7 +63,11 @@ public class DeleteProgramSlotCmd implements Perform {
         // collect data from requset
         Date dateOfProgram = null;
         Time startTime = null;
+        int year;
+        int weekNum;
         try {
+            year = Integer.parseInt(req.getParameter("year"));
+            weekNum = Integer.parseInt(req.getParameter("weekNum"));
             dateOfProgram = Util.stringToDate(req.getParameter("dateOfProgram"));
             startTime = Util.stringToTime(req.getParameter("startTime"));
         } catch (Exception ex) {
@@ -75,7 +79,7 @@ public class DeleteProgramSlotCmd implements Perform {
         // execute deletion
         try {
             ScheduleDelegate del = new ScheduleDelegate();
-            del.processDelete(dateOfProgram, startTime);
+            del.processDelete(year,weekNum,dateOfProgram, startTime);
         } catch (Exception ex) {
             Logger.getLogger(DeleteProgramSlotCmd.class.getName()).log(Level.SEVERE, null, ex);
             req.setAttribute("errorMsg", ex.getMessage());

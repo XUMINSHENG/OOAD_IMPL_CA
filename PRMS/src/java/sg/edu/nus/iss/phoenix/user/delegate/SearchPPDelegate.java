@@ -17,8 +17,8 @@ public class SearchPPDelegate {
            
             public ArrayList<User> FetchPresnterProducers() {
 		UserService service = new UserService();
-		return service.findAllPresenterProducer();
-		
+//		return service.findAllPresenterProducer();
+		return null;
 	}
 
 	

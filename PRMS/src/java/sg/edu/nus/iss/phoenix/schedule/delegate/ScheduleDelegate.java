@@ -57,9 +57,9 @@ public class ScheduleDelegate {
 		
 	}
 
-	public void processDelete(Date dateOfProgram, Time startTime) throws NotFoundException, SQLException {
+	public void processDelete(int year, int weekNum, Date dateOfProgram, Time startTime) throws NotFoundException, SQLException {
 		ScheduleService service = new ScheduleService();
-		service.processDelete(dateOfProgram, startTime);
+		service.processDelete(year, weekNum, dateOfProgram, startTime);
 	}
         
         public void processCopy() {

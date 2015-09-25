@@ -196,13 +196,19 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 			throw new NotFoundException("Can not select without Primary-Key!");
 		}
 
-		String sql = "DELETE FROM `program-slot` WHERE (`dateOfProgram` = ? ) AND (`startTime` = ?); ";
+		String sql = "DELETE FROM `program-slot` "
+                        + "WHERE (`year` = ? ) "
+                        + "AND (`weekNum` = ? ) "
+                        + "AND (`dateOfProgram` = ? ) "
+                        + "AND (`startTime` = ?); ";
 		PreparedStatement stmt = null;
 		openConnection();
 		try {
 			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, Util.dateToString(valueObject.getDateOfProgram()));
-                        stmt.setTime(2, valueObject.getStartTime());
+                        stmt.setInt(1, valueObject.getYear());
+                        stmt.setInt(2, valueObject.getWeekNum());
+			stmt.setString(3, Util.dateToString(valueObject.getDateOfProgram()));
+                        stmt.setTime(4, valueObject.getStartTime());
 
 			int rowcount = databaseUpdate(stmt);
 			if (rowcount == 0) {
@@ -394,8 +400,11 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 
 			while (result.next()) {
 				ProgramSlot temp = createValueObject();
+                                
                                 temp.setProgram(new RadioProgram(result.getString("program-name")));
-				temp.setDateOfProgram(result.getDate("dateOfProgram"));
+				temp.setYear(result.getInt("year"));
+                                temp.setWeekNum(result.getInt("weekNum"));
+                                temp.setDateOfProgram(result.getDate("dateOfProgram"));
 				temp.setStartTime(result.getTime("startTime"));
                                 temp.setDuration(result.getTime("duration"));
                                 temp.setProducer(new Producer(result.getString("producer-name")));

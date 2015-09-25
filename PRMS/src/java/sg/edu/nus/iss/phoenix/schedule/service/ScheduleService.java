@@ -96,10 +96,10 @@ public class ScheduleService {
 		
 	}
 
-	public void processDelete(Date dateOfProgram, Time startTime) throws NotFoundException, SQLException {
+	public void processDelete(int year, int weekNum, Date dateOfProgram, Time startTime) throws NotFoundException, SQLException {
 
             try {
-                ProgramSlot ps = new ProgramSlot(dateOfProgram, startTime);
+                ProgramSlot ps = new ProgramSlot(year, weekNum, dateOfProgram, startTime);
                 scdao.delete(ps);
             } catch (NotFoundException e) {
                 throw e;

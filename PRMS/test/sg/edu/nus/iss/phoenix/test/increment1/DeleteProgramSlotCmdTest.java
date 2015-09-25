@@ -100,6 +100,10 @@ public class DeleteProgramSlotCmdTest {
         
         when(req.getSession())
                 .thenReturn(session);
+        when(req.getParameter("year"))
+                .thenReturn("2015");
+        when(req.getParameter("weekNum"))
+                .thenReturn("38");
         when(req.getParameter("dateOfProgram"))
                 .thenReturn("2015-09-15");
         when(req.getParameter("startTime"))
@@ -118,6 +122,8 @@ public class DeleteProgramSlotCmdTest {
         verify(req).getSession();
         verify(session).getAttribute("user");
         verify(user).hasRole("manager");
+        verify(req).getParameter("year");
+        verify(req).getParameter("weekNum");
         verify(req).getParameter("dateOfProgram");
         verify(req).getParameter("startTime");
 
@@ -129,25 +135,25 @@ public class DeleteProgramSlotCmdTest {
         List<ProgramSlot> expected = new ArrayList();
         ProgramSlot expProgramSlot = new ProgramSlot();
         expProgramSlot.setDateOfProgram(Util.stringToDate("2015-09-15"));
+        expProgramSlot.setYear(2015);
+        expProgramSlot.setWeekNum(38);
         expProgramSlot.setStartTime(Util.stringToTime("19:30:00"));
         expProgramSlot.setDuration(Util.stringToTime("00:30:00"));
         
-//        // RadioProgram
-//        RadioProgram expRadioProgram = new RadioProgram();
-//        expRadioProgram.setAll("news", 
-//                "full news broadcasted four times a day", 
-//                Util.stringToTime("00:30:00"));
-//        expProgramSlot.setProgram(expRadioProgram);
-//        
-//        // Producer
-//        Producer expProducer = new Producer();
-//        expProducer.setName("wally, the bludger");
-//        expProgramSlot.setProducer(expProducer);
-//        
-//        // Presenter
-//        Presenter expPresenter = new Presenter();
-//        expProducer.setName("dilbert, the hero");
-//        expProgramSlot.setPresenter(expPresenter);
+        // RadioProgram
+        RadioProgram expRadioProgram = new RadioProgram();
+        expRadioProgram.setName("news");
+        expProgramSlot.setProgram(expRadioProgram);
+        
+        // Producer
+        Producer expProducer = new Producer();
+        expProducer.setName("wally, the bludger");
+        expProgramSlot.setProducer(expProducer);
+        
+        // Presenter
+        Presenter expPresenter = new Presenter();
+        expPresenter.setName("dilbert, the hero");
+        expProgramSlot.setPresenter(expPresenter);
  
         // add to list
         expected.add(expProgramSlot);
@@ -169,11 +175,7 @@ public class DeleteProgramSlotCmdTest {
 
         when(req.getSession())
                 .thenReturn(session);
-        when(req.getParameter("dateOfProgram"))
-                .thenReturn("2015-09-15");
-        when(req.getParameter("startTime"))
-                .thenReturn("07:30:00");
-
+        
         // perform test
         String forwardPath;
         try {
@@ -208,13 +210,8 @@ public class DeleteProgramSlotCmdTest {
         when(session.getAttribute("user"))
                 .thenReturn(user);
 
-        
         when(req.getSession())
                 .thenReturn(session);
-        when(req.getParameter("dateOfProgram"))
-                .thenReturn("2015-09-15");
-        when(req.getParameter("startTime"))
-                .thenReturn("07:30:00");
 
         // perform test
         String forwardPath;
@@ -241,7 +238,7 @@ public class DeleteProgramSlotCmdTest {
                 "You do not have the privileges to perform this operation", 
                 valueCaptor.getValue());
     }
-
+    
     @Test
     public void performEmptyDateTest() throws Exception {
         
@@ -254,6 +251,10 @@ public class DeleteProgramSlotCmdTest {
         when(req.getSession())
                 .thenReturn(session);
 
+        when(req.getParameter("year"))
+                .thenReturn("2015");
+        when(req.getParameter("weekNum"))
+                .thenReturn("38");
         // empty date
         when(req.getParameter("dateOfProgram"))
                 .thenReturn("");
@@ -273,6 +274,8 @@ public class DeleteProgramSlotCmdTest {
         verify(req).getSession();
         verify(session).getAttribute("user");
         verify(user).hasRole("manager");
+        verify(req).getParameter("year");
+        verify(req).getParameter("weekNum");
         verify(req).getParameter("dateOfProgram");
 
         ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
@@ -299,6 +302,10 @@ public class DeleteProgramSlotCmdTest {
         when(req.getSession())
                 .thenReturn(session);
 
+        when(req.getParameter("year"))
+                .thenReturn("2015");
+        when(req.getParameter("weekNum"))
+                .thenReturn("38");
         // incorrect date
         when(req.getParameter("dateOfProgram"))
                 .thenReturn("a-02-30");
@@ -318,7 +325,207 @@ public class DeleteProgramSlotCmdTest {
         verify(req).getSession();
         verify(session).getAttribute("user");
         verify(user).hasRole("manager");
+        verify(req).getParameter("year");
+        verify(req).getParameter("weekNum");
         verify(req).getParameter("dateOfProgram");
+
+        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
+
+        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
+        
+        assertEquals("forwardPath", "/pages/error.jsp", forwardPath);
+        assertEquals("varName", "errorMsg", nameCaptor.getValue());
+        assertEquals("errorMsg" , 
+                "Invalid input", 
+                valueCaptor.getValue());
+    }
+    
+    @Test
+    public void performEmptyYearTest() throws Exception {
+        
+        when(user.hasRole("manager"))
+                .thenReturn(true);
+        
+        when(session.getAttribute("user"))
+                .thenReturn(user);
+
+        when(req.getSession())
+                .thenReturn(session);
+
+        // empty year
+        when(req.getParameter("year"))
+                .thenReturn("");
+        when(req.getParameter("weekNum"))
+                .thenReturn("38");
+        when(req.getParameter("dateOfProgram"))
+                .thenReturn("");
+        when(req.getParameter("startTime"))
+                .thenReturn("07:30:00");
+
+        // perform test
+        String forwardPath;
+        try {
+            forwardPath = deleteProgramSlotCmd.perform(null, req, resp);
+        } catch (Exception ex) {
+            fail("When calling perform");
+            return;
+        }
+        
+        // verify test
+        verify(req).getSession();
+        verify(session).getAttribute("user");
+        verify(user).hasRole("manager");
+        verify(req).getParameter("year");
+
+        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
+
+        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
+        
+        assertEquals("forwardPath", "/pages/error.jsp", forwardPath);
+        assertEquals("varName", "errorMsg", nameCaptor.getValue());
+        assertEquals("errorMsg" , 
+                "Invalid input", 
+                valueCaptor.getValue());
+    }
+    
+    @Test
+    public void performInvalidYearTest() throws Exception {
+        
+        when(user.hasRole("manager"))
+                .thenReturn(true);
+        
+        when(session.getAttribute("user"))
+                .thenReturn(user);
+
+        when(req.getSession())
+                .thenReturn(session);
+
+        // incorrect year
+        when(req.getParameter("year"))
+                .thenReturn("abcd");
+        when(req.getParameter("weekNum"))
+                .thenReturn("38");
+        when(req.getParameter("dateOfProgram"))
+                .thenReturn("2015-02-28");
+        when(req.getParameter("startTime"))
+                .thenReturn("07:30:00");
+
+        // perform test
+        String forwardPath;
+        try {
+            forwardPath = deleteProgramSlotCmd.perform(null, req, resp);
+        } catch (Exception ex) {
+            fail("When calling perform");
+            return;
+        }
+        
+        // verify test
+        verify(req).getSession();
+        verify(session).getAttribute("user");
+        verify(user).hasRole("manager");
+        verify(req).getParameter("year");
+
+        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
+
+        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
+        
+        assertEquals("forwardPath", "/pages/error.jsp", forwardPath);
+        assertEquals("varName", "errorMsg", nameCaptor.getValue());
+        assertEquals("errorMsg" , 
+                "Invalid input", 
+                valueCaptor.getValue());
+    }
+
+    @Test
+    public void performEmptyWeekNumTest() throws Exception {
+        
+        when(user.hasRole("manager"))
+                .thenReturn(true);
+        
+        when(session.getAttribute("user"))
+                .thenReturn(user);
+
+        when(req.getSession())
+                .thenReturn(session);
+        
+        when(req.getParameter("year"))
+                .thenReturn("2015");
+        // empty week
+        when(req.getParameter("weekNum"))
+                .thenReturn("");
+        when(req.getParameter("dateOfProgram"))
+                .thenReturn("2015-09-15");
+        when(req.getParameter("startTime"))
+                .thenReturn("07:30:00");
+
+        // perform test
+        String forwardPath;
+        try {
+            forwardPath = deleteProgramSlotCmd.perform(null, req, resp);
+        } catch (Exception ex) {
+            fail("When calling perform");
+            return;
+        }
+        
+        // verify test
+        verify(req).getSession();
+        verify(session).getAttribute("user");
+        verify(user).hasRole("manager");
+        verify(req).getParameter("year");
+        verify(req).getParameter("weekNum");
+
+        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
+
+        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
+        
+        assertEquals("forwardPath", "/pages/error.jsp", forwardPath);
+        assertEquals("varName", "errorMsg", nameCaptor.getValue());
+        assertEquals("errorMsg" , 
+                "Invalid input", 
+                valueCaptor.getValue());
+    }
+    
+    @Test
+    public void performInvalidWeekNumTest() throws Exception {
+        
+        when(user.hasRole("manager"))
+                .thenReturn(true);
+        
+        when(session.getAttribute("user"))
+                .thenReturn(user);
+
+        when(req.getSession())
+                .thenReturn(session);
+
+        when(req.getParameter("year"))
+                .thenReturn("2015");
+        // incorrect week
+        when(req.getParameter("weekNum"))
+                .thenReturn("ab");
+        when(req.getParameter("dateOfProgram"))
+                .thenReturn("2015-02-30");
+        when(req.getParameter("startTime"))
+                .thenReturn("07:30:00");
+
+        // perform test
+        String forwardPath;
+        try {
+            forwardPath = deleteProgramSlotCmd.perform(null, req, resp);
+        } catch (Exception ex) {
+            fail("When calling perform");
+            return;
+        }
+        
+        // verify test
+        verify(req).getSession();
+        verify(session).getAttribute("user");
+        verify(user).hasRole("manager");
+        verify(req).getParameter("year");
+        verify(req).getParameter("weekNum");
 
         ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
@@ -344,6 +551,10 @@ public class DeleteProgramSlotCmdTest {
         when(req.getSession())
                 .thenReturn(session);
 
+        when(req.getParameter("year"))
+                .thenReturn("2015");
+        when(req.getParameter("weekNum"))
+                .thenReturn("38");
         // empty time
         when(req.getParameter("dateOfProgram"))
                 .thenReturn("2015-09-15");
@@ -363,6 +574,8 @@ public class DeleteProgramSlotCmdTest {
         verify(req).getSession();
         verify(session).getAttribute("user");
         verify(user).hasRole("manager");
+        verify(req).getParameter("year");
+        verify(req).getParameter("weekNum");
         verify(req).getParameter("dateOfProgram");
         verify(req).getParameter("startTime");
 
@@ -390,6 +603,10 @@ public class DeleteProgramSlotCmdTest {
         when(req.getSession())
                 .thenReturn(session);
 
+        when(req.getParameter("year"))
+                .thenReturn("2015");
+        when(req.getParameter("weekNum"))
+                .thenReturn("38");
         // incorrect time
         when(req.getParameter("dateOfProgram"))
                 .thenReturn("2015-02-30");
@@ -409,6 +626,8 @@ public class DeleteProgramSlotCmdTest {
         verify(req).getSession();
         verify(session).getAttribute("user");
         verify(user).hasRole("manager");
+        verify(req).getParameter("year");
+        verify(req).getParameter("weekNum");
         verify(req).getParameter("dateOfProgram");
         verify(req).getParameter("startTime");
 
@@ -436,7 +655,12 @@ public class DeleteProgramSlotCmdTest {
         when(req.getSession())
                 .thenReturn(session);
 
-        // no such data
+        
+        when(req.getParameter("year"))
+                .thenReturn("2015");
+        when(req.getParameter("weekNum"))
+                .thenReturn("38");
+        // no such data 2015-02-01
         when(req.getParameter("dateOfProgram"))
                 .thenReturn("2015-02-01");
         when(req.getParameter("startTime"))
@@ -455,6 +679,8 @@ public class DeleteProgramSlotCmdTest {
         verify(req).getSession();
         verify(session).getAttribute("user");
         verify(user).hasRole("manager");
+        verify(req).getParameter("year");
+        verify(req).getParameter("weekNum");
         verify(req).getParameter("dateOfProgram");
         verify(req).getParameter("startTime");
 
