@@ -26,6 +26,7 @@ CREATE  TABLE IF NOT EXISTS `phoenix`.`user` (
   `password` VARCHAR(45) NULL ,
   `name` VARCHAR(45) NULL ,
   `role` VARCHAR(255) NULL ,
+  `isActive` VARCHAR(1) NOT NULL ,
   PRIMARY KEY (`id`))
 --  CONSTRAINT `role`
 --    FOREIGN KEY (`role` )
@@ -54,11 +55,11 @@ insert into `phoenix`.`role` values("producer", "program producer");
 -- -----------------------------------------------------
 
 -- id, password, name, role
-insert into `phoenix`.`user` values("dilbert", "dilbert", "dilbert, the hero", "presenter:producer");
-insert into `phoenix`.`user` values("wally", "wally", "wally, the bludger", "producer");
-insert into `phoenix`.`user` values("pointyhead", "pointyhead", "pointyhead, the manager", "manager");
-insert into `phoenix`.`user` values("catbert", "catbert", "catbert, the hr", "admin:manager");
-insert into `phoenix`.`user` values("dogbert", "dogbert", "dogbert, the CEO", "producer:admin");
+insert into `phoenix`.`user` values("dilbert", "dilbert", "dilbert, the hero", "presenter:producer",'Y');
+insert into `phoenix`.`user` values("wally", "wally", "wally, the bludger", "producer",'Y');
+insert into `phoenix`.`user` values("pointyhead", "pointyhead", "pointyhead, the manager", "manager",'Y');
+insert into `phoenix`.`user` values("catbert", "catbert", "catbert, the hr", "admin:manager",'Y');
+insert into `phoenix`.`user` values("dogbert", "dogbert", "dogbert, the CEO", "producer:admin",'Y');
 
 -- -----------------------------------------------------
 -- Table `phoenix`.`radio-program`
@@ -108,43 +109,28 @@ ENGINE = InnoDB;
 CREATE INDEX `id_annual_schedule` ON `phoenix`.`annual-schedule` (`assingedBy` ASC) ;
 
 -- -----------------------------------------------------
--- Table `phoenix`.`program-slot`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `phoenix`.`program-slot` ;
-
-CREATE  TABLE IF NOT EXISTS `phoenix`.`program-slot` (
-  `duration` TIME NOT NULL ,
-  `dateOfProgram` DATETIME NOT NULL ,
-  `startTime` DATETIME NULL ,
-  `program-name` VARCHAR(45) NULL ,
-  PRIMARY KEY (`duration`, `dateOfProgram`) ,
-  CONSTRAINT `name`
-    FOREIGN KEY (`program-name` )
-    REFERENCES `phoenix`.`radio-program` (`name` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-CREATE INDEX `name_program_slot` ON `phoenix`.`program-slot` (`program-name` ASC) ;
-
-CREATE UNIQUE INDEX `dateOfProgram_UNIQUE` ON `phoenix`.`program-slot` (`dateOfProgram` ASC) ;
-
-
--- -----------------------------------------------------
 -- Table `phoenix`.`weekly-schedule`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `phoenix`.`weekly-schedule` ;
 CREATE  TABLE IF NOT EXISTS `phoenix`.`weekly-schedule` (
-  `startDate` DATETIME NOT NULL ,
+  `year` INT NOT NULL ,
+  `weeknum` INT(2) NOT NULL ,
   `assignedBy` VARCHAR(45) NULL ,
-  PRIMARY KEY (`startDate`) ,
+  PRIMARY KEY (`year`,`weeknum`) ,
   CONSTRAINT `id_ws`
     FOREIGN KEY (`assignedBy` )
     REFERENCES `phoenix`.`user` (`id` )
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION ,
+  CONSTRAINT `year_ws`
+    FOREIGN KEY (`year` )
+    REFERENCES `phoenix`.`annual-schedule` (`year` )
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE UNIQUE INDEX `startDate_UNIQUE` ON `phoenix`.`weekly-schedule` (`startDate` ASC) ;
+CREATE UNIQUE INDEX `ws_UNIQUE` ON `phoenix`.`weekly-schedule` (`year`,`weeknum` ASC) ;
 
 CREATE INDEX `id_assigned_by` ON `phoenix`.`weekly-schedule` (`assignedBy` ASC) ;
+
+CREATE INDEX `id_year` ON `phoenix`.`annual-schedule` (`year` ASC) ;

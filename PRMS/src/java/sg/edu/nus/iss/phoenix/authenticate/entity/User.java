@@ -22,7 +22,7 @@ public class User implements Cloneable, Serializable {
 	private String name;
         private String address;
         private String joiningDate;
-	private ArrayList<Role> roles = new ArrayList<>();
+	private ArrayList<Role> roles = new ArrayList<Role>();
 
 	/**
 	 * Constructors. The first one takes no arguments and provides the most

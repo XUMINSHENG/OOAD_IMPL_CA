@@ -19,26 +19,29 @@ import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
  *
  * @author achyut
  */
-
 @Action("deleteuser")
 public class DeleteUserCmd implements Perform {
 
     @Override
     public String perform(String string, HttpServletRequest hsr, HttpServletResponse hsr1) throws IOException, ServletException {
-        
+
         UserDelegate del = new UserDelegate();
         List<User> data1 = del.FetchUsers();
-        System.out.println(data1.toString());
+
         String name = hsr.getParameter("name");
-        if(name.contains(",")){
-        String id = name.substring(0, name.indexOf(','));
-        name = id;
+        String id = null;
+        if (name.contains(",")) {
+            id = name.substring(0, name.indexOf(','));
+            //name = id;
+        } else {
+            id = name;
         }
-        del.processDelete(name);
-        
+
+        del.processDeassign(id);
+
         List<User> data = del.FetchUsers();
         hsr.setAttribute("rps", data);
         return "/pages/cruduser.jsp";
     }
-    
+
 }

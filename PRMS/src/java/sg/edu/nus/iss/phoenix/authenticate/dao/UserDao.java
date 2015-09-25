@@ -142,7 +142,6 @@ public interface UserDao {
 
 	public abstract User searchMatching(String uid)
 			throws SQLException;
-        
-        public abstract List<User> getListofPresenterProducer()
-			throws SQLException;
+
+        public abstract void deassign(User user) throws NotFoundException,SQLException;
 }
