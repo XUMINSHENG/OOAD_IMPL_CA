@@ -22,6 +22,8 @@ import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
 import sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDaoImpl;
+import sg.edu.nus.iss.phoenix.user.entity.Presenter;
+import sg.edu.nus.iss.phoenix.user.entity.Producer;
 
 /**
  *
@@ -37,8 +39,11 @@ public class EnterUserDetailsCmd implements Perform {
         
         UserDelegate del = new UserDelegate();
         User user = new User();
-        user.setName(request.getParameter("name"));
+        Presenter presenter = new Presenter();
+        Producer producer = new Producer();
         
+        
+        user.setName(request.getParameter("name"));        
         String id= request.getParameter("name");//from name, id needs to be populated
         String[] id_arr = id.trim().split(",");
         if(id_arr.length>1){
@@ -74,8 +79,19 @@ public class EnterUserDetailsCmd implements Perform {
         String ins = (String) request.getParameter("ins");
         Logger.getLogger(getClass().getName()).log(Level.INFO,
                         "Insert Flag: " + ins);
+        
+        presenter.setName(request.getParameter("name"));
+        presenter.setUserId(id);
+        presenter.setIsActive("Y");
+        
+        producer.setName(request.getParameter("name"));
+        producer.setUserId(id);
+        producer.setIsActive("Y");
+        
         if (ins.equalsIgnoreCase("true")) {
               del.processCreate(user);
+            //  del.processCreate_presenter(presenter);
+            //  del.processCreate_producer(producer);
         } else {
                //del.processModify(user);
         }
@@ -83,6 +99,7 @@ public class EnterUserDetailsCmd implements Perform {
         
         UserDelegate delegate = new UserDelegate();
         List<User> data = delegate.FetchUsers();
+        
         request.setAttribute("rps", data);
         return "/pages/cruduser.jsp";
     
