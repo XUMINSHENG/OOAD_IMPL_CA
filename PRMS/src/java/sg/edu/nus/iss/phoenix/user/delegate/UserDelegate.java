@@ -6,7 +6,6 @@
 package sg.edu.nus.iss.phoenix.user.delegate;
 import java.util.ArrayList;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
-import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
 import sg.edu.nus.iss.phoenix.user.service.UserService;
 
 /**
