@@ -143,8 +143,8 @@
                         <a href="${updurl}"><fmt:message key="label.crudsc.edit"/></a>
                         &nbsp;&nbsp;&nbsp;
                         <c:url var="delurl" scope="page" value="/nocturne/deleteps">
-                            <c:param name="dateOfProgram" value="${crudsc.dateOfProgram}" />
-                            <c:param name="startTime" value="${crudsc.startTime}"/>
+                            <c:param name="dateOfProgram" value="${pitem.dateOfProgram}" />
+                            <c:param name="startTime" value="${pitem.startTime}"/>
                         </c:url>
                         <a href="${delurl}"><fmt:message key="label.crudsc.delete"/></a>
                     </td>
