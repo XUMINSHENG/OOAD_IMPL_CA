@@ -30,7 +30,7 @@ public interface ScheduleDAO {
         
         public abstract WeeklySchedule createWeeklySchedule();
         
-        public abstract WeeklySchedule getWeeklySchedule(Timestamp date)
+        public abstract WeeklySchedule getWeeklySchedule(int year, int week)
                 throws NotFoundException, SQLException;
         
         public abstract void loadWeeklySchedule(WeeklySchedule valueObject)

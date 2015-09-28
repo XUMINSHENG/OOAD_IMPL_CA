@@ -4,6 +4,9 @@ import sg.edu.nus.iss.phoenix.radioprogram.entity.*;
 import java.io.Serializable;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class WeeklySchedule implements Cloneable, Serializable {
@@ -17,7 +20,8 @@ public class WeeklySchedule implements Cloneable, Serializable {
      * Persistent Instance variables. This data is directly 
      * mapped to the columns of database table.
      */
-    private Timestamp startDate;
+    private int year;
+    private int week;
     private String assignedBy;
     private List<ProgramSlot> listOfProgramSlot;
 
@@ -33,10 +37,10 @@ public class WeeklySchedule implements Cloneable, Serializable {
 
     }
 
-    public WeeklySchedule (Timestamp startDateIn) {
+    public WeeklySchedule (int yearIn, int weekIn) {
 
-          this.startDate = startDateIn;
-
+        this.year = yearIn;
+        this.week = weekIn;
     }
 
 
@@ -46,13 +50,22 @@ public class WeeklySchedule implements Cloneable, Serializable {
      * so these might require some manual additions.
      */
 
-    public Timestamp getStartDate() {
-          return this.startDate;
+    public int getYear() {
+        return this.year;
     }
-    public void setStartDate(Timestamp startDateIn) {
-          this.startDate = startDateIn;
+    
+    public void setYear(int yearIn) {
+        this.year = yearIn;
     }
 
+    public int getWeek() {
+        return this.week;
+    }
+    
+    public void setWeek(int weekIn) {
+        this.week = weekIn;
+    }
+    
     public String getAssignedBy() {
           return this.assignedBy;
     }
@@ -79,9 +92,10 @@ public class WeeklySchedule implements Cloneable, Serializable {
      * individual set-methods.
      */
 
-    public void setAll(Timestamp startDateIn,
+    public void setAll(int yearIn, int weekIn,
           String assignedByIn) {
-          this.startDate = startDateIn;
+          this.year = yearIn;
+          this.week = weekIn;
           this.assignedBy = assignedByIn;
     }
 
@@ -95,10 +109,16 @@ public class WeeklySchedule implements Cloneable, Serializable {
      */
     public boolean hasEqualMapping(WeeklySchedule valueObject) {
 
-          if (this.startDate == null) {
-                    if (valueObject.getStartDate() != null)
+          if (this.year == 0) {
+                    if (valueObject.getYear() != 0)
                            return(false);
-          } else if (!this.startDate.equals(valueObject.getStartDate())) {
+          } else if (this.year != valueObject.getYear()) {
+                    return(false);
+          }
+          if (this.week == 0) {
+                    if (valueObject.getWeek() != 0)
+                           return(false);
+          } else if (this.week != valueObject.getWeek()) {
                     return(false);
           }
           if (this.assignedBy == null) {
@@ -122,7 +142,7 @@ public class WeeklySchedule implements Cloneable, Serializable {
         StringBuffer out = new StringBuffer();
         out.append("\nRadioProgram class, mapping to table radio-program\n");
         out.append("Persistent attributes: \n"); 
-        out.append("name = " + this.startDate.toString() + "\n"); 
+        out.append("year = " + Integer.toString(this.year) + "\n"); 
         out.append("description = " + this.assignedBy + "\n"); 
         return out.toString();
     }
@@ -137,14 +157,35 @@ public class WeeklySchedule implements Cloneable, Serializable {
     public Object clone() {
         WeeklySchedule cloned = new WeeklySchedule();
 
-        if (this.startDate != null)
-             cloned.setStartDate(this.startDate); 
+        if (this.year != 0)
+             cloned.setYear(this.year);
+        if (this.week != 0)
+             cloned.setWeek(this.week);
         if (this.assignedBy != null)
              cloned.setAssignedBy(new String(this.assignedBy)); 
         
         return cloned;
     }
 
-
+    public String getStartDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, this.year);
+        cal.set(Calendar.WEEK_OF_YEAR, this.week);
+        Date startOfWeek = new Date(cal.getTimeInMillis());
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd EEE");
+        
+        return df.format(startOfWeek);
+    }
+    
+    public String getEndDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, this.year);
+        cal.set(Calendar.WEEK_OF_YEAR, this.week);
+        cal.add(Calendar.DATE,6);
+        Date endOfWeek = new Date(cal.getTimeInMillis());
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd EEE");
+        
+        return df.format(endOfWeek);
+    }
 
 }

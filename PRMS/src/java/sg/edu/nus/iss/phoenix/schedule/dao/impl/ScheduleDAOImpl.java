@@ -391,7 +391,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	 *            This parameter contains the SQL statement to be excuted.
 	 */
 	protected List<ProgramSlot> listQuery(PreparedStatement stmt) throws SQLException {
-
+                System.out.println("listquery1");
 		ArrayList<ProgramSlot> searchResults = new ArrayList<ProgramSlot>();
 		ResultSet result = null;
 		openConnection();
@@ -420,7 +420,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 				stmt.close();
 			closeConnection();
 		}
-
+                System.out.println("listquery2");
 		return (List<ProgramSlot>) searchResults;
 	}
 
@@ -512,12 +512,14 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 
     @Override
     public AnnualSchedule getAnnualSchedule(int year) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        AnnualSchedule valueObject = createAnnualSchedule();
+        valueObject.setYear(year);
+        loadAnnualSchedule(valueObject);
+	return valueObject;
     }
 
     @Override
     public void loadAnnualSchedule(AnnualSchedule valueObject) throws NotFoundException, SQLException {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         if (valueObject.getYear() == 0 || valueObject.getAssignedBy() == null) {
 			// System.out.println("Can not select without Primary-Key!");
 			throw new NotFoundException("Can not select without Primary-Key!");
@@ -542,7 +544,6 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 
     @Override
     public List<AnnualSchedule> loadAllAnnualSchedule() throws SQLException {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         openConnection();
         String sql = "SELECT * FROM `annual-schedule` ORDER BY `year` ASC; ";
 	List<AnnualSchedule> searchResults = annualListQuery(connection
@@ -552,31 +553,45 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         return searchResults;
     }
     
-        protected void weeklySingleQuery(PreparedStatement stmt, WeeklySchedule valueObject)
-			throws NotFoundException, SQLException {
+    protected void weeklySingleQuery(PreparedStatement stmt, WeeklySchedule valueObject)
+		throws NotFoundException, SQLException {
+        System.out.println("mid1 weekschedule");
+	ResultSet result = null;
+	openConnection();
+	try {
+		result = stmt.executeQuery();
 
-		ResultSet result = null;
-		openConnection();
-		try {
-			result = stmt.executeQuery();
+		if (result.next()) {
 
-			if (result.next()) {
-
-				valueObject.setStartDate(result.getTimestamp("startDate"));
-				valueObject.setAssignedBy(result.getString("assignedBy"));
-				
-			} else {
+			valueObject.setYear(result.getInt("year"));
+                        valueObject.setYear(result.getInt("week"));
+			valueObject.setAssignedBy(result.getString("assignedBy"));
+			
+		} else {
 				// System.out.println("ProgramSlot Object Not Found!");
-//				throw new NotFoundException("WeeklySchedule Object Not Found!");
+                    System.out.println("not found");
+				throw new NotFoundException("WeeklySchedule Object Not Found!");
 			}
-		} finally {
-			if (result != null)
-				result.close();
-			if (stmt != null)
-				stmt.close();
-			closeConnection();
-		}
+                System.out.println("mid2 weekschedule");
+                String sql = "SELECT * FROM `program-slot` WHERE `year` == ? AND `week` == ? ORDER BY `dateOfProgram` DESC;";
+                        PreparedStatement stm = null;
+                        stm = connection.prepareStatement(sql);
+                        stm.setInt(1,valueObject.getYear());
+                        stm.setInt(2,valueObject.getWeek());
+//                        List<ProgramSlot> slotList = listQuery(stm);
+//                        System.out.println(slotList.size());
+//                        if(!slotList.isEmpty()){
+//                            valueObject.setListOfProgramSlot(slotList);
+//                        }
+                        System.out.println("mid3 weekschedule");
+	} finally {
+		if (result != null)
+			result.close();
+		if (stmt != null)
+			stmt.close();
+		closeConnection();
 	}
+    }
         
         protected List<WeeklySchedule> weeklyListQuery(PreparedStatement stmt) throws SQLException{
             ArrayList<WeeklySchedule> searchResults = new ArrayList<WeeklySchedule>();
@@ -588,7 +603,8 @@ public class ScheduleDAOImpl implements ScheduleDAO {
                     while (result.next()) {
 			WeeklySchedule temp = createWeeklySchedule();
 
-                        temp.setStartDate(result.getTimestamp("startDate"));
+                        temp.setYear(result.getInt("year"));
+                        temp.setWeek(result.getInt("week"));
                         temp.setAssignedBy(result.getString("assignedBy"));
                         
                         
@@ -613,24 +629,14 @@ public class ScheduleDAOImpl implements ScheduleDAO {
     
     @Override
     public List<ProgramSlot> searchScheduledProgramSlot(int year, int week) throws NotFoundException, SQLException {
-        String sql = "SELECT * FROM `program-slot` WHERE `dateOfProgram` BETWEEN ? AND ? ORDER BY `dateOfProgram`, `startTime` ASC; ";
+        String sql = "SELECT * FROM `program-slot` WHERE `year` = ? AND `weeknum` = ? ORDER BY `year`, `weeknum`, `dateOfProgram` DESC; ";
         PreparedStatement stmt = null;
         List<ProgramSlot> searchResults = null;
         openConnection();
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.WEEK_OF_YEAR, week);
-        Date startOfWeek = new Date(cal.getTimeInMillis());
-        cal.set(Calendar.WEEK_OF_YEAR, week+1);
-        Date endOfWeek = new Date(cal.getTimeInMillis());
-        System.out.println(startOfWeek);
-//        Timestamp dateOfWeek = new Timestamp(cal.getTime().getTime());
-//        Date startOfProgram = new Date(dateOfWeek.getTime());
-//        Date endOfWeek = new Date(startOfProgram.getTime()+TimeUnit.DAYS.toMillis(7));
         try {
             stmt = connection.prepareStatement(sql);
-            stmt.setDate(1, startOfWeek);
-            stmt.setDate(2, endOfWeek);
+            stmt.setInt(1, year);
+            stmt.setInt(2, week);
             searchResults = listQuery(stmt);
         
         }   catch (SQLException ex) {
@@ -645,17 +651,19 @@ public class ScheduleDAOImpl implements ScheduleDAO {
     }
 
     @Override
-    public WeeklySchedule getWeeklySchedule(Timestamp dateOfWeek) throws NotFoundException, SQLException {
-        String sql = "SELECT * FROM `weekly-schedule` WHERE (`startDate` = ? ); ";
+    public WeeklySchedule getWeeklySchedule(int year, int week) throws NotFoundException, SQLException {
+        String sql = "SELECT * FROM `weekly-schedule` WHERE (`year` = ? and `weeknum` = ?); ";
 	PreparedStatement stmt = null;
-        WeeklySchedule valueObject = new WeeklySchedule(dateOfWeek);
+        WeeklySchedule valueObject = new WeeklySchedule(year,week);
+        System.out.println("start weekschedule");
 	openConnection();
 	try {
 		stmt = connection.prepareStatement(sql);
-		stmt.setTimestamp(1, dateOfWeek);
-                        
+		stmt.setInt(1, year);
+                stmt.setInt(2, week);
+                System.out.println("mid weekschedule");        
 		weeklySingleQuery(stmt, valueObject);
-
+                
 	} catch(NotFoundException e){
                 return null;
         } finally {
@@ -665,23 +673,24 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         
 //        valueObject.setListOfProgramSlot(searchScheduledProgramSlot(dateOfWeek));
 	closeConnection();
+        System.out.println("return weekschedule");
         return valueObject;
     }
 
     @Override
     public void loadWeeklySchedule(WeeklySchedule valueObject) throws NotFoundException, SQLException {
-        if (valueObject.getStartDate() == null || valueObject.getAssignedBy() == null) {
+        if (valueObject.getYear() == 0 || valueObject.getWeek() == 0 ) {
 			// System.out.println("Can not select without Primary-Key!");
 			throw new NotFoundException("Can not select without Primary-Key!");
 		}
 
-	String sql = "SELECT * FROM `weekly-schedule` WHERE (`startDate` = ? ) AND (`assignedBy` = ?); ";
+	String sql = "SELECT * FROM `weekly-schedule` WHERE (`year` = ? ) AND (`weeknum` = ?); ";
 	PreparedStatement stmt = null;
 	openConnection();
 	try {
 		stmt = connection.prepareStatement(sql);
-		stmt.setString(1, valueObject.getStartDate().toString());
-                stmt.setString(2, valueObject.getAssignedBy());
+		stmt.setInt(1, valueObject.getYear());
+                stmt.setInt(2, valueObject.getWeek());
                         
 		weeklySingleQuery(stmt, valueObject);
 

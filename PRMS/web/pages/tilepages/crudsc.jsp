@@ -63,9 +63,10 @@
                                     <c:choose>
                                         <c:when test="${! empty yearlist}">
 					<td><fmt:message key="fieldLabel.year" />
-                                            <select name="year" style="width: 100px;">
+                                            <select name="year" style="width: 150px;">
+                                                <option value="0"> --Please select year-- </option>
                                                 <c:forEach var="item" items="${yearlist}" varStatus="loop">
-                                                    <option value="<c:out value="${item.getYear()}" />">
+                                                    <option value="${item.getYear()}">
                                                         <c:out value="${item.getYear()}" />
                                                     </option>
                                                 </c:forEach>
@@ -73,9 +74,10 @@
                                         </td>
                                         <td>
                                             <fmt:message key="fieldLabel.week" />
-                                            <select name="week" style="width:100px;">
+                                            <select name="week" style="width:150px;">
+                                                <option value="0"> --Please select week-- </option>
                                                 <c:forEach begin="1" end="52" varStatus="loop">
-                                                    <option value="<c:out value="${loop.index}" />" >
+                                                    <option value="${loop.index}" >
                                                         <c:out value="${loop.index}" />
                                                     </option>
                                                 </c:forEach>
@@ -92,17 +94,19 @@
 		</center>
             </form>
         
-    <c:if test="${! empty yearlist}">
+    <c:if test="${(year != 0) && (week != 0)}">
         <table class="borderAll">
             <thead>
                 <tr>
-                    <th><c:out value="${year}"/> Year - <c:out value="${week}"/> Week Schedule</th>
+                    <th colspan="7">
+                        <c:out value="${ws.getYear()}"/> Year - <c:out value="${ws.getWeek()}"/> Week Schedule (<c:out value="${ws.getStartDate()}" /> - <c:out value="${ws.getEndDate()}" />)
+                    </th>
                 </tr>
             </thead>
             <tbody>
             <tr>
-                <th><fmt:message key="label.radioprogram.name"/></th>
                 <th><fmt:message key="label.crudsc.date"/></th>
+                <th><fmt:message key="label.radioprogram.name"/></th>
                 <th><fmt:message key="label.crudsc.startTime"/></th>
                 <th><fmt:message key="label.crudsc.duration"/></th>
                 <th><fmt:message key="label.programslot.presenter"/></th>
@@ -110,23 +114,23 @@
                 <th><fmt:message key="label.crudsc.edit"/> <fmt:message key="label.crudsc.delete"/></th>
             </tr>
             <c:choose>
-            <c:when test="${! empty pss}">    
-            <c:forEach var="crudsc" items="${pss}" varStatus="status">
+            <c:when test="${! empty ws.getListOfProgramSlot()}">    
+            <c:forEach var="item" items="${ws.getListOfProgramSlot()}" varStatus="status">
                 <tr class="${status.index%2==0?'even':'odd'}">
-                    <td class="nowrap"><c:out value="${crudsc.program.name}" /></td>
-                    <td class="nowrap"><fmt:formatDate pattern="yyyy-MM-dd" value="${crudsc.dateOfProgram}" /></td>
-                    <td class="nowrap"><fmt:formatDate pattern="hh:mm:ss" value="${crudsc.startTime}" /></td>
-                    <td class="nowrap"><fmt:formatDate pattern="HH:mm:ss" value="${crudsc.duration}" /></td>
-                    <td class="nowrap"><c:out value="${crudsc.producer.name}" /></td>
-                    <td class="nowrap"><c:out value="${crudsc.presenter.name}" /></td>
+                    <td class="nowrap"><fmt:formatDate pattern="yyyy-MM-dd" value="${pitem.dateOfProgram}" /></td>
+                    <td class="nowrap"><c:out value="${pitem.program.name}" /></td>
+                    <td class="nowrap"><fmt:formatDate pattern="hh:mm:ss" value="${pitem.startTime}" /></td>
+                    <td class="nowrap"><fmt:formatDate pattern="HH:mm:ss" value="${pitem.duration}" /></td>
+                    <td class="nowrap"><c:out value="${pitem.producer.name}" /></td>
+                    <td class="nowrap"><c:out value="${pitem.presenter.name}" /></td>
                     <td class="nowrap">
                         <c:url var="updurl" scope="page" value="/nocturne/addeditps">
-                            <c:param name="dataOfProgram" value="${crudsc.dateOfProgram}"/>
-                            <c:param name="startTime" value="${crudsc.startTime}"/>
-                            <c:param name="duration" value="${crudsc.duration}"/>
-                            <c:param name="program-name" value="${crudsc.program.name}"/>
-                            <c:param name="producer-name" value="${crudsc.producer.name}"/>
-                            <c:param name="presenter-name" value="${crudsc.presenter.name}"/>
+                            <c:param name="dataOfProgram" value="${pitem.dateOfProgram}"/>
+                            <c:param name="startTime" value="${pitem.startTime}"/>
+                            <c:param name="duration" value="${pitem.duration}"/>
+                            <c:param name="program-name" value="${pitem.program.name}"/>
+                            <c:param name="producer-name" value="${pitem.producer.name}"/>
+                            <c:param name="presenter-name" value="${pitem.presenter.name}"/>
                             <c:param name="insert" value="false"/>
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.crudsc.edit"/></a>

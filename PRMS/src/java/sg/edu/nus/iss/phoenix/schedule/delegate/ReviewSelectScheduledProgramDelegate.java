@@ -25,8 +25,8 @@ public class ReviewSelectScheduledProgramDelegate {
 		return service.reviewSelectScheduledProgram();	
 	}
         
-        public WeeklySchedule reviewSelectWeeklySchedule(Timestamp dateOfWeek) {
-                return service.reviewSelectWeeklySchedule(dateOfWeek);
+        public WeeklySchedule reviewSelectWeeklySchedule(int year, int week) {
+                return service.reviewSelectWeeklySchedule(year,week);
         }
         
         public List<ProgramSlot> searchScheduledProgramSlot(int year, int week) {

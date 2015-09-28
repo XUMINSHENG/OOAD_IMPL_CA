@@ -44,10 +44,10 @@ public class ReviewSelectScheduledProgramService {
             return data; 
 	}
 
-        public WeeklySchedule reviewSelectWeeklySchedule(Timestamp dateOfWeek) {
+        public WeeklySchedule reviewSelectWeeklySchedule(int year, int week) {
             WeeklySchedule data = null;
             try {
-                data = rpdao.getWeeklySchedule(dateOfWeek);
+                data = rpdao.getWeeklySchedule(year,week);
             } catch (SQLException ex) {
                 Logger.getLogger(ReviewSelectScheduledProgramService.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NotFoundException ex) {
