@@ -55,7 +55,7 @@
 		<center>
 			<table class="framed">
 				<tr>
-					<th width="30%"><fmt:message key="caption.schedule" /></th>
+                                    <th width="30%"><h3><fmt:message key="caption.schedule" /></h3></th>
                                         <th width="30%"></th>
                                         <th></th>
 				</tr>
@@ -83,13 +83,13 @@
                                                 </c:forEach>
                                             </select>
                                         </td>
-                                        <td><input type="submit" value="Submit"></td>
+                                        <td><input type="submit" value="Select week scheduel"></td>
                                         </c:when>
                                         <c:otherwise>
                                         <td colspan="3"><p style="color:grey;text-align: center;"><i>No Annual Schedule</i></p></td>
                                         </c:otherwise>
-                                    </c:choose>    
-				</tr>
+                                    </c:choose>
+                                </tr>
                         </table>
 		</center>
             </form>
@@ -98,8 +98,15 @@
         <table class="borderAll">
             <thead>
                 <tr>
-                    <th colspan="7">
-                        <c:out value="${ws.getYear()}"/> Year - <c:out value="${ws.getWeek()}"/> Week Schedule (<c:out value="${ws.getStartDate()}" /> - <c:out value="${ws.getEndDate()}" />)
+                    <th colspan="6">
+                        <h3>
+                            <c:out value="${ws.getYear()}"/> Year - <c:out value="${ws.getWeek()}"/> Week Schedule (<c:out value="${ws.getStartDate()}" /> - <c:out value="${ws.getEndDate()}" />)
+                        </h3>
+                    </th>
+                    <th>
+                        <c:if test="${! empty ws.getAssignedBy()}">
+                            <p>Assigned By: <c:out value="${ws.getAssignedBy()}"/></p>
+                        </c:if>
                     </th>
                 </tr>
             </thead>
@@ -115,7 +122,7 @@
             </tr>
             <c:choose>
             <c:when test="${! empty ws.getListOfProgramSlot()}">    
-            <c:forEach var="item" items="${ws.getListOfProgramSlot()}" varStatus="status">
+            <c:forEach var="pitem" items="${ws.getListOfProgramSlot()}" varStatus="status">
                 <tr class="${status.index%2==0?'even':'odd'}">
                     <td class="nowrap"><fmt:formatDate pattern="yyyy-MM-dd" value="${pitem.dateOfProgram}" /></td>
                     <td class="nowrap"><c:out value="${pitem.program.name}" /></td>

@@ -564,25 +564,25 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 		if (result.next()) {
 
 			valueObject.setYear(result.getInt("year"));
-                        valueObject.setYear(result.getInt("week"));
+                        valueObject.setWeek(result.getInt("weeknum"));
 			valueObject.setAssignedBy(result.getString("assignedBy"));
-			
+			System.out.println("mid2 weekschedule");
+                        String sql = "SELECT * FROM `program-slot` WHERE `year` = ? AND `weeknum` = ? ORDER BY `dateOfProgram` DESC;";
+                        PreparedStatement stm = null;
+                        stm = connection.prepareStatement(sql);
+                        stm.setInt(1,valueObject.getYear());
+                        stm.setInt(2,valueObject.getWeek());
+                        List<ProgramSlot> slotList = listQuery(stm);
+                        System.out.println(slotList.size());
+                        if(!slotList.isEmpty()){
+                            valueObject.setListOfProgramSlot(slotList);
+                        }
 		} else {
 				// System.out.println("ProgramSlot Object Not Found!");
                     System.out.println("not found");
 				throw new NotFoundException("WeeklySchedule Object Not Found!");
 			}
-                System.out.println("mid2 weekschedule");
-                String sql = "SELECT * FROM `program-slot` WHERE `year` == ? AND `week` == ? ORDER BY `dateOfProgram` DESC;";
-                        PreparedStatement stm = null;
-                        stm = connection.prepareStatement(sql);
-                        stm.setInt(1,valueObject.getYear());
-                        stm.setInt(2,valueObject.getWeek());
-//                        List<ProgramSlot> slotList = listQuery(stm);
-//                        System.out.println(slotList.size());
-//                        if(!slotList.isEmpty()){
-//                            valueObject.setListOfProgramSlot(slotList);
-//                        }
+                
                         System.out.println("mid3 weekschedule");
 	} finally {
 		if (result != null)
@@ -665,7 +665,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 		weeklySingleQuery(stmt, valueObject);
                 
 	} catch(NotFoundException e){
-                return null;
+//                return null;               
         } finally {
             if (stmt != null)
 		stmt.close();
