@@ -39,4 +39,8 @@
         <definition name="setuppsPage" extends="homePage">
 		<put-attribute name="body" value="/pages/tilepages/setupps.jsp" />
 	</definition>
+        
+     <definition name="addascPage" extends="homePage">
+		<put-attribute name="body" value="/pages/tilepages/addasc.jsp" />
+	</definition>
 </tiles-definitions>

@@ -1,21 +1,16 @@
 package sg.edu.nus.iss.phoenix.schedule.dao.impl;
 
-import sg.edu.nus.iss.phoenix.radioprogram.dao.impl.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -53,8 +48,10 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	/* (non-Javadoc)
 	 * @see sg.edu.nus.iss.phoenix.radioprogram.dao.impl.ProgramDAO#createValueObject()
 	 */
+       
 	@Override
 	public ProgramSlot createValueObject() {
+            
 		return new ProgramSlot();
 	}
 
@@ -333,7 +330,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	 * sure that if cache is used, it will reset when data changes.
 	 * 
 	 * @param stmt
-	 *            This parameter contains the SQL statement to be excuted.
+	 *            This parameter contains the SQL statement to be executed.
 	 */
 	protected int databaseUpdate(PreparedStatement stmt) throws SQLException {
 
@@ -345,11 +342,11 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	/**
 	 * databaseQuery-method. This method is a helper method for internal use. It
 	 * will execute all database queries that will return only one row. The
-	 * resultset will be converted to valueObject. If no rows were found,
+	 * result set will be converted to valueObject. If no rows were found,
 	 * NotFoundException will be thrown.
 	 * 
 	 * @param stmt
-	 *            This parameter contains the SQL statement to be excuted.
+	 *            This parameter contains the SQL statement to be executed.
 	 * @param valueObject
 	 *            Class-instance where resulting data will be stored.
 	 */
@@ -384,11 +381,11 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	/**
 	 * databaseQuery-method. This method is a helper method for internal use. It
 	 * will execute all database queries that will return multiple rows. The
-	 * resultset will be converted to the List of valueObjects. If no rows were
+	 * result set will be converted to the List of valueObjects. If no rows were
 	 * found, an empty List will be returned.
 	 * 
 	 * @param stmt
-	 *            This parameter contains the SQL statement to be excuted.
+	 *            This parameter contains the SQL statement to be executed.
 	 */
 	protected List<ProgramSlot> listQuery(PreparedStatement stmt) throws SQLException {
                 System.out.println("listquery1");
@@ -484,10 +481,10 @@ public class ScheduleDAOImpl implements ScheduleDAO {
                     result = stmt.executeQuery();
 
                     while (result.next()) {
-			AnnualSchedule temp = createAnnualSchedule();
-
-                        temp.setYear(Integer.parseInt(result.getString("year")));
-                        temp.setAssignedBy(result.getString("assingedBy"));
+			//AnnualSchedule temp = createAnnualSchedule();
+                        AnnualSchedule temp = createAnnualSchedule(Integer.parseInt(result.getString("year")),result.getString("assingedBy"));
+                       // temp.setYear(Integer.parseInt(result.getString("year")));
+                        //temp.setAssignedBy(result.getString("assingedBy"));
                         
                         
                         searchResults.add(temp);
@@ -505,18 +502,44 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         }
         
 
-    @Override
-    public AnnualSchedule createAnnualSchedule() {
-        return new AnnualSchedule();
+ @Override
+    public AnnualSchedule createAnnualSchedule(int year,String name) throws SQLException  {
+     String  sql = "INSERT INTO `annual-schedule` (`year`, `assingedBy`) VALUES (?,?); ";
+                       PreparedStatement stmt=null;
+                        openConnection();
+                        try{
+			stmt = this.connection.prepareStatement(sql);
+			stmt.setInt(1,year);
+			stmt.setString(2,name);
+			 
+			int rowcount = databaseUpdate(stmt);
+                        return null;} finally {
+			if (stmt != null)
+				stmt.close();
+			closeConnection();
+		}
     }
-
-    @Override
-    public AnnualSchedule getAnnualSchedule(int year) throws NotFoundException, SQLException {
-        AnnualSchedule valueObject = createAnnualSchedule();
-        valueObject.setYear(year);
-        loadAnnualSchedule(valueObject);
-	return valueObject;
+ @Override
+    public WeeklySchedule createWeeklySchedule(int year_number,int week_number,String name) throws SQLException{
+       
+       String  sql = "INSERT INTO `weekly-schedule` (`year`, `weeknum`,`assignedBy`) VALUES (?,?,?); ";
+                       PreparedStatement stmt=null;
+                        openConnection();
+                        try {
+			stmt = this.connection.prepareStatement(sql);
+			stmt.setInt(1,year_number);
+                        stmt.setInt(2,week_number);
+			stmt.setString(3,name);
+			 
+			int rowcount = databaseUpdate(stmt);
+                        return null;
+                        } finally {
+			if (stmt != null)
+				stmt.close();
+			closeConnection();
+		}
     }
+    
 
     @Override
     public void loadAnnualSchedule(AnnualSchedule valueObject) throws NotFoundException, SQLException {
@@ -601,11 +624,11 @@ public class ScheduleDAOImpl implements ScheduleDAO {
                     result = stmt.executeQuery();
 
                     while (result.next()) {
-			WeeklySchedule temp = createWeeklySchedule();
+			WeeklySchedule temp = createWeeklySchedule(result.getInt("year"),result.getInt("week"),result.getString("assignedBy"));
 
-                        temp.setYear(result.getInt("year"));
-                        temp.setWeek(result.getInt("week"));
-                        temp.setAssignedBy(result.getString("assignedBy"));
+                       // temp.setYear(result.getInt("year"));
+                       // temp.setWeek(result.getInt("week"));
+                      //  temp.setAssignedBy(result.getString("assignedBy"));
                         
                         
                         searchResults.add(temp);
@@ -622,10 +645,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
             return (List<WeeklySchedule>) searchResults;
         }
 
-    @Override
-    public WeeklySchedule createWeeklySchedule() {
-        return new WeeklySchedule();
-    }
+   
     
     @Override
     public List<ProgramSlot> searchScheduledProgramSlot(int year, int week) throws NotFoundException, SQLException {
@@ -707,6 +727,11 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 
     @Override
     public List<WeeklySchedule> loadAllWeeklySchedule() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public AnnualSchedule getAnnualSchedule(int year) throws NotFoundException, SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

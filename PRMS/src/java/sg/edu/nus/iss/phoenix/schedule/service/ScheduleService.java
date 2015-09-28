@@ -107,6 +107,22 @@ public class ScheduleService {
                 throw e;
             }
 	}
-        
-
+        public void processCreateAnnualSchedule(int year_number,String name) throws SQLException {	 
+	  try {
+		scdao.createAnnualSchedule(year_number,name);
+	 	} 
+                catch (SQLException e) {
+	 		e.printStackTrace();
+                         throw e;
+		 }
+         }
+         public void processCreateWeeklySchedule(int year_number,int week_number,String name) throws SQLException {	 
+	 try {
+		scdao.createWeeklySchedule(year_number,week_number,name);
+	 	} 
+                catch (SQLException e) {
+	 		e.printStackTrace();
+                        throw e;
+                }
+         }
 }

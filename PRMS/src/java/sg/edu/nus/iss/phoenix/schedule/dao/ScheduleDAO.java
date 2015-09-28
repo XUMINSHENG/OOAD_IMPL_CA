@@ -17,7 +17,7 @@ import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 public interface ScheduleDAO {
     
         
-        public abstract AnnualSchedule createAnnualSchedule();
+        public abstract AnnualSchedule createAnnualSchedule(int year_number,String name) throws SQLException ;
         
         public abstract AnnualSchedule getAnnualSchedule(int year)
                 throws NotFoundException, SQLException;
@@ -28,7 +28,7 @@ public interface ScheduleDAO {
         public abstract List<AnnualSchedule> loadAllAnnualSchedule() 
                 throws SQLException;
         
-        public abstract WeeklySchedule createWeeklySchedule();
+        public abstract WeeklySchedule createWeeklySchedule(int year_number,int week_number,String name)throws SQLException;
         
         public abstract WeeklySchedule getWeeklySchedule(int year, int week)
                 throws NotFoundException, SQLException;
