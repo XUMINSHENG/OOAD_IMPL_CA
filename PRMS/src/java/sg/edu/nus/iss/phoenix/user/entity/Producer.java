@@ -69,6 +69,10 @@ public class Producer implements Cloneable, Serializable {
         return "Producer{" + "userId=" + userId + ", name=" + name + '}';
     }
 
+    /**
+     * Hashcode will return a hashed code for the given object.
+     * Used when inserting into a HashTable, HashMap or HashSet.
+     */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -76,6 +80,12 @@ public class Producer implements Cloneable, Serializable {
         hash = 71 * hash + Objects.hashCode(this.name);
         return hash;
     }
+    
+    /**
+     * Used to determine if an object contains a given element.
+     * @param obj
+     * @return boolean
+     */
 
     @Override
     public boolean equals(Object obj) {

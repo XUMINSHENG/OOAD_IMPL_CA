@@ -128,6 +128,11 @@ public class Presenter implements Cloneable, Serializable {
              cloned.setName(new String(this.userId)); 
         return cloned;
     }
+    
+    /**
+     * Hashcode will return a hashed code for the given object.
+     * Used when inserting into a HashTable, HashMap or HashSet.
+     */
 
     @Override
     public int hashCode() {
@@ -137,6 +142,11 @@ public class Presenter implements Cloneable, Serializable {
         return hash;
     }
 
+    /**
+     * Used to determine if an object contains a given element.
+     * @param obj
+     * @return boolean
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
