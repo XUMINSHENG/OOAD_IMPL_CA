@@ -55,7 +55,7 @@
 							<input type="text" name="name" value="${param['name']}" size=15
 								maxlength=20>
 							<input type="hidden" name="ins" value="true" />
-                                                        <input type="button" name="selectProgram" value="Select">
+                                                        <input type="submit" name="Submit" value="selectrp">
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
 							<input type="text" name="name" value="${param['name']}" size=15
@@ -72,7 +72,7 @@
 							<input type="text" name="producer" value="${param['producer']}" size=15
 								maxlength=20>
 							<input type="hidden" name="ins" value="true" />
-                                                        <input type="button" name="selectProducer" value="Select">
+                                                        <input type="submit" name="Submit" value="selectpr">
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
 							<input type="text" name="producer" value="${param['producer']}" size=15
@@ -89,7 +89,7 @@
 							<input type="text" name="presenter" value="${param['presenter']}" size=15
 								maxlength=20>
 							<input type="hidden" name="ins" value="true" />
-                                                        <input type="button" name="selectPresenter" value="Select">
+                                                        <input type="submit" name="Submit" value="selectpp">
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
 							<input type="text" name="presenter" value="${param['presenter']}" size=15
@@ -103,7 +103,7 @@
 				
 			</table>
 		</center>
-		<input type="submit" value="Submit"> <input type="reset"
+		<input type="submit" value="Submit" name="Submit"> <input type="reset"
 			value="Reset">
 	</form>
 

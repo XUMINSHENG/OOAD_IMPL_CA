@@ -34,9 +34,13 @@ import sg.edu.nus.iss.phoenix.util.Util;
  * @author boonkui
  */
 @Action("enterps")
-public class EnterProgramSlotDetailsCmd implements Perform {
+public class EnterProgramSlotDetailsCmd implements Perform 
+{
     @Override
-    public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException 
+    {
+        if (req.getParameter("Submit").equals("Submit"))
+        {     
         ScheduleDelegate del = new ScheduleDelegate();
         ProgramSlot ps = new ProgramSlot();
         Date date;
@@ -105,5 +109,12 @@ public class EnterProgramSlotDetailsCmd implements Perform {
         req.setAttribute("yearlist", yearList);
         req.setAttribute("pss", data);
         return "/pages/crudsc.jsp";
+        }
+        if (req.getParameter("Submit").equals("selectrp"))
+        {
+            HttpSession hs = new HttpSession();
+            return "/pages/searchrp.jsp";
+        }
+        return null;
     }
 }
