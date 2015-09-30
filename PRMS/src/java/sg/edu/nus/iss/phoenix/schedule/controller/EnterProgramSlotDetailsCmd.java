@@ -112,7 +112,6 @@ public class EnterProgramSlotDetailsCmd implements Perform
         }
         if (req.getParameter("Submit").equals("selectrp"))
         {
-            HttpSession hs = new HttpSession();
             return "/pages/searchrp.jsp";
         }
         return null;
