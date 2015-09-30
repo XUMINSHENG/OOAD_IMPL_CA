@@ -41,27 +41,12 @@ public class ScheduleDelegate {
 		return service.findAllSP();
 	}
 
-//	public void processCreateAnnualSchedule(ProgramSlot ps) {
-////		ScheduleService service = new ScheduleService();
-////		service.processCreate(rp);
-//	}
-  
-        public void processCreateAnnualSchedule(int  year_number,String name)throws SQLException {
+        public void processCreateAnnualSchedule(int year_number, 
+                int week_number, String userName)throws SQLException {
             try{
 		ScheduleService service = new ScheduleService();
-		service.processCreateAnnualSchedule(year_number,name);
-            }catch (SQLException ex)
-            {
-                ex.printStackTrace();
-                 throw ex;
-            }
-            
-	}
-        
-        public void processCreateWeeklySchedule(int  year_number,int week_number,String name) throws SQLException  {
-            try{
-		ScheduleService service = new ScheduleService();
-		service.processCreateWeeklySchedule(year_number,week_number,name);
+		service.processCreateAnnualAndWeeklySchedule(year_number,
+                        week_number, userName);
             }catch (SQLException ex)
             {
                 throw ex;

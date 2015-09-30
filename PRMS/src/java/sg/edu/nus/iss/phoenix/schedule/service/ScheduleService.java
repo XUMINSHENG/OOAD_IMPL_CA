@@ -67,7 +67,7 @@ public class ScheduleService {
 	public ArrayList<ProgramSlot> findAllSP() {
 		ArrayList<ProgramSlot> currentList = new ArrayList<ProgramSlot>();
 		try {
-			currentList = (ArrayList<ProgramSlot>) scdao.loadAll();
+			currentList = (ArrayList<ProgramSlot>) scdao.loadAllProgramSlot();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,7 +78,7 @@ public class ScheduleService {
 
 	public void processCreate(ProgramSlot ps) throws SQLException {
 	try {
-		scdao.create(ps);
+		scdao.createProgramSlot(ps);
 		} 
                 catch (SQLException e) {
 			throw e;
@@ -88,7 +88,7 @@ public class ScheduleService {
 	public void processModify(ProgramSlot ps) throws NotFoundException, SQLException {
 		
 			try {
-				scdao.save(ps);
+				scdao.saveProgramSlot(ps);
 			} catch (NotFoundException | SQLException e) {
 				// TODO Auto-generated catch block
 				throw e;
@@ -100,29 +100,23 @@ public class ScheduleService {
 
             try {
                 ProgramSlot ps = new ProgramSlot(year, weekNum, dateOfProgram, startTime);
-                scdao.delete(ps);
+                scdao.deleteProgramSlot(ps);
             } catch (NotFoundException e) {
                 throw e;
             } catch (SQLException e) {
                 throw e;
             }
 	}
-        public void processCreateAnnualSchedule(int year_number,String name) throws SQLException {	 
-	  try {
-		scdao.createAnnualSchedule(year_number,name);
-	 	} 
-                catch (SQLException e) {
-	 		e.printStackTrace();
-                         throw e;
-		 }
-         }
-         public void processCreateWeeklySchedule(int year_number,int week_number,String name) throws SQLException {	 
-	 try {
-		scdao.createWeeklySchedule(year_number,week_number,name);
-	 	} 
-                catch (SQLException e) {
-	 		e.printStackTrace();
-                        throw e;
-                }
+        public void processCreateAnnualAndWeeklySchedule(int year_number, int week_number ,String name) throws SQLException {	 
+            try {
+                
+                scdao.createAnnualSchedule(year_number,name);
+                
+                
+                scdao.createWeeklySchedule(year_number,week_number,name);
+            } 
+            catch (SQLException e) {
+                throw e;
+            }
          }
 }

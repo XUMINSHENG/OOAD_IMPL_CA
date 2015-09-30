@@ -36,28 +36,33 @@ public class AddAnnualScheduleCmd implements Perform {
         }
        
         ScheduleDelegate del = new ScheduleDelegate();
-          
+        
+        int year;
         //need to validate that the year is not null and appropiate
-          String year=  req.getParameter("year");
-          if (year != null)
-          {
-            try {
-                del.processCreateAnnualSchedule(Integer.parseInt(year), user.getId().toString());
-                Calendar mCalendar = Calendar.getInstance();
-                mCalendar.set(Calendar.YEAR, Integer.parseInt(year));
-                mCalendar.set(Calendar.MONTH, Calendar.JANUARY);
-                mCalendar.set(Calendar.DAY_OF_MONTH, 1);
-                int totalWeeks = mCalendar.getActualMaximum(Calendar.WEEK_OF_YEAR);
-                for (int i=1; i<=totalWeeks;i++)
-                {
-                        del.processCreateWeeklySchedule(Integer.parseInt(year),i, user.getId().toString());
-                }
-            }catch (SQLException ex) {
-                
-                        req.setAttribute("errorMsg",ex.getMessage().toString());
-                        return "/pages/error.jsp";
-                    }
-            }
-          return "/pages/addasc.jsp";   
-          }
+        try{
+             year = Integer.parseInt(req.getParameter("year"));
+        }catch (NumberFormatException ex){
+            req.setAttribute("errorMsg","invalid input");
+            return "/pages/error.jsp";
+        }
+        
+        try {
+            // get total week number of this year
+            Calendar mCalendar = Calendar.getInstance();
+            mCalendar.set(Calendar.YEAR, year);
+            mCalendar.set(Calendar.MONTH, Calendar.JANUARY);
+            mCalendar.set(Calendar.DAY_OF_MONTH, 1);
+            int totalWeeks = mCalendar.getActualMaximum(Calendar.WEEK_OF_YEAR);
+            
+            // create annual and weekly schedule
+            del.processCreateAnnualSchedule(year, totalWeeks, 
+                    user.getId());
+
+        }catch (SQLException ex) {
+            req.setAttribute("errorMsg",ex.getMessage());
+            return "/pages/error.jsp";
+        }
+        
+        return "/pages/addasc.jsp";   
+    }
 }

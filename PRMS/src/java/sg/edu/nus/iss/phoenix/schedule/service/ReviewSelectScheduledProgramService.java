@@ -37,7 +37,7 @@ public class ReviewSelectScheduledProgramService {
 	public List<ProgramSlot> reviewSelectScheduledProgram() {
             List<ProgramSlot> data = null;
             try {
-                data = rpdao.loadAll();
+                data = rpdao.loadAllProgramSlot();
             } catch (SQLException ex) {
                 Logger.getLogger(ReviewSelectScheduledProgramService.class.getName()).log(Level.SEVERE, null, ex);
             }
