@@ -536,20 +536,22 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         }
 
         @Override
-        public void createWeeklySchedule(int year_number,int week_number,
+        public void createWeeklySchedule(int year_number,int max_week_number,
                 String name) throws SQLException{
 
             String  sql = "INSERT INTO `weekly-schedule` (`year`, `weeknum`,`assignedBy`) VALUES (?,?,?); ";
             PreparedStatement stmt=null;
             openConnection();
             try {
-                stmt = this.connection.prepareStatement(sql);
-                stmt.setInt(1,year_number);
-                stmt.setInt(2,week_number);
-                stmt.setString(3,name);
+                for (int i=1;i<=max_week_number;i++){
+                    stmt = this.connection.prepareStatement(sql);
+                    stmt.setInt(1,year_number);
+                    stmt.setInt(2,i);
+                    stmt.setString(3,name);
 
-                int rowcount = databaseUpdate(stmt);
-
+                    int rowcount = databaseUpdate(stmt);
+                }
+                
             } finally {
                 if (stmt != null)
                     stmt.close();

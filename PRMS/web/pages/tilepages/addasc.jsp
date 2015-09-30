@@ -12,12 +12,13 @@
         <title>Create Annual Schedule</title>
     </head>
     <body>
+        
         <h1>Enter The Year </h1>
-       <form action="${pageContext.request.contextPath}/nocturne/addasc" method="POST" >
-            <input type="text" name="year" />
-      <p> 
-        <input type="submit" name="Submit" value="Submit year" />   
-      </p>
-    </form>
+        <form action="${pageContext.request.contextPath}/nocturne/addasc" method="POST" >
+            <input type="text" name="year" /> ${requestScope.msg}
+            <p> 
+                <input type="submit" name="Submit" value="Submit year" />   
+            </p>
+        </form>
     </body>
 </html>

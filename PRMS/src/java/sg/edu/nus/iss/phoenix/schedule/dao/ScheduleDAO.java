@@ -39,7 +39,7 @@ public interface ScheduleDAO {
                 String name) throws SQLException ;
         
         public abstract void createWeeklySchedule(int year_number,
-                int week_number,String name)throws SQLException;
+                int max_week_number,String name)throws SQLException;
         
 	/**
 	 * createProgramSlotVO-method. This method is used when the Dao class needs to

@@ -42,7 +42,7 @@ public class ScheduleDelegate {
 	}
 
         public void processCreateAnnualSchedule(int year_number, 
-                int week_number, String userName)throws SQLException {
+                int week_number, String userName)throws Exception {
             try{
 		ScheduleService service = new ScheduleService();
 		service.processCreateAnnualAndWeeklySchedule(year_number,

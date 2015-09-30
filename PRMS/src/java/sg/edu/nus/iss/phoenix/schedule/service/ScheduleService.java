@@ -5,6 +5,11 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 import sg.edu.nus.iss.phoenix.core.dao.DAOFactoryImpl;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
@@ -96,7 +101,8 @@ public class ScheduleService {
 		
 	}
 
-	public void processDelete(int year, int weekNum, Date dateOfProgram, Time startTime) throws NotFoundException, SQLException {
+	public void processDelete(int year, int weekNum, Date dateOfProgram, 
+                Time startTime) throws NotFoundException, SQLException {
 
             try {
                 ProgramSlot ps = new ProgramSlot(year, weekNum, dateOfProgram, startTime);
@@ -107,15 +113,26 @@ public class ScheduleService {
                 throw e;
             }
 	}
-        public void processCreateAnnualAndWeeklySchedule(int year_number, int week_number ,String name) throws SQLException {	 
+        public void processCreateAnnualAndWeeklySchedule(int year_number, 
+                int week_number ,String name) 
+                throws Exception {	 
+            
+            UserTransaction utx = null;
             try {
                 
+                utx = (UserTransaction)InitialContext.doLookup("java:comp/UserTransaction");
+                utx.begin();
+                
+                // create year schedule
                 scdao.createAnnualSchedule(year_number,name);
                 
-                
+                // create all weekly schedule of this year in one shot
                 scdao.createWeeklySchedule(year_number,week_number,name);
+                
+                utx.commit();
             } 
             catch (SQLException e) {
+                utx.rollback();
                 throw e;
             }
          }

@@ -24,45 +24,49 @@ import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
  */
 @Action("addasc")
 public class AddAnnualScheduleCmd implements Perform {
-     @Override
-    public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException 
+    @Override
+    public String perform(String path, HttpServletRequest req, HttpServletResponse resp) 
+            throws IOException, ServletException 
     {
-        System.out.println(path);
         // Authorization Check
         User user = (User)req.getSession().getAttribute("user");
         if ((null==user)||!user.hasRole("manager")){
-            req.setAttribute("errorMsg","You do not have the privileges to perform this operation");
+            req.setAttribute("errorMsg",
+                    "You do not have the privileges to perform this operation");
             return "/pages/error.jsp";
         }
        
         ScheduleDelegate del = new ScheduleDelegate();
         
-        int year;
-        //need to validate that the year is not null and appropiate
-        try{
-             year = Integer.parseInt(req.getParameter("year"));
-        }catch (NumberFormatException ex){
-            req.setAttribute("errorMsg","invalid input");
-            return "/pages/error.jsp";
-        }
-        
-        try {
-            // get total week number of this year
-            Calendar mCalendar = Calendar.getInstance();
-            mCalendar.set(Calendar.YEAR, year);
-            mCalendar.set(Calendar.MONTH, Calendar.JANUARY);
-            mCalendar.set(Calendar.DAY_OF_MONTH, 1);
-            int totalWeeks = mCalendar.getActualMaximum(Calendar.WEEK_OF_YEAR);
-            
-            // create annual and weekly schedule
-            del.processCreateAnnualSchedule(year, totalWeeks, 
-                    user.getId());
+        if((null!=req.getParameter("year"))
+                &&(!"".equals(req.getParameter("year")))){
+            int year;
+            //need to validate that the year is not null and appropiate
+            try{
+                year = Integer.parseInt(req.getParameter("year"));
+            }catch (NumberFormatException ex){
+                req.setAttribute("errorMsg","Invalid Input");
+                return "/pages/error.jsp";
+            }
 
-        }catch (SQLException ex) {
-            req.setAttribute("errorMsg",ex.getMessage());
-            return "/pages/error.jsp";
+            try {
+                // get total week number of this year
+                Calendar mCalendar = Calendar.getInstance();
+                mCalendar.set(Calendar.YEAR, year);
+                mCalendar.set(Calendar.MONTH, Calendar.JANUARY);
+                mCalendar.set(Calendar.DAY_OF_MONTH, 1);
+                int totalWeeks = mCalendar.getActualMaximum(Calendar.WEEK_OF_YEAR);
+
+                // create annual and weekly schedule
+                del.processCreateAnnualSchedule(year, totalWeeks, 
+                        user.getId());
+                
+                req.setAttribute("msg", "Year " + year + " and its weekly schedules created successfully");
+            }catch (Exception ex) {
+                req.setAttribute("errorMsg",ex.getMessage());
+                return "/pages/error.jsp";
+            }
         }
-        
         return "/pages/addasc.jsp";   
     }
 }
