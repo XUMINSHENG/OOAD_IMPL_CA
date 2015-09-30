@@ -22,7 +22,7 @@
         </c:url>
         
         <c:url var="addurl" scope="page" value="/nocturne/addeditps">
-        	<c:param name="dataOfProgram" value=""/>
+        	<c:param name="dateOfProgram" value=""/>
                 <c:param name="startTime" value=""/>
                 <c:param name="duration" value=""/>
                 <c:param name="program-name" value=""/>
@@ -32,7 +32,7 @@
         </c:url>
         
         <c:url var="cpurl" scope="page" value="/nocturne/copysc">
-        	<c:param name="dataOfProgram" value=""/>
+        	<c:param name="dateOfProgram" value=""/>
                 <c:param name="startTime" value=""/>
                 <c:param name="duration" value=""/>
                 <c:param name="program-name" value=""/>
@@ -132,7 +132,7 @@
                     <td class="nowrap"><c:out value="${pitem.presenter.name}" /></td>
                     <td class="nowrap">
                         <c:url var="updurl" scope="page" value="/nocturne/addeditps">
-                            <c:param name="dataOfProgram" value="${pitem.dateOfProgram}"/>
+                            <c:param name="dateOfProgram" value="${pitem.dateOfProgram}"/>
                             <c:param name="startTime" value="${pitem.startTime}"/>
                             <c:param name="duration" value="${pitem.duration}"/>
                             <c:param name="program-name" value="${pitem.program.name}"/>

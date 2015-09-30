@@ -48,13 +48,13 @@ public class EnterProgramSlotDetailsCmd implements Perform {
             ps.setDateOfProgram(date);
             ps.setWeekNum(cal.get(Calendar.WEEK_OF_YEAR));
             ps.setStartTime(Util.stringToTime(req.getParameter("startTime")));
-            ps.setDuration(Util.stringToTime(req.getParameter("duration")));
         } catch (ParseException ex) {
             Logger.getLogger(EnterProgramSlotDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         RadioProgram trp = new RadioProgram();
         trp.setName("news");
+        trp.setTypicalDuration(Util.stringToTime("00:30:00"));
         ps.setProgram(trp);
         
         Presenter presenter = new Presenter();
@@ -64,7 +64,7 @@ public class EnterProgramSlotDetailsCmd implements Perform {
         Producer producer = new Producer();
         producer.setName("dogbert, the CEO");
         ps.setProducer(producer);
-        
+        ps.setDuration(ps.getProgram().getTypicalDuration());
         String ins = (String) req.getParameter("ins");
         Logger.getLogger(getClass().getName()).log(Level.INFO,
                         "Insert Flag: " + ins);

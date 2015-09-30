@@ -48,22 +48,6 @@
                                         </td>
 				</tr>
                                 
-                                <!--Duration-->
-                                <tr>
-					<td><fmt:message key="label.programslot.duration" /></td>
-					<td><c:if test="${param['insert'] == 'true'}">
-							<input type="text" name="duration" value="${param['duration']}" size=15
-								maxlength=20>
-							<input type="hidden" name="ins" value="true" />
-						</c:if> 
-						<c:if test="${param['insert']=='false'}">
-							<input type="text" name="duration" value="${param['duration']}" size=15
-								maxlength=20 readonly="readonly">
-							<input type="hidden" name="ins" value="false" />
-						</c:if>
-                                        </td>
-				</tr>
-                                
                                 <!--Program-->
                                 <tr>
 					<td><fmt:message key="label.programslot.name" /></td>
