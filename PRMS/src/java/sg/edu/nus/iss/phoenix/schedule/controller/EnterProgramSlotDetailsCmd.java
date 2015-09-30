@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,6 +25,8 @@ import sg.edu.nus.iss.phoenix.radioprogram.delegate.ReviewSelectProgramDelegate;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.user.entity.*;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectScheduledProgramDelegate;
+import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.util.Util;
 
 /**
@@ -36,22 +39,32 @@ public class EnterProgramSlotDetailsCmd implements Perform {
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         ScheduleDelegate del = new ScheduleDelegate();
         ProgramSlot ps = new ProgramSlot();
+        Date date;
+        Calendar cal = Calendar.getInstance();
         try {
-            ps.setDateOfProgram(Util.stringToDate(req.getParameter("dateOfProgram")));
+            date = Util.stringToDate(req.getParameter("dateOfProgram"));
+            cal.setTime(date);
+            ps.setYear(cal.get(Calendar.YEAR));
+            ps.setDateOfProgram(date);
+            ps.setWeekNum(cal.get(Calendar.WEEK_OF_YEAR));
+            ps.setStartTime(Util.stringToTime(req.getParameter("startTime")));
+            ps.setDuration(Util.stringToTime(req.getParameter("duration")));
         } catch (ParseException ex) {
             Logger.getLogger(EnterProgramSlotDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
         }
-        ps.setStartTime(Util.stringToTime(req.getParameter("startTime")));
-        ps.setDuration(Util.stringToTime(req.getParameter("duration")));
+
         RadioProgram trp = new RadioProgram();
-        trp.setName("TestRadio");
+        trp.setName("news");
         ps.setProgram(trp);
+        
         Presenter presenter = new Presenter();
-        presenter.setName("TestPresenter");
+        presenter.setName("dilbert, the hero");
         ps.setPresenter(presenter);
+        
         Producer producer = new Producer();
-        producer.setName("TestProducer");
+        producer.setName("dogbert, the CEO");
         ps.setProducer(producer);
+        
         String ins = (String) req.getParameter("ins");
         Logger.getLogger(getClass().getName()).log(Level.INFO,
                         "Insert Flag: " + ins);
@@ -68,6 +81,29 @@ public class EnterProgramSlotDetailsCmd implements Perform {
                 Logger.getLogger(EnterProgramSlotDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return "/pages/crudps.jsp";
+        int year = 0;
+        int week = 0;
+        ReviewSelectScheduledProgramDelegate del2 = new ReviewSelectScheduledProgramDelegate();
+        List<AnnualSchedule> yearList = del2.reviewSelectAnnualSchedule();
+        
+        if(req.getParameter("year") != null && req.getParameter("week") != null){
+            year = Integer.parseInt(req.getParameter("year"));
+            week = Integer.parseInt(req.getParameter("week"));
+            System.out.println("test year");
+            System.out.println(year+week);
+        }else{
+            if((year <= 0 || week <= 0 || week > 52)){
+                Calendar now = Calendar.getInstance();
+                year = now.get(Calendar.YEAR);
+                week = now.get(Calendar.WEEK_OF_YEAR);
+            }
+        }
+        
+        List<ProgramSlot> data = del2.searchScheduledProgramSlot(year, week);
+        req.setAttribute("year",year);
+        req.setAttribute("week", week);
+        req.setAttribute("yearlist", yearList);
+        req.setAttribute("pss", data);
+        return "/pages/crudsc.jsp";
     }
 }

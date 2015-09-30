@@ -123,26 +123,32 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 		PreparedStatement stmt = null;
 		openConnection();
 		try {
-			sql = "INSERT INTO `program-slot` (`dateOfProgram`, `startTime`, `duration`, `program-name`, `producer-name`, `presenter-name`) VALUES (?,?,?,?,?,?); ";
+                    
+			sql = "INSERT INTO `program-slot`"
+                                + "(`year`,`weeknum`,`dateOfProgram`,`startTime`, `duration`, `program-name`, `producer-name`, `presenter-name`) "
+                                + "VALUES (?,?,?,?,?,?,?,?); ";
 			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, Util.dateToString(valueObject.getDateOfProgram()));
-			stmt.setTime(2, valueObject.getStartTime());
-			stmt.setTime(3, valueObject.getDuration());
-                        stmt.setString(4, valueObject.getProgram().getName());
-			stmt.setString(5, valueObject.getProducer().getName());
-                        stmt.setString(6, valueObject.getPresenter().getName());
+                        stmt.setInt(1, valueObject.getYear());
+                        stmt.setInt(2, valueObject.getWeekNum());
+			stmt.setString(3, Util.dateToString(valueObject.getDateOfProgram()));
+			stmt.setTime(4, valueObject.getStartTime());
+			stmt.setTime(5, valueObject.getDuration());
+                        stmt.setString(6, valueObject.getProgram().getName());
+			stmt.setString(7, valueObject.getProducer().getName());
+                        stmt.setString(8, valueObject.getPresenter().getName());
+                        
 			int rowcount = databaseUpdate(stmt);
 			if (rowcount != 1) {
 				// System.out.println("PrimaryKey Error when updating DB!");
 				throw new SQLException("PrimaryKey Error when updating DB!");
 			}
-
+                } catch(Exception ex){
+                    ex.printStackTrace();;
 		} finally {
 			if (stmt != null)
 				stmt.close();
 			closeConnection();
 		}
-
 	}
 
 	/* (non-Javadoc)
