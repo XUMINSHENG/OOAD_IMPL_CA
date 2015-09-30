@@ -74,7 +74,7 @@
                                         </td>
                                         <td>
                                             <fmt:message key="fieldLabel.week" />
-                                            <select name="week" style="width:150px;">
+                                            <select name="weekNum" style="width:150px;">
                                                 <option value="0"> --Please select week-- </option>
                                                 <c:forEach begin="1" end="52" varStatus="loop">
                                                     <option value="${loop.index}" >
@@ -143,6 +143,8 @@
                         <a href="${updurl}"><fmt:message key="label.crudsc.edit"/></a>
                         &nbsp;&nbsp;&nbsp;
                         <c:url var="delurl" scope="page" value="/nocturne/deleteps">
+                            <c:param name="year" value="${pitem.year}" />
+                            <c:param name="weekNum" value="${pitem.weekNum}"/>
                             <c:param name="dateOfProgram" value="${pitem.dateOfProgram}" />
                             <c:param name="startTime" value="${pitem.startTime}"/>
                         </c:url>

@@ -133,8 +133,9 @@ insert into `phoenix`.`presenter` values("dilbert, the hero", "dilbert",'Y');
 -- -----------------------------------------------------
 -- dateOfProgram, startTime, duration, program-name, producer-name, presenter-name
 insert into `phoenix`.`annual-schedule` values(2015, "dilbert");  
+insert into `phoenix`.`weekly-schedule` values(2015, 37, "dilbert");  
 insert into `phoenix`.`weekly-schedule` values(2015, 38, "dilbert");  
+insert into `phoenix`.`program-slot` values(2015,37,"2015/09/10", "08:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
 insert into `phoenix`.`program-slot` values(2015,38,"2015/09/15", "07:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
-insert into `phoenix`.`program-slot` values(2015,38,"2015/09/15", "08:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
 insert into `phoenix`.`program-slot` values(2015,38,"2015/09/15", "19:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
 

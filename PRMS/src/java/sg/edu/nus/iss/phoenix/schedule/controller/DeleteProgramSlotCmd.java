@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,7 +52,7 @@ public class DeleteProgramSlotCmd implements Perform {
      */
     @Override
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        System.out.println(path);
+        
         // Authorization Check
         User user = (User)req.getSession().getAttribute("user");
         if ((null==user)||!user.hasRole("manager")){
@@ -86,10 +87,9 @@ public class DeleteProgramSlotCmd implements Perform {
             return "/pages/error.jsp";
         }
         
-        // forward
-        ReviewSelectScheduledProgramDelegate rsDel = new ReviewSelectScheduledProgramDelegate();
-        List<ProgramSlot> data = rsDel.reviewSelectScheduledProgram();
-        req.setAttribute("pss", data);
-        return "/pages/crudsc.jsp";
+        // forward to managesc servlet to process 
+        RequestDispatcher rd = req.getRequestDispatcher("managesc");
+        rd.forward(req, resp);
+        return "";
     }
 }

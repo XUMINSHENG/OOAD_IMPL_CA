@@ -15,19 +15,19 @@ import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 
 public class ReviewSelectScheduledProgramService {
 	DAOFactoryImpl factory;
-	ScheduleDAO rpdao;
+	ScheduleDAO scdao;
 
 	public ReviewSelectScheduledProgramService() {
 		super();
 		// TODO Auto-generated constructor stub
 		factory = new DAOFactoryImpl();
-		rpdao = factory.getScheduleDAO();
+		scdao = factory.getScheduleDAO();
 	}
         
         public List<AnnualSchedule> reviewSelectAnnualSchedule() {
             List<AnnualSchedule> data = null;
             try {
-                data = rpdao.loadAllAnnualSchedule();
+                data = scdao.loadAllAnnualSchedule();
             } catch (SQLException ex) {
                 Logger.getLogger(ReviewSelectScheduledProgramService.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -37,7 +37,7 @@ public class ReviewSelectScheduledProgramService {
 	public List<ProgramSlot> reviewSelectScheduledProgram() {
             List<ProgramSlot> data = null;
             try {
-                data = rpdao.loadAllProgramSlot();
+                data = scdao.loadAllProgramSlot();
             } catch (SQLException ex) {
                 Logger.getLogger(ReviewSelectScheduledProgramService.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -47,7 +47,7 @@ public class ReviewSelectScheduledProgramService {
         public WeeklySchedule reviewSelectWeeklySchedule(int year, int week) {
             WeeklySchedule data = null;
             try {
-                data = rpdao.getWeeklySchedule(year,week);
+                data = scdao.getWeeklySchedule(year,week);
             } catch (SQLException ex) {
                 Logger.getLogger(ReviewSelectScheduledProgramService.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NotFoundException ex) {
@@ -60,7 +60,7 @@ public class ReviewSelectScheduledProgramService {
         public List<ProgramSlot> searchScheduledProgramSlot(int year, int week) {
             List<ProgramSlot> data = null;
             try {
-                data = rpdao.searchScheduledProgramSlot(year, week);
+                data = scdao.searchScheduledProgramSlot(year, week);
             } catch (SQLException ex) {
                 Logger.getLogger(ReviewSelectScheduledProgramService.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NotFoundException ex) {
