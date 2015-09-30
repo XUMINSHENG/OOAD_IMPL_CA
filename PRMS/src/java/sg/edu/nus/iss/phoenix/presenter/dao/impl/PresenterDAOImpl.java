@@ -240,5 +240,28 @@ public class PresenterDAOImpl implements PresenterDAO {
             }
         }
     }
+    
+     @Override
+    public void reassign(String id) throws NotFoundException, SQLException {
+        String sql = "";
+        PreparedStatement stmt = null;
+        try {
+            sql = "UPDATE presenter SET isActive= ?  WHERE (`user-id` = ? ) ";
+            stmt = this.connection.prepareStatement(sql);
+
+            stmt.setString(1, "Y");
+            stmt.setString(2, id);
+            int rowcount = databaseUpdate(stmt);
+            if (rowcount != 1) {
+                // System.out.println("PrimaryKey Error when updating DB!");
+                throw new SQLException("PrimaryKey Error when updating DB!");
+            }
+
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+    }
 
 }

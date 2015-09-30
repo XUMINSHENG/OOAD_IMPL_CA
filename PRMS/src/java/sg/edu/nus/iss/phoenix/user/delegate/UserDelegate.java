@@ -5,9 +5,11 @@
  */
 package sg.edu.nus.iss.phoenix.user.delegate;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import sg.edu.nus.iss.phoenix.authenticate.entity.Role;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
+import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
 import sg.edu.nus.iss.phoenix.user.entity.Presenter;
 import sg.edu.nus.iss.phoenix.user.entity.Producer;
@@ -25,7 +27,7 @@ public class UserDelegate {
 
     }
 
-    public void processCreate(User user) {
+    public void processCreate(User user) throws SQLException, NotFoundException {
         UserService service = new UserService();
         service.processCreate(user);
 

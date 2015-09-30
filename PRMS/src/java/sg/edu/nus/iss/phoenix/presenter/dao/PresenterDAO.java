@@ -146,4 +146,5 @@ public interface PresenterDAO {
 			throws SQLException;
 
          public abstract void deassign(String id) throws NotFoundException, SQLException;
+         public abstract void reassign(String id) throws NotFoundException, SQLException;
 }

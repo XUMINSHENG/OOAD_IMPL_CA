@@ -52,17 +52,17 @@ public class UserService {
 
     }
 
-    public void processCreate(User user) {
+    public void processCreate(User user) throws SQLException, NotFoundException {
 
         String id = user.getId();
-
+        ArrayList<Role> a_role = user.getRoles();
+        String s_role = "";
+        Presenter presenter = null;
+        Producer producer = null;
         try {
-             usrdao.create(user);
-            Presenter presenter = presdao.getObject(id);
-            Producer producer = proddao.getObject(id);
-            ArrayList<Role> a_role = user.getRoles();
-            String s_role = "";
-           
+            usrdao.create(user);
+            presenter = presdao.getObject(id);
+            producer = proddao.getObject(id);
             for (int i = 0; i < a_role.size(); i++) {
                 s_role = a_role.get((i)).getRole().toString();
 
@@ -77,8 +77,36 @@ public class UserService {
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
+            System.out.println("User already exusting with a 'N' flag");
+            for (int i = 0; i < a_role.size(); i++) {
+                s_role = a_role.get((i)).getRole().toString();
+                usrdao.reassign(user);
+                if (s_role.equals("presenter")) {
+                    try{
+                    
+                    presdao.reassign(id);
+                    }catch(SQLException exception0){
+                        //when the presenter doesnt exist in the presenter table, create first
+                        presenter = presdao.getObject(id);
+                        presdao.create(presenter);
+                    }
+                }
+                if (s_role.equals("producer")) {
+                    try{
+                    proddao.reassign(id);
+                    }catch(SQLException exception1){
+                        //when the producer doesnt exist in the producer table, create first
+                        producer = proddao.getObject(id);                        
+                        proddao.create(producer);
+                        
+                    }
+                }
+
+            }
+
             e.printStackTrace();
         } catch (NotFoundException e) {
+            System.out.println("HERE 1");
             e.printStackTrace();
         }
     }

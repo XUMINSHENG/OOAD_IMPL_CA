@@ -144,4 +144,5 @@ public interface UserDao {
 			throws SQLException;
 
         public abstract void deassign(User user) throws NotFoundException,SQLException;
+        public abstract void reassign(User user) throws NotFoundException,SQLException;
 }

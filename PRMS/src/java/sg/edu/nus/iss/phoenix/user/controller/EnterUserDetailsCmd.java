@@ -9,6 +9,7 @@ import at.nocturne.api.Action;
 import at.nocturne.api.Perform;
 import static com.sun.xml.ws.security.addressing.impl.policy.Constants.logger;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
 import sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDaoImpl;
+import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.user.entity.Presenter;
 import sg.edu.nus.iss.phoenix.user.entity.Producer;
 
@@ -36,6 +38,12 @@ public class EnterUserDetailsCmd implements Perform {
 
     @Override
     public String perform(String string, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        User user1 = (User)request.getSession().getAttribute("user");
+       if ((("").equals(request.getParameter("name"))) || ("").equals(request.getParameterValues("rolelist")) || ("").equals(request.getParameter("address")) || ("").equals(request.getParameter("password"))|| ("").equals(request.getParameter("joiningdate"))){
+            request.setAttribute("errorMsg", 
+                    "One or more input fields is missing, please fill all the details while creating a user!");
+            return "/pages/error.jsp";
+        }
         
         UserDelegate del = new UserDelegate();
         User user = new User();
@@ -89,9 +97,15 @@ public class EnterUserDetailsCmd implements Perform {
         producer.setIsActive("Y");
         
         if (ins.equalsIgnoreCase("true")) {
+            try {
               del.processCreate(user);
             //  del.processCreate_presenter(presenter);
             //  del.processCreate_producer(producer);
+            } catch (SQLException ex) {
+                Logger.getLogger(EnterUserDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NotFoundException ex) {
+                Logger.getLogger(EnterUserDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             System.out.println("inside modify");
                del.processModify(user);

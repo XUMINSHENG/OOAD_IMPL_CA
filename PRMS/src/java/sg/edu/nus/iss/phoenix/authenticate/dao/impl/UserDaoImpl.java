@@ -625,5 +625,45 @@ public class UserDaoImpl implements UserDao {
                 stmt.close();
             }
         }
-}
+    }
+    
+    @Override
+    public void reassign(User user) throws NotFoundException, SQLException {
+
+        String sql = "";
+        PreparedStatement stmt = null;
+        try {
+            sql = "UPDATE user SET isActive= ? , role=? WHERE (id = ? ) ";
+            stmt = this.connection.prepareStatement(sql);
+
+            stmt.setString(1, "Y");
+            stmt.setString(3, user.getId());
+           
+            
+            ArrayList<Role> a_role = user.getRoles();
+            String s_role = "";
+            for (int i = 0; i < a_role.size(); i++) {
+                if (i > 0) {
+                    s_role = s_role + ":";
+                    s_role = s_role + a_role.get((i)).getRole().toString();
+
+                } else {
+                    s_role = s_role + a_role.get((i)).getRole().toString();
+
+                }
+            }
+            // stmt.setString(5, valueObject.getRoles().get(0).getRole());
+            stmt.setString(2, s_role);
+            int rowcount = databaseUpdate(stmt);
+            if (rowcount != 1) {
+                // System.out.println("PrimaryKey Error when updating DB!");
+                throw new SQLException("PrimaryKey Error when updating DB!");
+            }
+
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+    }
 }
