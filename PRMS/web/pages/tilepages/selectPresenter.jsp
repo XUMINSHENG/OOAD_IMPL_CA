@@ -32,7 +32,7 @@
                                         <td><input type="text" name="name" size=45 maxlength=45 value="${name}"></td>
 				</tr>
 				<tr>
-					<td colspan="2" align="center"><input type="submit" value="Submit"> <input
+                                    <td colspan="2" align="center"><input type="submit" value="Submit"> <input
 						type="reset" value="Reset"></td>
 				</tr>
 			</table>
@@ -61,7 +61,8 @@
             <tbody>
             <tr>
                 <th><fmt:message key="label.Presenter.userId" /></th>
-                <th><fmt:message key="label.Presenter.name" /></th>			
+                <th><fmt:message key="label.Presenter.name" /></th>
+                <th><fmt:message key="label.Select" /></th>	
             </tr>                    
             <c:choose>
                 <c:when test="${! empty  selPresList}">
@@ -69,6 +70,18 @@
 				<tr class="${status.index%2==0?'even':'odd'}">
 					<td class="nowrap">${presenter.userId}</td>
 					<td class="nowrap">${presenter.name}</td>
+                                        <td>
+                                            <c:url var="get" scope="page" value="/nocturne/addeditps">
+                                            <c:param name="dateOfProgram" value="${param['dateOfProgram']}"/>
+                                            <c:param name="startTime" value="${param['startTime']}"/>
+                                            <c:param name="program-name" value="${param['program-name']}"/>
+                                            <c:param name="producer-name" value="${param['producer-name']}"/>
+                                            <c:param name="presenter-name" value="${presenter.name}"/>
+                                            <c:param name="insert" value="${param['insert']}"/>
+                                            
+                                            </c:url>
+                                            <a href="${get}"><fmt:message key="label.Select"/></a>
+                                        </td>
 				</tr>
 			</c:forEach>
                 </c:when>

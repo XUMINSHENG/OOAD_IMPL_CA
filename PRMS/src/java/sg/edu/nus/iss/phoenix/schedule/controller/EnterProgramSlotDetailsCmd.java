@@ -10,6 +10,7 @@ import at.nocturne.api.Perform;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,20 +29,23 @@ import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectScheduledProgramDelegate;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
 import sg.edu.nus.iss.phoenix.util.Util;
+import sg.edu.nus.iss.phoenix.radioprogram.delegate.ProgramDelegate;
+import sg.edu.nus.iss.phoenix.presenter.delegate.PresenterDelegate;
+import sg.edu.nus.iss.phoenix.producer.delegate.ProducerDelegate;
 
 /**
  *
- * @author boonkui
+ * @author Liu xinzhuo
  */
 @Action("enterps")
 public class EnterProgramSlotDetailsCmd implements Perform 
 {
     @Override
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException 
-    {
-        if (req.getParameter("Submit").equals("Submit"))
-        {     
-        ScheduleDelegate del = new ScheduleDelegate();
+    {   
+        ScheduleDelegate sdel = new ScheduleDelegate();
+        ProgramDelegate pdel = new ProgramDelegate();
+        
         ProgramSlot ps = new ProgramSlot();
         Date date;
         Calendar cal = Calendar.getInstance();
@@ -55,32 +59,35 @@ public class EnterProgramSlotDetailsCmd implements Perform
         } catch (ParseException ex) {
             Logger.getLogger(EnterProgramSlotDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        RadioProgram trp = new RadioProgram();
-        trp.setName("news");
-        trp.setTypicalDuration(Util.stringToTime("00:30:00"));
+        
+        
+        RadioProgram trp = pdel.findRP(req.getParameter("name"));
         ps.setProgram(trp);
         
+        String proName = req.getParameter("producer");
+        Producer producer = new Producer();
+        producer.setName(proName);
+        ps.setProducer(producer);
+        
+        String preName = req.getParameter("presenter");
         Presenter presenter = new Presenter();
-        presenter.setName("dilbert, the hero");
+        presenter.setName(preName);
         ps.setPresenter(presenter);
         
-        Producer producer = new Producer();
-        producer.setName("dogbert, the CEO");
-        ps.setProducer(producer);
         ps.setDuration(ps.getProgram().getTypicalDuration());
+        
         String ins = (String) req.getParameter("ins");
         Logger.getLogger(getClass().getName()).log(Level.INFO,
                         "Insert Flag: " + ins);
         if (ins.equalsIgnoreCase("true")) {
             try {
-                del.processCreate(ps);
+                sdel.processCreate(ps);
             } catch (SQLException ex) {
                 Logger.getLogger(EnterProgramSlotDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             try {
-                del.processModify(ps);
+                sdel.processModify(ps);
             } catch (NotFoundException | SQLException ex) {
                 Logger.getLogger(EnterProgramSlotDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -110,10 +117,4 @@ public class EnterProgramSlotDetailsCmd implements Perform
         req.setAttribute("pss", data);
         return "/pages/crudsc.jsp";
         }
-        if (req.getParameter("Submit").equals("selectrp"))
-        {
-            return "/pages/searchrp.jsp";
-        }
-        return null;
-    }
 }
