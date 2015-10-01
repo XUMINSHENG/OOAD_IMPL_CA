@@ -1039,7 +1039,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.tiles-template-2.2.2.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.mysql-connector-java-5.1.21-bin.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.nocturne.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${libs.UnitTesingtLib.classpath}" todir="${build.web.dir}/WEB-INF/classes"/>
+        <!--<copyfiles files="${libs.UnitTesingtLib.classpath}" todir="${build.web.dir}/WEB-INF/classes"/>-->
         <copyfiles files="${libs.UnitTestLib.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">

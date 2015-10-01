@@ -491,6 +491,16 @@ public class ScheduleDAOImpl implements ScheduleDAO {
                     AnnualSchedule temp = createAnnualScheduleVO();
                     temp.setYear(Integer.parseInt(result.getString("year")));
                     temp.setAssignedBy(result.getString("assingedBy"));
+                    
+//                    String sql = "SELECT * FROM `weekly-schedule` WHERE `year` = ? ORDER BY `weeknum` DESC;";
+//                    PreparedStatement stm = null;
+//                    stm = connection.prepareStatement(sql);
+//                    stm.setInt(1,temp.getYear());
+//                    List<WeeklySchedule> weekList = weeklyListQuery(stm);
+//                    if(!weekList.isEmpty()){
+//                        temp.setListOfWeeklySchedule(weekList);
+//                    }
+                    
                     searchResults.add(temp);
                 }
 
@@ -647,7 +657,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
                     WeeklySchedule temp = createWeeklyScheduleVO();
 
                     temp.setYear(result.getInt("year"));
-                    temp.setWeek(result.getInt("week"));
+                    temp.setWeek(result.getInt("weeknum"));
                     temp.setAssignedBy(result.getString("assignedBy"));
 
                     searchResults.add(temp);
