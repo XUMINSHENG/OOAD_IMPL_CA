@@ -17,7 +17,7 @@ import java.util.Date;
  */
 public class Util {
     public static final String C_Date_Format = "yyyy-MM-dd";
-    public static final String C_Time_Format = "hh:mm:ss";
+    public static final String C_Time_Format = "HH:mm:ss";
     
     
     public static Date stringToDate(String str) throws ParseException {

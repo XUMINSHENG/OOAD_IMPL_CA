@@ -22,7 +22,7 @@
         </c:url>
         
         <c:url var="addurl" scope="page" value="/nocturne/addeditps">
-        	<c:param name="dataOfProgram" value=""/>
+        	<c:param name="dateOfProgram" value=""/>
                 <c:param name="startTime" value=""/>
                 <c:param name="duration" value=""/>
                 <c:param name="program-name" value=""/>
@@ -32,7 +32,7 @@
         </c:url>
         
         <c:url var="cpurl" scope="page" value="/nocturne/copysc">
-        	<c:param name="dataOfProgram" value=""/>
+        	<c:param name="dateOfProgram" value=""/>
                 <c:param name="startTime" value=""/>
                 <c:param name="duration" value=""/>
                 <c:param name="program-name" value=""/>
@@ -59,37 +59,44 @@
                                         <th width="30%"></th>
                                         <th></th>
 				</tr>
-				<tr>
-                                    <c:choose>
-                                        <c:when test="${! empty yearlist}">
-					<td><fmt:message key="fieldLabel.year" />
-                                            <select name="year" style="width: 150px;">
-                                                <option value="0"> --Please select year-- </option>
-                                                <c:forEach var="item" items="${yearlist}" varStatus="loop">
-                                                    <option value="${item.getYear()}">
-                                                        <c:out value="${item.getYear()}" />
-                                                    </option>
-                                                </c:forEach>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <fmt:message key="fieldLabel.week" />
-                                            <select name="week" style="width:150px;">
-                                                <option value="0"> --Please select week-- </option>
-                                                <c:forEach begin="1" end="52" varStatus="loop">
-                                                    <option value="${loop.index}" >
-                                                        <c:out value="${loop.index}" />
-                                                    </option>
-                                                </c:forEach>
-                                            </select>
-                                        </td>
-                                        <td><input type="submit" value="Select week scheduel"></td>
-                                        </c:when>
-                                        <c:otherwise>
-                                        <td colspan="3"><p style="color:grey;text-align: center;"><i>No Annual Schedule</i></p></td>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </tr>
+				
+                                <c:choose>
+                                    <c:when test="${! empty yearlist}">
+                                        <tr>
+                                            <td><fmt:message key="fieldLabel.year" />
+                                                <select name="year" id="year" style="width: 150px;" onchange="changeYear()">
+                                                    <option value="0"> --Please select year-- </option>
+                                                    <c:forEach var="item" items="${yearlist}" varStatus="loop">
+                                                        <c:choose>
+                                                            <c:when test="${ year == item.getYear() }">
+                                                                <option value="${item.getYear()}" selected>
+                                                                    <c:out value="${item.getYear()}" />
+                                                                </option>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <option value="${item.getYear()}">
+                                                                    <c:out value="${item.getYear()}" />
+                                                                </option>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:forEach>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="hidden" id="previous_week" value="${weekNum}">
+                                                <div id="select_week">
+                                                
+                                                </div>
+                                            </td>
+                                            <td><input type="submit" id="submit_btn" value="Select week scheduel"></td>
+                                        </tr>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <tr>
+                                            <td colspan="3"><h3 style="color:grey;text-align: center;"><i>No Annual Schedule</i></h3></td>
+                                        </tr>
+                                    </c:otherwise>
+                                </c:choose>
                         </table>
 		</center>
             </form>
@@ -132,7 +139,7 @@
                     <td class="nowrap"><c:out value="${pitem.presenter.name}" /></td>
                     <td class="nowrap">
                         <c:url var="updurl" scope="page" value="/nocturne/addeditps">
-                            <c:param name="dataOfProgram" value="${pitem.dateOfProgram}"/>
+                            <c:param name="dateOfProgram" value="${pitem.dateOfProgram}"/>
                             <c:param name="startTime" value="${pitem.startTime}"/>
                             <c:param name="duration" value="${pitem.duration}"/>
                             <c:param name="program-name" value="${pitem.program.name}"/>
@@ -143,6 +150,8 @@
                         <a href="${updurl}"><fmt:message key="label.crudsc.edit"/></a>
                         &nbsp;&nbsp;&nbsp;
                         <c:url var="delurl" scope="page" value="/nocturne/deleteps">
+                            <c:param name="year" value="${pitem.year}" />
+                            <c:param name="weekNum" value="${pitem.weekNum}"/>
                             <c:param name="dateOfProgram" value="${pitem.dateOfProgram}" />
                             <c:param name="startTime" value="${pitem.startTime}"/>
                         </c:url>
@@ -152,12 +161,63 @@
             </c:forEach>
             </c:when>
             <c:otherwise>
-                <tr><td colspan="8"><p style="color:grey;text-align: center"><i>No Schedule</i></p></td></tr>
+                <tr><td colspan="8"><h3 style="color:grey;text-align: center"><i>No Schedule</i></h3></td></tr>
             </c:otherwise>
             </c:choose>
             </tbody>
         </table>
     </c:if>
-        
+                                        <script>
+                                            window.onload = function(){
+                                                changeYear();
+                                            };
+                                            
+                                            function changeYear(){
+                                                var e = document.getElementById("year");
+                                                var year = e.options[e.selectedIndex].value;
+                                                if(year == 0){
+                                                    document.getElementById("select_week").innerHTML = "";
+                                                    document.getElementById("submit_btn").style.display = "none";
+                                                }else{
+                                                    var firstDate = new Date(year,0,1);
+                                                    var lastDate = new Date(year,11,31);
+                                                    var weeknum = Math.ceil(((lastDate - firstDate)/ 84600000)/7);
+                                                    var weekHtml = '';
+                                                    weekHtml += '<fmt:message key="fieldLabel.week" />';
+                                                    weekHtml += '<select name="weekNum" id="weekNum" style="width:150px;" onchange="changeWeek()"><option value="0"> --Please select week-- </option>';
+                                                    var i;
+                                                    var pre = document.getElementById("previous_week").value;
+                                                    console.log(pre);
+                                                    for( i = 1; i <= weeknum; i++ ) {
+                                                        if( pre == i )
+                                                            weekHtml += '<option value="' + i + '" selected>' + i + '</option>';
+                                                        weekHtml += '<option value="' + i + '" >' + i + '</option>';
+                                                    }
+                                                    weekHtml += '</select>';
+                                                
+                                                    var e1 = document.getElementById("select_week");
+                                                    e1.innerHTML = weekHtml;
+                                                    document.getElementById("submit_btn").style.display = "inline-block";
+                                                }
+                                                
+                                            }
+                                            
+                                            function changeWeek(){
+                                                var e = document.getElementById("weekNum");
+                                                var week = e.options[e.selectedIndex].value;
+                                                document.getElementById("previous_week").value = week;
+                                                console.log(week);
+                                            }
+                                            
+                                            function getSelectedWeek(){
+                                                var week = -1;
+                                                var e = document.getElementById("weekNum");
+                                                console.log(e);
+                                                if(e == null || typeof(e) == "undefined")
+                                                    return week;
+                                                week = e.options(e.selectedIndex).value;
+                                                return week;
+                                            }
+                                        </script>
 </body>
 </html>

@@ -50,7 +50,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	 */
        
 	@Override
-	public ProgramSlot createValueObject() {
+	public ProgramSlot createProgramSlotVO() {
             
 		return new ProgramSlot();
 	}
@@ -62,10 +62,10 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	public ProgramSlot getObject(Time duration, Date dateOfProgram) throws NotFoundException,
 			SQLException {
 
-		ProgramSlot valueObject = createValueObject();
+		ProgramSlot valueObject = createProgramSlotVO();
                 valueObject.setDuration(duration);
                 valueObject.setDateOfProgram(dateOfProgram);
-		load(valueObject);
+		loadProgramSlot(valueObject);
 		return valueObject;
 	}
 
@@ -73,7 +73,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	 * @see sg.edu.nus.iss.phoenix.radioprogram.dao.impl.ProgramDAO#load(sg.edu.nus.iss.phoenix.radioprogram.entity.ProgramSlot)
 	 */
 	@Override
-	public void load(ProgramSlot valueObject) throws NotFoundException,
+	public void loadProgramSlot(ProgramSlot valueObject) throws NotFoundException,
 			SQLException {
 
 		if (valueObject.getDuration()== null || valueObject.getDateOfProgram() == null) {
@@ -102,7 +102,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	 * @see sg.edu.nus.iss.phoenix.radioprogram.dao.impl.ProgramDAO#loadAll()
 	 */
 	@Override
-	public List<ProgramSlot> loadAll() throws SQLException {
+	public List<ProgramSlot> loadAllProgramSlot() throws SQLException {
 		openConnection();
 		String sql = "SELECT * FROM `program-slot` ORDER BY `dateOfProgram`, `startTime` ASC; ";
 		List<ProgramSlot> searchResults = listQuery(connection
@@ -116,40 +116,46 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	 * @see sg.edu.nus.iss.phoenix.radioprogram.dao.impl.ProgramDAO#create(sg.edu.nus.iss.phoenix.radioprogram.entity.ProgramSlot)
 	 */
 	@Override
-	public synchronized void create(ProgramSlot valueObject)
+	public synchronized void createProgramSlot(ProgramSlot valueObject)
 			throws SQLException {
 
 		String sql = "";
 		PreparedStatement stmt = null;
 		openConnection();
 		try {
-			sql = "INSERT INTO `program-slot` (`dateOfProgram`, `startTime`, `duration`, `program-name`, `producer-name`, `presenter-name`) VALUES (?,?,?,?,?,?); ";
+                    
+			sql = "INSERT INTO `program-slot`"
+                                + "(`year`,`weeknum`,`dateOfProgram`,`startTime`, `duration`, `program-name`, `producer-name`, `presenter-name`) "
+                                + "VALUES (?,?,?,?,?,?,?,?); ";
 			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, Util.dateToString(valueObject.getDateOfProgram()));
-			stmt.setTime(2, valueObject.getStartTime());
-			stmt.setTime(3, valueObject.getDuration());
-                        stmt.setString(4, valueObject.getProgram().getName());
-			stmt.setString(5, valueObject.getProducer().getName());
-                        stmt.setString(6, valueObject.getPresenter().getName());
+                        stmt.setInt(1, valueObject.getYear());
+                        stmt.setInt(2, valueObject.getWeekNum());
+			stmt.setString(3, Util.dateToString(valueObject.getDateOfProgram()));
+			stmt.setTime(4, valueObject.getStartTime());
+			stmt.setTime(5, valueObject.getDuration());
+                        stmt.setString(6, valueObject.getProgram().getName());
+			stmt.setString(7, valueObject.getProducer().getName());
+                        stmt.setString(8, valueObject.getPresenter().getName());
+                        
 			int rowcount = databaseUpdate(stmt);
 			if (rowcount != 1) {
 				// System.out.println("PrimaryKey Error when updating DB!");
 				throw new SQLException("PrimaryKey Error when updating DB!");
 			}
-
+                } catch(Exception ex){
+                    ex.printStackTrace();;
 		} finally {
 			if (stmt != null)
 				stmt.close();
 			closeConnection();
 		}
-
 	}
 
 	/* (non-Javadoc)
 	 * @see sg.edu.nus.iss.phoenix.radioprogram.dao.impl.ProgramDAO#save(sg.edu.nus.iss.phoenix.radioprogram.entity.ProgramSlot)
 	 */
 	@Override
-	public void save(ProgramSlot valueObject) throws NotFoundException,
+	public void saveProgramSlot(ProgramSlot valueObject) throws NotFoundException,
 			SQLException {
 
 		String sql = "UPDATE `program-slot` SET `program-name` = ?, `producer-name` = ?, `presenter-name` = ? WHERE (`dateOfProgram` = ? ) AND (`startTime` = ?); ";
@@ -185,7 +191,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	 * @see sg.edu.nus.iss.phoenix.radioprogram.dao.impl.ProgramDAO#delete(sg.edu.nus.iss.phoenix.radioprogram.entity.ProgramSlot)
 	 */
 	@Override
-	public void delete(ProgramSlot valueObject) throws NotFoundException,
+	public void deleteProgramSlot(ProgramSlot valueObject) throws NotFoundException,
 			SQLException {
 
 		if (valueObject.getDateOfProgram() == null || valueObject.getStartTime()== null) {
@@ -229,7 +235,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	 * @see sg.edu.nus.iss.phoenix.radioprogram.dao.impl.ProgramDAO#deleteAll(java.sql.Connection)
 	 */
 	@Override
-	public void deleteAll(Connection conn) throws SQLException {
+	public void deleteAllProgramSlot(Connection conn) throws SQLException {
 
 		String sql = "DELETE FROM `program-slot`";
 		PreparedStatement stmt = null;
@@ -250,7 +256,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	 * @see sg.edu.nus.iss.phoenix.radioprogram.dao.impl.ProgramDAO#countAll()
 	 */
 	@Override
-	public int countAll() throws SQLException {
+	public int countAllProgramSlot() throws SQLException {
 
 		String sql = "SELECT count(*) FROM `radio-program`";
 		PreparedStatement stmt = null;
@@ -396,7 +402,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 			result = stmt.executeQuery();
 
 			while (result.next()) {
-				ProgramSlot temp = createValueObject();
+				ProgramSlot temp = createProgramSlotVO();
                                 
                                 temp.setProgram(new RadioProgram(result.getString("program-name")));
 				temp.setYear(result.getInt("year"));
@@ -473,72 +479,95 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 		}
 	}
         
-        protected List<AnnualSchedule> annualListQuery(PreparedStatement stmt) throws SQLException{
+        protected List<AnnualSchedule> annualListQuery(PreparedStatement stmt) 
+                throws SQLException{
             ArrayList<AnnualSchedule> searchResults = new ArrayList<AnnualSchedule>();
-		ResultSet result = null;
-		openConnection();
-		try {
-                    result = stmt.executeQuery();
+            ResultSet result = null;
+            openConnection();
+            try {
+                result = stmt.executeQuery();
 
-                    while (result.next()) {
-			//AnnualSchedule temp = createAnnualSchedule();
-                        AnnualSchedule temp = createAnnualSchedule(Integer.parseInt(result.getString("year")),result.getString("assingedBy"));
-                       // temp.setYear(Integer.parseInt(result.getString("year")));
-                        //temp.setAssignedBy(result.getString("assingedBy"));
-                        
-                        
-                        searchResults.add(temp);
-			}
+                while (result.next()) {
+                    AnnualSchedule temp = createAnnualScheduleVO();
+                    temp.setYear(Integer.parseInt(result.getString("year")));
+                    temp.setAssignedBy(result.getString("assingedBy"));
+                    
+//                    String sql = "SELECT * FROM `weekly-schedule` WHERE `year` = ? ORDER BY `weeknum` DESC;";
+//                    PreparedStatement stm = null;
+//                    stm = connection.prepareStatement(sql);
+//                    stm.setInt(1,temp.getYear());
+//                    List<WeeklySchedule> weekList = weeklyListQuery(stm);
+//                    if(!weekList.isEmpty()){
+//                        temp.setListOfWeeklySchedule(weekList);
+//                    }
+                    
+                    searchResults.add(temp);
+                }
 
-		} finally {
-			if (result != null)
-				result.close();
-			if (stmt != null)
-				stmt.close();
-			closeConnection();
-		}
+            } finally {
+                if (result != null)
+                        result.close();
+                if (stmt != null)
+                        stmt.close();
+                closeConnection();
+            }
 
             return (List<AnnualSchedule>) searchResults;
         }
         
+        @Override
+        public AnnualSchedule createAnnualScheduleVO(){
+                return new AnnualSchedule();
+        }
+        
+        @Override
+        public WeeklySchedule createWeeklyScheduleVO(){
+            return new WeeklySchedule();
+        }
 
- @Override
-    public AnnualSchedule createAnnualSchedule(int year,String name) throws SQLException  {
-     String  sql = "INSERT INTO `annual-schedule` (`year`, `assingedBy`) VALUES (?,?); ";
-                       PreparedStatement stmt=null;
-                        openConnection();
-                        try{
-			stmt = this.connection.prepareStatement(sql);
-			stmt.setInt(1,year);
-			stmt.setString(2,name);
-			 
-			int rowcount = databaseUpdate(stmt);
-                        return null;} finally {
-			if (stmt != null)
-				stmt.close();
-			closeConnection();
-		}
-    }
- @Override
-    public WeeklySchedule createWeeklySchedule(int year_number,int week_number,String name) throws SQLException{
-       
-       String  sql = "INSERT INTO `weekly-schedule` (`year`, `weeknum`,`assignedBy`) VALUES (?,?,?); ";
-                       PreparedStatement stmt=null;
-                        openConnection();
-                        try {
-			stmt = this.connection.prepareStatement(sql);
-			stmt.setInt(1,year_number);
-                        stmt.setInt(2,week_number);
-			stmt.setString(3,name);
-			 
-			int rowcount = databaseUpdate(stmt);
-                        return null;
-                        } finally {
-			if (stmt != null)
-				stmt.close();
-			closeConnection();
-		}
-    }
+        @Override
+        public void createAnnualSchedule(int year,String name) 
+                throws SQLException  {
+            String  sql = "INSERT INTO `annual-schedule` (`year`, `assingedBy`) VALUES (?,?); ";
+            PreparedStatement stmt=null;
+            openConnection();
+            try{
+                stmt = this.connection.prepareStatement(sql);
+                stmt.setInt(1,year);
+                stmt.setString(2,name);
+
+                int rowcount = databaseUpdate(stmt);
+
+            }finally {
+                if (stmt != null)
+                    stmt.close();
+                closeConnection();
+            }
+        }
+
+        @Override
+        public void createWeeklySchedule(int year_number,int max_week_number,
+                String name) throws SQLException{
+
+            String  sql = "INSERT INTO `weekly-schedule` (`year`, `weeknum`,`assignedBy`) VALUES (?,?,?); ";
+            PreparedStatement stmt=null;
+            openConnection();
+            try {
+                for (int i=1;i<=max_week_number;i++){
+                    stmt = this.connection.prepareStatement(sql);
+                    stmt.setInt(1,year_number);
+                    stmt.setInt(2,i);
+                    stmt.setString(3,name);
+
+                    int rowcount = databaseUpdate(stmt);
+                }
+                
+            } finally {
+                if (stmt != null)
+                    stmt.close();
+                closeConnection();
+            }
+        }
     
 
     @Override
@@ -616,40 +645,42 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	}
     }
         
-        protected List<WeeklySchedule> weeklyListQuery(PreparedStatement stmt) throws SQLException{
+        protected List<WeeklySchedule> weeklyListQuery(PreparedStatement stmt) 
+                throws SQLException{
             ArrayList<WeeklySchedule> searchResults = new ArrayList<WeeklySchedule>();
-		ResultSet result = null;
-		openConnection();
-		try {
-                    result = stmt.executeQuery();
+            ResultSet result = null;
+            openConnection();
+            try {
+                result = stmt.executeQuery();
 
-                    while (result.next()) {
-			WeeklySchedule temp = createWeeklySchedule(result.getInt("year"),result.getInt("week"),result.getString("assignedBy"));
+                while (result.next()) {
+                    WeeklySchedule temp = createWeeklyScheduleVO();
 
-                       // temp.setYear(result.getInt("year"));
-                       // temp.setWeek(result.getInt("week"));
-                      //  temp.setAssignedBy(result.getString("assignedBy"));
-                        
-                        
-                        searchResults.add(temp);
-			}
+                    temp.setYear(result.getInt("year"));
+                    temp.setWeek(result.getInt("weeknum"));
+                    temp.setAssignedBy(result.getString("assignedBy"));
 
-		} finally {
-			if (result != null)
-				result.close();
-			if (stmt != null)
-				stmt.close();
-			closeConnection();
-		}
+                    searchResults.add(temp);
+                }
 
+            } finally {
+                    if (result != null)
+                            result.close();
+                    if (stmt != null)
+                            stmt.close();
+                    closeConnection();
+            }
             return (List<WeeklySchedule>) searchResults;
         }
 
-   
     
     @Override
-    public List<ProgramSlot> searchScheduledProgramSlot(int year, int week) throws NotFoundException, SQLException {
-        String sql = "SELECT * FROM `program-slot` WHERE `year` = ? AND `weeknum` = ? ORDER BY `year`, `weeknum`, `dateOfProgram` DESC; ";
+    public List<ProgramSlot> searchScheduledProgramSlot(int year, int week) 
+            throws NotFoundException, SQLException {
+        String sql = "SELECT * FROM `program-slot` "
+                + "WHERE `year` = ? "
+                + "AND `weeknum` = ? "
+                + "ORDER BY `year`, `weeknum`, `dateOfProgram` DESC; ";
         PreparedStatement stmt = null;
         List<ProgramSlot> searchResults = null;
         openConnection();

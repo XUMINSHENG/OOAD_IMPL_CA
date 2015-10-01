@@ -1,10 +1,8 @@
 package sg.edu.nus.iss.phoenix.schedule.dao;
 
-import sg.edu.nus.iss.phoenix.radioprogram.dao.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.sql.Date;
 import java.util.List;
 
@@ -16,9 +14,9 @@ import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 
 public interface ScheduleDAO {
     
-        
-        public abstract AnnualSchedule createAnnualSchedule(int year_number,String name) throws SQLException ;
-        
+        public abstract AnnualSchedule createAnnualScheduleVO();
+        public abstract WeeklySchedule createWeeklyScheduleVO();
+                
         public abstract AnnualSchedule getAnnualSchedule(int year)
                 throws NotFoundException, SQLException;
         
@@ -27,8 +25,6 @@ public interface ScheduleDAO {
 
         public abstract List<AnnualSchedule> loadAllAnnualSchedule() 
                 throws SQLException;
-        
-        public abstract WeeklySchedule createWeeklySchedule(int year_number,int week_number,String name)throws SQLException;
         
         public abstract WeeklySchedule getWeeklySchedule(int year, int week)
                 throws NotFoundException, SQLException;
@@ -39,13 +35,19 @@ public interface ScheduleDAO {
         public abstract List<WeeklySchedule> loadAllWeeklySchedule() 
                 throws SQLException;
         
+        public abstract void createAnnualSchedule(int year_number,
+                String name) throws SQLException ;
+        
+        public abstract void createWeeklySchedule(int year_number,
+                int max_week_number,String name)throws SQLException;
+        
 	/**
-	 * createValueObject-method. This method is used when the Dao class needs to
+	 * createProgramSlotVO-method. This method is used when the Dao class needs to
 	 * create new value object instance. The reason why this method exists is
 	 * that sometimes the programmer may want to extend also the valueObject and
 	 * then this method can be over-rided to return extended valueObject.
 	 */
-	public abstract ProgramSlot createValueObject();
+	public abstract ProgramSlot createProgramSlotVO();
 
 	/**
 	 * getObject-method. This will create and load valueObject contents from
@@ -70,7 +72,7 @@ public interface ScheduleDAO {
 	 *            This parameter contains the class instance to be loaded.
 	 *            Primary-key field must be set for this to work properly.
 	 */
-	public abstract void load(ProgramSlot valueObject)
+	public abstract void loadProgramSlot(ProgramSlot valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -80,7 +82,7 @@ public interface ScheduleDAO {
 	 * only be used when target tables have only small amounts of data.
 	 * 
 	 */
-	public abstract List<ProgramSlot> loadAll() throws SQLException;
+	public abstract List<ProgramSlot> loadAllProgramSlot() throws SQLException;
 
 	/**
 	 * create-method. This will create new row in database according to supplied
@@ -95,7 +97,7 @@ public interface ScheduleDAO {
 	 *            automatic surrogate-keys are not used the Primary-key field
 	 *            must be set for this to work properly.
 	 */
-	public abstract void create(ProgramSlot valueObject) throws SQLException;
+	public abstract void createProgramSlot(ProgramSlot valueObject) throws SQLException;
 
 	/**
 	 * save-method. This method will save the current state of valueObject to
@@ -109,7 +111,7 @@ public interface ScheduleDAO {
 	 *            This parameter contains the class instance to be saved.
 	 *            Primary-key field must be set for this to work properly.
 	 */
-	public abstract void save(ProgramSlot valueObject)
+	public abstract void saveProgramSlot(ProgramSlot valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -125,7 +127,7 @@ public interface ScheduleDAO {
 	 *            This parameter contains the class instance to be deleted.
 	 *            Primary-key field must be set for this to work properly.
 	 */
-	public abstract void delete(ProgramSlot valueObject)
+	public abstract void deleteProgramSlot(ProgramSlot valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -142,7 +144,7 @@ public interface ScheduleDAO {
 	 * @param conn
 	 *            This method requires working database connection.
 	 */
-	public abstract void deleteAll(Connection conn) throws SQLException;
+	public abstract void deleteAllProgramSlot(Connection conn) throws SQLException;
 
 	/**
 	 * coutAll-method. This method will return the number of all rows from table
@@ -152,7 +154,7 @@ public interface ScheduleDAO {
 	 * sure table has not too many rows.
 	 * 
 	 */
-	public abstract int countAll() throws SQLException;
+	public abstract int countAllProgramSlot() throws SQLException;
 
 	/**
 	 * searchMatching-Method. This method provides searching capability to get
