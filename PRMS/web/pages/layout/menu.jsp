@@ -48,12 +48,7 @@
 	</tr>
       
         <tr>
-		<td>
-				<a href="<c:url value="/nocturne/searchpp"/>"> <fmt:message
-						key="caption.menu.searchpp" />
-				</a>
-			</td>
-	</tr>
+        
 	</c:if>
         <c:if test="${sessionScope.user.hasRole('admin')==true}">
             <tr>
