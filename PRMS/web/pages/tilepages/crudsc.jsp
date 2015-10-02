@@ -107,7 +107,7 @@
                 <tr>
                     <th colspan="6">
                         <h3>
-                            <c:out value="${ws.getYear()}"/> Year - <c:out value="${ws.getWeek()}"/> Week Schedule (<c:out value="${ws.getStartDate()}" /> - <c:out value="${ws.getEndDate()}" />)
+                            <c:out value="${ws.getYear()}"/> Year - <c:out value="${ws.getWeek()}"/> Week Schedule (<fmt:formatDate pattern="yyyy-MM-dd" value="${ws.getStartDate()}" /> - <fmt:formatDate pattern="yyyy-MM-dd" value="${ws.getEndDate()}" />)
                         </h3>
                     </th>
                     <th>
@@ -143,8 +143,8 @@
                             <c:param name="startTime" value="${pitem.startTime}"/>
                             <c:param name="duration" value="${pitem.duration}"/>
                             <c:param name="program-name" value="${pitem.program.name}"/>
-                            <c:param name="producer-name" value="${pitem.producer.name}"/>
                             <c:param name="presenter-name" value="${pitem.presenter.name}"/>
+                            <c:param name="producer-name" value="${pitem.producer.name}"/>
                             <c:param name="insert" value="false"/>
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.crudsc.edit"/></a>
@@ -191,7 +191,8 @@
                                                     for( i = 1; i <= weeknum; i++ ) {
                                                         if( pre == i )
                                                             weekHtml += '<option value="' + i + '" selected>' + i + '</option>';
-                                                        weekHtml += '<option value="' + i + '" >' + i + '</option>';
+                                                        else
+                                                            weekHtml += '<option value="' + i + '" >' + i + '</option>';
                                                     }
                                                     weekHtml += '</select>';
                                                 
