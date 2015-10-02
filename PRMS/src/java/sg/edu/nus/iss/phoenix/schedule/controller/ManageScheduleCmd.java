@@ -45,7 +45,7 @@ public class ManageScheduleCmd implements Perform {
             week = Integer.parseInt(getValueFromReq(req,"current_week"));
             System.out.println(year);
             System.out.println(week);
-            if( year < 0 || week < 0 || week > 53 ){
+                if( year < 0 || week < 0 || week > 53 ){
                 year = 0;
                 week = 0;
             }

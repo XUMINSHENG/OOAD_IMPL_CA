@@ -26,6 +26,7 @@
             var producerName = getQueryString("producer-name");
             var presenterName = getQueryString("presenter-name");
             var insert = getQueryString("insert");
+            var duration = getQueryString("duration");
             function srp(){           
                         dateOfProgram = document.getElementById("date").value;
                         startTime = document.getElementById("st").value;
@@ -33,10 +34,11 @@
                         producerName = getQueryString("producer-name");
                         presenterName = getQueryString("presenter-name");
                         insert = getQueryString("insert");
+                        duration = document.getElementById("duration").value;
                         window.location.href="selectrp?dateOfProgram="+dateOfProgram+
                         "&startTime="+startTime+"&program-name="+ programName+
-                        "&producer-name="+producerName+"&presenter-name="+presenterName
-                        +"&insert="+insert;
+                        "&producer-name="+producerName+"&duration="+duration+
+                        "&presenter-name="+presenterName+"&insert="+insert;
             }
             function spro(){
                         dateOfProgram = document.getElementById("date").value;
@@ -44,11 +46,12 @@
                         programName = getQueryString("program-name");
                         producerName = getQueryString("producer-name");
                         presenterName = getQueryString("presenter-name");
-                        insert = getQueryString("insert");  
+                        insert = getQueryString("insert");
+                        duration = document.getElementById("duration").value;
                         window.location.href="selectProducer?dateOfProgram="+dateOfProgram+
                         "&startTime="+startTime+"&program-name="+ programName+
-                        "&producer-name="+producerName+"&presenter-name="+presenterName
-                        +"&insert="+insert;
+                        "&producer-name="+producerName+"&duration="+duration+
+                        "&presenter-name="+presenterName+"&insert="+insert;
             }
             function spre(){
                         dateOfProgram = document.getElementById("date").value;
@@ -57,33 +60,57 @@
                         producerName = getQueryString("producer-name");
                         presenterName = getQueryString("presenter-name");
                         insert = getQueryString("insert");
+                        duration = document.getElementById("duration").value;
                         window.location.href="selectPresenter?dateOfProgram="+dateOfProgram+
                         "&startTime="+startTime+"&program-name="+ programName+
-                        "&producer-name="+producerName+"&presenter-name="+presenterName
-                        +"&insert="+insert;
+                        "&producer-name="+producerName+"&duration="+duration+
+                        "&presenter-name="+presenterName+"&insert="+insert;
             }
             function val()
             {
-                var dateFormate = new RegExp("[0-9]+[-]+[0-9]+[-]+[0-9]");
-                var timeFormate = RegExp("(([0-1]+[0-9])|([2]+[0-4]))+[:]+[0|3]+[0]+[:]+[0]+[0]");
+                var dateFormate = new RegExp("[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))");
+                var durationFormate = new RegExp("(([0-1]?[0-9])|([2][0-3])):([0|3]?[0]):(([0]?[0]))");
+                var stFormat = new RegExp("(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9]):(([0-5]?[0-9]))");
+                var zeroDuration = new RegExp("[0]?[0]:[0]?[0]:(([0-5]?[0-9]))");
+                
                 if(document.getElementById("date").value==="")
                 {
                     alert("Date Of Program can't be empty!");
+                    return;
+                }
+                if(dateFormate.test(document.getElementById("date").value)!==true)
+                {
+                    alert("Date Format Error! Date Format should be 'YYYY-MM-DD'");
                     return;
                 }
                 if(document.getElementById("st").value==="")
                 {
-                    alert("Date Of Program can't be empty!");
-                    return;
-                }
-                if(document.getElementById("date").value==="")
-                {
                     alert("Start Time can't be empty!");
                     return;
                 }
-                 if(document.getElementById("programName").value==="")
+                if(stFormat.test(document.getElementById("st").value)!==true)
+                {
+                    alert("Time Format Error! Time Format should be 'HH:mm:ss'");
+                    return;
+                }
+                if(document.getElementById("programName").value==="")
                 {
                     alert("Program Name can't be empty!");
+                    return;
+                }
+                if(document.getElementById("duration").value==="")
+                {
+                    alert("Duration can't be empty!");
+                    return;
+                }
+                if(durationFormate.test(document.getElementById("duration").value)!==true)
+                {
+                    alert("Duration Format Error! Time Format should be 'HH:00:00' or 'HH:30:00'");
+                    return;
+                }
+                if(zeroDuration.test(document.getElementById("duration").value)===true)
+                {
+                    alert("Duration need to more than 30mins!");
                     return;
                 }
                  if(document.getElementById("producerName").value==="")
@@ -94,16 +121,6 @@
                  if(document.getElementById("presenterName").value==="")
                 {
                     alert("Presenter Name can't be empty!");
-                    return;
-                }
-                if(dateFormate.test(document.getElementById("date").value)!==true)
-                {
-                    alert("Date Format Error! Date Format should be 'YYYY-MM-DD'");
-                    return;
-                }
-                if(timeFormate.test(document.getElementById("st").value)!==true)
-                {
-                    alert("Time Format Error! Time Format should be 'HH-mm-ss'");
                     return;
                 }
                 document.getElementById("detail").submit();
@@ -163,7 +180,21 @@
 						</c:if>
                                         </td>
 				</tr>
-                                
+                                <!--Duration-->
+                                <tr>
+                                        <td><fmt:message key="label.programslot.duration"/></td>
+                                        <td><c:if test="${param['insert'] == 'true'}">
+							<input type="text" name="duration" id = "duration" value="${param['duration']}" size=15
+								maxlength=20>
+							<input type="hidden" name="ins" value="true" />
+						</c:if> 
+						<c:if test="${param['insert']=='false'}">
+							<input type="text" name="duration" id = "duration" value="${param['duration']}" size=15
+								maxlength=20 readonly="readonly">
+							<input type="hidden" name="ins" value="false" />
+						</c:if>
+                                        </td>
+                                </tr>
                                 <!--Producer-->
                                 <tr>
 					<td><fmt:message key="label.programslot.producer" /></td>
@@ -181,7 +212,6 @@
 						</c:if>
                                         </td>
 				</tr>
-                                
                                 <!--Presenter-->
                                 <tr>
 					<td><fmt:message key="label.programslot.presenter" /></td>

@@ -31,6 +31,7 @@
                                         <input type="hidden" name="dateOfProgram" value="${param["dateOfProgram"]}">
                                         <input type="hidden" name="startTime" value="${param["startTime"]}">
                                         <input type="hidden" name="program-name" value="${param["program-name"]}">
+                                        <input type="hidden" name="presenter-name" value="${param["duration"]}">
                                         <input type="hidden" name="producer-name" value="${param["producer-name"]}">
                                         <input type="hidden" name="presenter-name" value="${param["presenter-name"]}">
                                         <input type="hidden" name="insert" value="${param["insert"]}">
@@ -81,6 +82,7 @@
                                             <c:param name="dateOfProgram" value="${param['dateOfProgram']}"/>
                                             <c:param name="startTime" value="${param['startTime']}"/>
                                             <c:param name="program-name" value="${param['program-name']}"/>
+                                            <c:param name="duration" value="${param['duration']}"/>
                                             <c:param name="producer-name" value="${param['producer-name']}"/>
                                             <c:param name="presenter-name" value="${presenter.name}"/>
                                             <c:param name="insert" value="${param['insert']}"/>
