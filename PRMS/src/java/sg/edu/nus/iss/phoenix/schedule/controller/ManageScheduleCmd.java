@@ -38,13 +38,19 @@ public class ManageScheduleCmd implements Perform {
         ReviewSelectScheduledProgramDelegate del = new ReviewSelectScheduledProgramDelegate();
         List<AnnualSchedule> yearList = del.reviewSelectAnnualSchedule();
         
-        if(req.getParameter("year") != null && req.getParameter("weekNum") != null){
+        System.out.println(req.getParameter("year"));
+        System.out.println(req.getParameter("current_week"));
+        if(req.getParameter("year") != null && req.getParameter("current_week") != null){
             year = Integer.parseInt(req.getParameter("year"));
-            week = Integer.parseInt(req.getParameter("weekNum"));
-            if(year<0 || week<0 || week >52){
+            week = Integer.parseInt(req.getParameter("current_week"));
+            System.out.println(year);
+            System.out.println(week);
+            if( year < 0 || week < 0 || week > 53 ){
                 year = 0;
                 week = 0;
             }
+        }else{
+            System.out.println("no data");
         }
 
         if(year != 0 && week != 0){
@@ -54,7 +60,7 @@ public class ManageScheduleCmd implements Perform {
         }
         
         req.setAttribute("year",year);
-        req.setAttribute("weekNum", week);
+        req.setAttribute("current_week", week);
         req.setAttribute("yearlist", yearList);
 
         
