@@ -133,7 +133,7 @@
                 <tr class="${status.index%2==0?'even':'odd'}">
                     <td class="nowrap"><fmt:formatDate pattern="yyyy-MM-dd" value="${pitem.dateOfProgram}" /></td>
                     <td class="nowrap"><c:out value="${pitem.program.name}" /></td>
-                    <td class="nowrap"><fmt:formatDate pattern="hh:mm:ss" value="${pitem.startTime}" /></td>
+                    <td class="nowrap"><fmt:formatDate pattern="HH:mm:ss" value="${pitem.startTime}" /></td>
                     <td class="nowrap"><fmt:formatDate pattern="HH:mm:ss" value="${pitem.duration}" /></td>
                     <td class="nowrap"><c:out value="${pitem.producer.name}" /></td>
                     <td class="nowrap"><c:out value="${pitem.presenter.name}" /></td>
