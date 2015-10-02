@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -110,11 +111,19 @@ public class EnterProgramSlotDetailsCmd implements Perform
             }
         }
         
-        List<ProgramSlot> data = del2.searchScheduledProgramSlot(year, week);
-        req.setAttribute("year",year);
-        req.setAttribute("week", week);
-        req.setAttribute("yearlist", yearList);
-        req.setAttribute("pss", data);
-        return "/pages/crudsc.jsp";
+//        List<ProgramSlot> data = del2.searchScheduledProgramSlot(year, week);
+//        req.setAttribute("year",year);
+//        req.setAttribute("week", week);
+//        req.setAttribute("yearlist", yearList);
+//        req.setAttribute("pss", data);
+//        return "/pages/crudsc.jsp";
+        
+            // forward to managesc servlet to process 
+            req.setAttribute("year",year);
+            req.setAttribute("current_week", week);
+            RequestDispatcher rd = req.getRequestDispatcher("managesc");
+            rd.forward(req, resp);
+            return "";        
+           
         }
 }

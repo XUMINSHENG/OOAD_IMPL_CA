@@ -62,10 +62,56 @@
                         "&producer-name="+producerName+"&presenter-name="+presenterName
                         +"&insert="+insert;
             }
+            function val()
+            {
+                var dateFormate = new RegExp("[0-9]+[-]+[0-9]+[-]+[0-9]");
+                var timeFormate = RegExp("(([0-1]+[0-9])|([2]+[0-4]))+[:]+[0|3]+[0]+[:]+[0]+[0]");
+                if(document.getElementById("date").value==="")
+                {
+                    alert("Date Of Program can't be empty!");
+                    return;
+                }
+                if(document.getElementById("st").value==="")
+                {
+                    alert("Date Of Program can't be empty!");
+                    return;
+                }
+                if(document.getElementById("date").value==="")
+                {
+                    alert("Start Time can't be empty!");
+                    return;
+                }
+                 if(document.getElementById("programName").value==="")
+                {
+                    alert("Program Name can't be empty!");
+                    return;
+                }
+                 if(document.getElementById("producerName").value==="")
+                {
+                    alert("Producer Name can't be empty!");
+                    return;
+                }
+                 if(document.getElementById("presenterName").value==="")
+                {
+                    alert("Presenter Name can't be empty!");
+                    return;
+                }
+                if(dateFormate.test(document.getElementById("date").value)!==true)
+                {
+                    alert("Date Format Error! Date Format should be 'YYYY-MM-DD'");
+                    return;
+                }
+                if(timeFormate.test(document.getElementById("st").value)!==true)
+                {
+                    alert("Time Format Error! Time Format should be 'HH-mm-ss'");
+                    return;
+                }
+                document.getElementById("detail").submit();
+            }
         </script>
 </head>
 <body>
-	<form action="${pageContext.request.contextPath}/nocturne/enterps" method=post>
+    <form action="${pageContext.request.contextPath}/nocturne/enterps" method=post id="detail" >
 		<center>
 			<table cellpadding=6 cellspacing=2 border=0>
 				<!--Date-->
@@ -104,13 +150,13 @@
                                 <tr>
 					<td><fmt:message key="label.programslot.name" /></td>
 					<td><c:if test="${param['insert'] == 'true'}">
-							<input type="text" name="name" value="${param['program-name']}" size=15
+							<input type="text" name="name" id = "programName" value="${param['program-name']}" size=15
                                                                maxlength=20  readonly="readonly">
 							<input type="hidden" name="ins" value="true" />
                                                         <input type="button" name="selectRP" value="select" onclick="srp();">
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
-							<input type="text" name="name" value="${param['program-name']}" size=15
+							<input type="text" name="name" id = "programName" value="${param['program-name']}" size=15
 								maxlength=20 readonly="readonly">
 							<input type="hidden" name="ins" value="false" />
                                                         <input type="button" name="selectRP" value="select" onclick="srp();">
@@ -122,13 +168,13 @@
                                 <tr>
 					<td><fmt:message key="label.programslot.producer" /></td>
 					<td><c:if test="${param['insert'] == 'true'}">
-							<input type="text" name="producer" value="${param['producer-name']}" size=15
+							<input type="text" name="producer" id = "producerName" value="${param['producer-name']}" size=15
 								maxlength=20 readonly="readonly">
 							<input type="hidden" name="ins" value="true" />
                                                         <input type="button" name="selectProducer" value="select" onclick="spro();">
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
-							<input type="text" name="producer" value="${param['producer-name']}" size=15
+							<input type="text" name="producer" id = "producerName" value="${param['producer-name']}" size=15
 								maxlength=20 readonly="readonly">
 							<input type="hidden" name="ins" value="false" />
                                                         <input type="button" name="selectProducer" value="select" onclick="spro();">
@@ -140,13 +186,13 @@
                                 <tr>
 					<td><fmt:message key="label.programslot.presenter" /></td>
 					<td><c:if test="${param['insert'] == 'true'}">
-							<input type="text" name="presenter" value="${param['presenter-name']}" size=15
+							<input type="text" name="presenter" id = "presenterName" value="${param['presenter-name']}" size=15
 								maxlength=20 readonly="readonly">
 							<input type="hidden" name="ins" value="true" />
                                                         <input type="button" name="selectPresenter" value="select" onclick="spre();">
 						</c:if> 
 						<c:if test="${param['insert']=='false'}">
-							<input type="text" name="presenter" value="${param['presenter-name']}" size=15
+							<input type="text" name="presenter" id = "presenterName" value="${param['presenter-name']}" size=15
 								maxlength=20 readonly="readonly">
 							<input type="hidden" name="ins" value="false" />
                                                         <input type="button" name="selectPresenter" value="select" onclick="spre();">
@@ -158,7 +204,7 @@
 				
 			</table>
 		</center>
-		<input type="submit" value="Submit" name="Submit"> <input type="reset"
+                                        <input type="button" value="Submit" name="Submit" onclick="val();"> <input type="reset"
 			value="Reset">
 	</form>
 
