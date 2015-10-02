@@ -38,13 +38,19 @@ public class ManageScheduleCmd implements Perform {
         ReviewSelectScheduledProgramDelegate del = new ReviewSelectScheduledProgramDelegate();
         List<AnnualSchedule> yearList = del.reviewSelectAnnualSchedule();
         
-        if(req.getParameter("year") != null && req.getParameter("weekNum") != null){
-            year = Integer.parseInt(req.getParameter("year"));
-            week = Integer.parseInt(req.getParameter("weekNum"));
-            if(year<0 || week<0 || week >52){
+        System.out.println(req.getParameter("year"));
+        System.out.println(req.getParameter("current_week"));
+        if(getValueFromReq(req,"year")!= null && getValueFromReq(req,"current_week")!= null){
+            year = Integer.parseInt(getValueFromReq(req,"year"));
+            week = Integer.parseInt(getValueFromReq(req,"current_week"));
+            System.out.println(year);
+            System.out.println(week);
+                if( year < 0 || week < 0 || week > 53 ){
                 year = 0;
                 week = 0;
             }
+        }else{
+            System.out.println("no data");
         }
 
         if(year != 0 && week != 0){
@@ -54,10 +60,19 @@ public class ManageScheduleCmd implements Perform {
         }
         
         req.setAttribute("year",year);
-        req.setAttribute("weekNum", week);
+        req.setAttribute("current_week", week);
         req.setAttribute("yearlist", yearList);
 
-        
         return "/pages/crudsc.jsp";
+    }
+    
+    private String getValueFromReq(HttpServletRequest req, String name)
+    {
+        String Para = req.getParameter(name);
+        if (req.getAttribute(name)==null)
+            return Para;
+        
+        String Attr = req.getAttribute(name).toString();
+        return (Attr.length()!=0)?( Attr):( Para); 
     }
 }

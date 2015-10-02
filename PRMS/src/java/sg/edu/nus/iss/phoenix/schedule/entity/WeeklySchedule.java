@@ -167,25 +167,30 @@ public class WeeklySchedule implements Cloneable, Serializable {
         return cloned;
     }
 
-    public String getStartDate() {
+    public Date getStartDate() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, this.year);
         cal.set(Calendar.WEEK_OF_YEAR, this.week);
+        cal.set(Calendar.DAY_OF_WEEK, cal.getActualMinimum(Calendar.DAY_OF_WEEK));
+        cal.add(Calendar.DATE, 1);
         Date startOfWeek = new Date(cal.getTimeInMillis());
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd EEE");
-        
-        return df.format(startOfWeek);
+//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd EEE");
+        return startOfWeek;
+//        return df.format(startOfWeek);
     }
     
-    public String getEndDate() {
+    public Date getEndDate() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, this.year);
         cal.set(Calendar.WEEK_OF_YEAR, this.week);
-        cal.add(Calendar.DATE,6);
+       
+        cal.set(Calendar.DAY_OF_WEEK, cal.getActualMaximum(Calendar.DAY_OF_WEEK));
+        cal.add(Calendar.DATE, 1);
+//        cal.add(Calendar.DATE,6);
         Date endOfWeek = new Date(cal.getTimeInMillis());
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd EEE");
-        
-        return df.format(endOfWeek);
+//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd EEE");
+        return endOfWeek;
+//        return df.format(endOfWeek);
     }
 
 }
