@@ -1,20 +1,18 @@
 package sg.edu.nus.iss.phoenix.presenter.dao.impl;
 
-import sg.edu.nus.iss.phoenix.authenticate.dao.impl.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
-import sg.edu.nus.iss.phoenix.authenticate.dao.UserDao;
-import sg.edu.nus.iss.phoenix.authenticate.entity.Role;
-import sg.edu.nus.iss.phoenix.authenticate.entity.User;
+import sg.edu.nus.iss.phoenix.core.dao.DBConstants;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.presenter.dao.PresenterDAO;
 import sg.edu.nus.iss.phoenix.user.entity.Presenter;
@@ -26,13 +24,21 @@ import sg.edu.nus.iss.phoenix.user.entity.Presenter;
 public class PresenterDAOImpl implements PresenterDAO {
 
     private static final String DELIMITER = ":";
-    private static final Logger logger = Logger.getLogger(UserDaoImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(PresenterDAOImpl.class.getName());
 
+    private final static String dataSourceName = "jdbc/phoenix";
+    private DataSource phoenix;
     Connection connection;
 
     public PresenterDAOImpl() {
         super();
         // TODO Auto-generated constructor stub
+
+        try {
+            this.phoenix = (DataSource) InitialContext.doLookup(dataSourceName);
+        } catch (NamingException ex) {
+            Logger.getLogger(PresenterDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         connection = openConnection();
     }
 
@@ -101,7 +107,7 @@ public class PresenterDAOImpl implements PresenterDAO {
         return searchResults;
     }
 
-        /**
+    /**
      * databaseQuery-method. This method is a helper method for internal use. It
      * will execute all database queries that will return multiple rows. The
      * resultset will be converted to the List of valueObjects. If no rows were
@@ -124,12 +130,9 @@ public class PresenterDAOImpl implements PresenterDAO {
                 searchResults.add(temp);
             }
 
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             if (result != null) {
                 result.close();
             }
@@ -140,7 +143,7 @@ public class PresenterDAOImpl implements PresenterDAO {
 
         return (List<Presenter>) searchResults;
     }
-    
+
     @Override
     public void create(Presenter valueObject) throws SQLException {
         String sql = "";
@@ -195,14 +198,13 @@ public class PresenterDAOImpl implements PresenterDAO {
                 stmt.setString(1, valueObject.getName());
                 stmt.setString(2, valueObject.getUserId());
                 stmt.setString(3, yes);
-                
+
                 int count = databaseUpdate(stmt);
-                if(count == 0){
+                if (count == 0) {
                     throw new NotFoundException(
-                      "Presenter could not be saved! (Duplicate PrimaryKey)");
+                            "Presenter could not be saved! (Duplicate PrimaryKey)");
                 }
 
-               
             }
         } finally {
             if (stmt != null) {
@@ -239,16 +241,14 @@ public class PresenterDAOImpl implements PresenterDAO {
     private Connection openConnection() {
         Connection conn = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(DBConstants.COM_MYSQL_JDBC_DRIVER);
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         try {
-            conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/phoenix", "phoenix",
-                    "password");
+            conn = phoenix.getConnection();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -284,8 +284,8 @@ public class PresenterDAOImpl implements PresenterDAO {
             }
         }
     }
-    
-     @Override
+
+    @Override
     public void reassign(String id) throws NotFoundException, SQLException {
         String sql = "";
         PreparedStatement stmt = null;
@@ -310,7 +310,7 @@ public class PresenterDAOImpl implements PresenterDAO {
 
     @Override
     public List<Presenter> searchByName(String name) throws SQLException {
-        String sql = "SELECT * FROM Presenter where isActive='Y' and name LIKE '%"+name+"%'";
+        String sql = "SELECT * FROM Presenter where isActive='Y' and name LIKE '%" + name + "%'";
         List<Presenter> searchResults = listQuery(this.connection
                 .prepareStatement(sql));
         System.out.println("exited loadAll()");
