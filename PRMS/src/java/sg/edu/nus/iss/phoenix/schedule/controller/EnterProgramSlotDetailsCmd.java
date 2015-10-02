@@ -93,31 +93,8 @@ public class EnterProgramSlotDetailsCmd implements Perform
                 Logger.getLogger(EnterProgramSlotDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        int year = 0;
-        int week = 0;
-        ReviewSelectScheduledProgramDelegate del2 = new ReviewSelectScheduledProgramDelegate();
-        List<AnnualSchedule> yearList = del2.reviewSelectAnnualSchedule();
-        
-        if(req.getParameter("year") != null && req.getParameter("week") != null){
-            year = Integer.parseInt(req.getParameter("year"));
-            week = Integer.parseInt(req.getParameter("week"));
-            System.out.println("test year");
-            System.out.println(year+week);
-        }else{
-            if((year <= 0 || week <= 0 || week > 52)){
-                Calendar now = Calendar.getInstance();
-                year = now.get(Calendar.YEAR);
-                week = now.get(Calendar.WEEK_OF_YEAR);
-            }
-        }
-        
-//        List<ProgramSlot> data = del2.searchScheduledProgramSlot(year, week);
-//        req.setAttribute("year",year);
-//        req.setAttribute("week", week);
-//        req.setAttribute("yearlist", yearList);
-//        req.setAttribute("pss", data);
-//        return "/pages/crudsc.jsp";
-        
+           int year = ps.getYear();
+           int week = ps.getWeekNum();  
             // forward to managesc servlet to process 
             req.setAttribute("year",year);
             req.setAttribute("current_week", week);
