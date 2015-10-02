@@ -14,7 +14,7 @@
 		<fmt:message key="title.selectrp" />
 	</h2>
 	<form action="${pageContext.request.contextPath}/nocturne/selectrp"
-		method=post>
+		method=get>
 		<center>
 			<table class="framed">
 				<tr>
@@ -22,6 +22,13 @@
 					<th width="55%"><fmt:message key="caption.desc" /></th>
 				</tr>
 				<tr>
+                                        <input type="hidden" name="dateOfProgram" value="${param["dateOfProgram"]}">
+                                        <input type="hidden" name="startTime" value="${param["startTime"]}">
+                                        <input type="hidden" name="program-name" value="${param["program-name"]}">
+                                        <input type="hidden" name="presenter-name" value="${param["duration"]}">
+                                        <input type="hidden" name="producer-name" value="${param["producer-name"]}">
+                                        <input type="hidden" name="presenter-name" value="${param["presenter-name"]}">
+                                        <input type="hidden" name="insert" value="${param["insert"]}">
 					<td><fmt:message key="fieldLabel.name" /></td>
                                         <td><input type="text" name="name" size=45 maxlength=45 value="${name}"></td>
 				</tr>
@@ -55,6 +62,7 @@
                                                 <c:param name="dateOfProgram" value="${param['dateOfProgram']}"/>
                                                 <c:param name="startTime" value="${param['startTime']}"/>
                                                 <c:param name="program-name" value="${rprogram.name}"/>
+                                                <c:param name="duration" value="${rprogram.typicalDuration}"/>
                                                 <c:param name="producer-name" value="${param['producer-name']}"/>
                                                 <c:param name="presenter-name" value="${param['presenter-name']}"/>
                                                 <c:param name="insert" value="${param['insert']}"/>

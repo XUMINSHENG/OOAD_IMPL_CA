@@ -161,9 +161,15 @@ public class DeleteProgramSlotCmdTest {
 // 
 //        // add to list
 //        expected.add(expProgramSlot);
-        assertEquals("forwardPath", "", forwardPath);
+//        assertEquals("forwardPath", "", forwardPath);
 //        assertEquals("ProgramSlotsData", "pss", stringCaptor.getValue());
 //        assertEquals("Remaining Slot" , expected, listCaptor.getValue());
+        
+        
+        verify(req).setAttribute("year", 2015);
+        verify(req).setAttribute("current_week", 38);
+        verify(rd).forward(req, resp);
+        assertEquals("forwardPath", "", forwardPath);
         
     }
     

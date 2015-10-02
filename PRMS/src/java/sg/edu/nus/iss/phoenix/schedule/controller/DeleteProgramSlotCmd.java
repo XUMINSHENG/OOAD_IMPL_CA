@@ -88,6 +88,8 @@ public class DeleteProgramSlotCmd implements Perform {
         }
         
         // forward to managesc servlet to process 
+        req.setAttribute("year",year);
+        req.setAttribute("current_week", weekNum);
         RequestDispatcher rd = req.getRequestDispatcher("managesc");
         rd.forward(req, resp);
         return "";

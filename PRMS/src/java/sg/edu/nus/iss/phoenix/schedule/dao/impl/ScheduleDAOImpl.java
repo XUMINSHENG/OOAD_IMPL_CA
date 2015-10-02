@@ -158,7 +158,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	public void saveProgramSlot(ProgramSlot valueObject) throws NotFoundException,
 			SQLException {
 
-		String sql = "UPDATE `program-slot` SET `program-name` = ?, `producer-name` = ?, `presenter-name` = ? "
+		String sql = "UPDATE `program-slot` SET `program-name` = ?, `producer-name` = ?, `presenter-name` = ?,`duration` = ? "
                         + "WHERE (`year` = ? ) "
                         + "AND (`weekNum` = ? ) "
                         + "AND (`dateOfProgram` = ? ) "
@@ -170,10 +170,11 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 			stmt.setString(1, valueObject.getProgram().getName());
 			stmt.setString(2, valueObject.getProducer().getName());
 			stmt.setString(3, valueObject.getPresenter().getName());
-                       stmt.setInt(4, valueObject.getYear());
-                        stmt.setInt(5, valueObject.getWeekNum());
-			stmt.setString(6, Util.dateToString(valueObject.getDateOfProgram()));
-                        stmt.setTime(7, valueObject.getStartTime());
+                        stmt.setTime(4, valueObject.getDuration());
+                        stmt.setInt(5, valueObject.getYear());
+                        stmt.setInt(6, valueObject.getWeekNum());
+			stmt.setString(7, Util.dateToString(valueObject.getDateOfProgram()));
+                        stmt.setTime(8, valueObject.getStartTime());
                         
 			int rowcount = databaseUpdate(stmt);
 			if (rowcount == 0) {
