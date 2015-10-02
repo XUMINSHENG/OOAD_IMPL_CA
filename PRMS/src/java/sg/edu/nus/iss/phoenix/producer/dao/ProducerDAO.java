@@ -149,4 +149,5 @@ public interface ProducerDAO {
 
         public abstract void deassign(String id) throws NotFoundException, SQLException;
          public abstract void reassign(String id) throws NotFoundException, SQLException;
+         public abstract List<Producer> searchByName(String name) throws SQLException;
 }

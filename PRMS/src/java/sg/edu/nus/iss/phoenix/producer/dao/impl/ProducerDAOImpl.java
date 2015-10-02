@@ -114,9 +114,52 @@ public class ProducerDAOImpl implements ProducerDAO {
 
     @Override
     public List<Producer> loadAll() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "SELECT * FROM Producer where isActive='Y'";
+        List<Producer> searchResults = listQuery(this.connection
+                .prepareStatement(sql));
+        System.out.println("exited loadAll()");
+        return searchResults;
     }
+    /**
+     * databaseQuery-method. This method is a helper method for internal use. It
+     * will execute all database queries that will return multiple rows. The
+     * resultset will be converted to the List of valueObjects. If no rows were
+     * found, an empty List will be returned.
+     *
+     * @param stmt This parameter contains the SQL statement to be excuted.
+     */
+    protected List<Producer> listQuery(PreparedStatement stmt) throws SQLException {
 
+        ArrayList<Producer> searchResults = new ArrayList<Producer>();
+        ResultSet result = null;
+
+        try {
+            result = stmt.executeQuery();
+            while (result.next()) {
+                Producer temp = createValueObject();
+                temp.setUserId(result.getString("user-id"));
+                temp.setName(result.getString("name"));
+                temp.setIsActive(result.getString("isActive"));
+                searchResults.add(temp);
+            }
+
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally {
+            if (result != null) {
+                result.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+
+        return (List<Producer>) searchResults;
+    }
+    
     @Override
     public void create(Producer valueObject) throws SQLException {
         String sql = "";
@@ -251,6 +294,15 @@ public class ProducerDAOImpl implements ProducerDAO {
                 stmt.close();
             }
         }
+    }
+
+    @Override
+    public List<Producer> searchByName(String name) throws SQLException {
+        String sql = "SELECT * FROM Producer where isActive='Y' and name LIKE '%"+name+"%'";
+        List<Producer> searchResults = listQuery(this.connection
+                .prepareStatement(sql));
+        System.out.println("exited loadAll()");
+        return searchResults;
     }
 
 }

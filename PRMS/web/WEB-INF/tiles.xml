@@ -43,4 +43,13 @@
      <definition name="addascPage" extends="homePage">
 		<put-attribute name="body" value="/pages/tilepages/addasc.jsp" />
 	</definition>
+        <definition name="selectProducerPage" extends="homePage">
+		<put-attribute name="body" value="/pages/tilepages/selectProducer.jsp" />
+	</definition>
+        <definition name="selectPresenterPage" extends="homePage">
+		<put-attribute name="body" value="/pages/tilepages/selectPresenter.jsp" />
+	</definition>
+        <definition name="selectrpPage" extends="homePage">
+		<put-attribute name="body" value="/pages/tilepages/selectrp.jsp" />
+	</definition>
 </tiles-definitions>
