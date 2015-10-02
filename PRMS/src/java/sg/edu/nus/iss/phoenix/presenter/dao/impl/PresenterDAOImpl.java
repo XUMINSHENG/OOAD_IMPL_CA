@@ -39,7 +39,7 @@ public class PresenterDAOImpl implements PresenterDAO {
         } catch (NamingException ex) {
             Logger.getLogger(PresenterDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        connection = openConnection();
+//        connection = openConnection();
     }
 
     @Override
@@ -59,6 +59,7 @@ public class PresenterDAOImpl implements PresenterDAO {
     public void load(Presenter valueObject) throws NotFoundException, SQLException {
         String sql = "SELECT * FROM user WHERE (`id` = ? ) ";
         PreparedStatement stmt = null;
+        connection = openConnection();
 
         try {
             stmt = this.connection.prepareStatement(sql);
@@ -70,6 +71,7 @@ public class PresenterDAOImpl implements PresenterDAO {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -95,6 +97,7 @@ public class PresenterDAOImpl implements PresenterDAO {
             if (result != null) {
                 result.close();
             }
+            closeConnection();
         }
     }
 
@@ -139,6 +142,7 @@ public class PresenterDAOImpl implements PresenterDAO {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
 
         return (List<Presenter>) searchResults;
@@ -148,6 +152,7 @@ public class PresenterDAOImpl implements PresenterDAO {
     public void create(Presenter valueObject) throws SQLException {
         String sql = "";
         PreparedStatement stmt = null;
+        connection = openConnection();
         String yes = "Y"; //By default, have it as 'Y'
 
         try {
@@ -166,6 +171,7 @@ public class PresenterDAOImpl implements PresenterDAO {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -184,6 +190,7 @@ public class PresenterDAOImpl implements PresenterDAO {
         //String sql = "UPDATE `program-slot` SET `program-name` = ?, `producer-name` = ?, `presenter-name` = ? WHERE (`dateOfProgram` = ? ) AND (`startTime` = ?); ";
 
         PreparedStatement stmt = null;
+        connection = openConnection();
         try {
             stmt = this.connection.prepareStatement(sql);
             stmt.setString(1, valueObject.getName());
@@ -210,6 +217,7 @@ public class PresenterDAOImpl implements PresenterDAO {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -256,6 +264,15 @@ public class PresenterDAOImpl implements PresenterDAO {
         return conn;
     }
 
+    private void closeConnection() {
+        try {
+            this.connection.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
 //    protected int databaseUpdate(PreparedStatement stmt) throws SQLException {
 //
 //		int result = stmt.executeUpdate();
@@ -266,6 +283,7 @@ public class PresenterDAOImpl implements PresenterDAO {
     public void deassign(String id) throws NotFoundException, SQLException {
         String sql = "";
         PreparedStatement stmt = null;
+        connection = openConnection();
         try {
             sql = "UPDATE presenter SET isActive= ?  WHERE (`user-id` = ? ) ";
             stmt = this.connection.prepareStatement(sql);
@@ -282,6 +300,7 @@ public class PresenterDAOImpl implements PresenterDAO {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -289,6 +308,7 @@ public class PresenterDAOImpl implements PresenterDAO {
     public void reassign(String id) throws NotFoundException, SQLException {
         String sql = "";
         PreparedStatement stmt = null;
+        connection = openConnection();
         try {
             sql = "UPDATE presenter SET isActive= ?  WHERE (`user-id` = ? ) ";
             stmt = this.connection.prepareStatement(sql);
@@ -305,6 +325,7 @@ public class PresenterDAOImpl implements PresenterDAO {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 

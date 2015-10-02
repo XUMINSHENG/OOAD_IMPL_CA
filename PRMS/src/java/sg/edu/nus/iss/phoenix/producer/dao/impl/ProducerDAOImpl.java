@@ -36,7 +36,7 @@ public class ProducerDAOImpl implements ProducerDAO {
         } catch (NamingException ex) {
             Logger.getLogger(ProducerDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        connection = openConnection();
+      //  connection = openConnection();
     }
 
     private Connection openConnection() {
@@ -57,6 +57,15 @@ public class ProducerDAOImpl implements ProducerDAO {
         return conn;
     }
 
+    private void closeConnection() {
+        try {
+            this.connection.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public Producer createValueObject() {
         return new Producer();
@@ -74,6 +83,7 @@ public class ProducerDAOImpl implements ProducerDAO {
     public void load(Producer valueObject) throws NotFoundException, SQLException {
         String sql = "SELECT * FROM user WHERE (`id` = ? ) ";
         PreparedStatement stmt = null;
+        connection = openConnection();
 
         try {
             stmt = this.connection.prepareStatement(sql);
@@ -85,6 +95,7 @@ public class ProducerDAOImpl implements ProducerDAO {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -110,6 +121,7 @@ public class ProducerDAOImpl implements ProducerDAO {
             if (result != null) {
                 result.close();
             }
+            closeConnection();
         }
     }
 
@@ -154,6 +166,7 @@ public class ProducerDAOImpl implements ProducerDAO {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
 
         return (List<Producer>) searchResults;
@@ -163,6 +176,7 @@ public class ProducerDAOImpl implements ProducerDAO {
     public void create(Producer valueObject) throws SQLException {
         String sql = "";
         PreparedStatement stmt = null;
+        connection = openConnection();
         String yes = "Y"; //By default, have it as 'Y'
 
         try {
@@ -181,6 +195,7 @@ public class ProducerDAOImpl implements ProducerDAO {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -199,6 +214,7 @@ public class ProducerDAOImpl implements ProducerDAO {
         //String sql = "UPDATE `program-slot` SET `program-name` = ?, `producer-name` = ?, `presenter-name` = ? WHERE (`dateOfProgram` = ? ) AND (`startTime` = ?); ";
 
         PreparedStatement stmt = null;
+        connection = openConnection();
         try {
             stmt = this.connection.prepareStatement(sql);
             stmt.setString(1, valueObject.getName());
@@ -223,6 +239,7 @@ public class ProducerDAOImpl implements ProducerDAO {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -255,6 +272,7 @@ public class ProducerDAOImpl implements ProducerDAO {
     public void deassign(String id) throws NotFoundException, SQLException {
         String sql = "";
         PreparedStatement stmt = null;
+        connection = openConnection();
         try {
             sql = "UPDATE producer SET isActive= ?  WHERE (`user-id` = ? ) ";
             stmt = this.connection.prepareStatement(sql);
@@ -271,6 +289,7 @@ public class ProducerDAOImpl implements ProducerDAO {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -278,6 +297,7 @@ public class ProducerDAOImpl implements ProducerDAO {
     public void reassign(String id) throws NotFoundException, SQLException {
         String sql = "";
         PreparedStatement stmt = null;
+        connection = openConnection();
         try {
             sql = "UPDATE producer SET isActive= ?  WHERE (`user-id` = ? ) ";
             stmt = this.connection.prepareStatement(sql);
@@ -294,6 +314,7 @@ public class ProducerDAOImpl implements ProducerDAO {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 

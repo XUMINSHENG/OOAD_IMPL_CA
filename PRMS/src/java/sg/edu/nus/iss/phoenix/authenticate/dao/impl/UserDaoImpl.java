@@ -1,12 +1,10 @@
 package sg.edu.nus.iss.phoenix.authenticate.dao.impl;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +39,7 @@ public class UserDaoImpl implements UserDao {
         } catch (NamingException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        connection = openConnection();
+        
     }
 
     /*
@@ -83,6 +81,7 @@ public class UserDaoImpl implements UserDao {
 
         String sql = "SELECT * FROM user WHERE (id = ? ) ";
         PreparedStatement stmt = null;
+        connection = openConnection();
 
         try {
             stmt = this.connection.prepareStatement(sql);
@@ -94,6 +93,7 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
+            //closeConnection();
         }
     }
 
@@ -107,6 +107,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> loadAll() throws SQLException {
 
+        connection = openConnection();
         String sql = "SELECT * FROM user where isActive='Y' ORDER BY id ASC ";
         List<User> searchResults = listQuery(this.connection
                 .prepareStatement(sql));
@@ -126,6 +127,7 @@ public class UserDaoImpl implements UserDao {
 
         String sql = "";
         PreparedStatement stmt = null;
+        connection = openConnection();
         try {
             sql = "INSERT INTO user ( id, password, name,address,role, joining_date, isActive) VALUES (?, ?, ?, ?,?,?,?) ";
             stmt = this.connection.prepareStatement(sql);
@@ -179,6 +181,7 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
 
     }
@@ -196,6 +199,7 @@ public class UserDaoImpl implements UserDao {
         //String sql = "UPDATE `program-slot` SET `program-name` = ?, `producer-name` = ?, `presenter-name` = ? WHERE (`dateOfProgram` = ? ) AND (`startTime` = ?); ";
 
         PreparedStatement stmt = null;
+        connection = openConnection();
         try {
             stmt = this.connection.prepareStatement(sql);
             //stmt.setString(1, valueObject.getRoles().get(0).getRole());
@@ -253,6 +257,7 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -268,6 +273,7 @@ public class UserDaoImpl implements UserDao {
 
         String sql = "DELETE FROM user WHERE (id = ? ) ";
         PreparedStatement stmt = null;
+        connection = openConnection();
 
         try {
             stmt = this.connection.prepareStatement(sql);
@@ -288,6 +294,7 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -303,6 +310,7 @@ public class UserDaoImpl implements UserDao {
 
         String sql = "DELETE FROM user";
         PreparedStatement stmt = null;
+        connection = openConnection();
 
         try {
             stmt = this.connection.prepareStatement(sql);
@@ -312,6 +320,7 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -327,6 +336,7 @@ public class UserDaoImpl implements UserDao {
 
         String sql = "SELECT count(*) FROM user";
         PreparedStatement stmt = null;
+        connection = openConnection();
         ResultSet result = null;
         int allRows = 0;
 
@@ -344,6 +354,7 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
         return allRows;
     }
@@ -476,6 +487,7 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -516,6 +528,7 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
 
         return (List<User>) searchResults;
@@ -548,6 +561,15 @@ public class UserDaoImpl implements UserDao {
         return conn;
     }
 
+    private void closeConnection() {
+        try {
+            this.connection.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     private void insertIntoPresenter(User user) throws SQLException {
 
         System.out.println("inside presenter: " + user.getName() + user.getId());
@@ -569,6 +591,7 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
 
     }
@@ -593,6 +616,7 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -618,6 +642,7 @@ public class UserDaoImpl implements UserDao {
 
         String sql = "";
         PreparedStatement stmt = null;
+        connection = openConnection();
         try {
             sql = "UPDATE user SET isActive= ?  WHERE (id = ? ) ";
             stmt = this.connection.prepareStatement(sql);
@@ -634,6 +659,7 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 
@@ -642,6 +668,7 @@ public class UserDaoImpl implements UserDao {
 
         String sql = "";
         PreparedStatement stmt = null;
+        connection = openConnection();
         try {
             sql = "UPDATE user SET isActive= ? , role=? WHERE (id = ? ) ";
             stmt = this.connection.prepareStatement(sql);
@@ -673,6 +700,7 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
+            closeConnection();
         }
     }
 }
