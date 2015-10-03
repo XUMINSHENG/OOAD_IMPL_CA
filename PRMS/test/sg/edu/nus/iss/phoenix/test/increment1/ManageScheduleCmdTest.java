@@ -17,8 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.controller.ManageScheduleCmd;
 import sg.edu.nus.iss.phoenix.schedule.dao.impl.ScheduleDAOImpl;
@@ -65,9 +71,52 @@ public class ManageScheduleCmdTest {
 
     @Before
     public void setUp() throws Exception {
+        user = mock(User.class);
+        session = mock(HttpSession.class);
+        req = mock(HttpServletRequest.class);
+        resp = mock(HttpServletResponse.class);
+        rd = mock(RequestDispatcher.class);
     }
 
     @After
     public void tearDown() throws Exception {
+    }
+    
+    @Test
+    public void performSuccTest() throws Exception {
+        when(user.hasRole("manager"))
+                .thenReturn(true);
+        
+        when(session.getAttribute("user"))
+                .thenReturn(user);
+        
+        when(req.getSession())
+                .thenReturn(session);
+        when(req.getParameter("year"))
+                .thenReturn("2015");
+        when(req.getParameter("weekNum"))
+                .thenReturn("38");
+        when(req.getRequestDispatcher("managesc"))
+                .thenReturn(rd);
+        // perform test
+        String forwardPath;
+        try {
+            forwardPath = manageScheduleCmd.perform(null, req, resp);
+        } catch (Exception ex) {
+            fail("When calling perform");
+            return;
+        }
+        
+        // verify test
+        verify(req).getSession();
+        verify(session).getAttribute("user");
+        verify(user).hasRole("manager");
+        verify(req).getParameter("year");
+        verify(req).getParameter("weekNum");
+        
+        verify(req).setAttribute("year", 2015);
+        verify(req).setAttribute("current_week", 38);
+        verify(rd).forward(req, resp);
+        assertEquals("forwardPath", "", forwardPath);
     }
 }
