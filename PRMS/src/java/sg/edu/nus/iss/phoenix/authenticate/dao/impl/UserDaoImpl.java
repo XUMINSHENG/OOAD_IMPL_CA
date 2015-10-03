@@ -117,6 +117,7 @@ public class UserDaoImpl implements UserDao {
         List<User> searchResults = listQuery(this.connection
                 .prepareStatement(sql));
         System.out.println("exited loadAll()");
+        closeConnection();
         return searchResults;
     }
 
