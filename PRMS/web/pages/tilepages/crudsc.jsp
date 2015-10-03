@@ -31,14 +31,7 @@
                 <c:param name="insert" value="true"/>
         </c:url>
         
-        <c:url var="cpurl" scope="page" value="/nocturne/copysc">
-        	<c:param name="dateOfProgram" value=""/>
-                <c:param name="startTime" value=""/>
-                <c:param name="duration" value=""/>
-                <c:param name="program-name" value=""/>
-                <c:param name="producer-name" value=""/>
-                <c:param name="presenter-name" value=""/>
-                <c:param name="insert" value="false"/>
+        <c:url var="cpurl" scope="page" value="/nocturne/copysched">
         </c:url>
         
         <a href="${url}"><fmt:message key="label.crudsc.createAnSc"/></a>
@@ -47,7 +40,7 @@
         <a href="${addurl}"><fmt:message key="label.crudsc.add"/></a>
         &nbsp;
         &nbsp;
-        <a href="${url}"><fmt:message key="label.crudsc.copy"/></a>
+        <a href="${cpurl}"><fmt:message key="label.crudsc.copy"/></a>
         <br/><br/>
         
             <form action="${pageContext.request.contextPath}/nocturne/managesc"

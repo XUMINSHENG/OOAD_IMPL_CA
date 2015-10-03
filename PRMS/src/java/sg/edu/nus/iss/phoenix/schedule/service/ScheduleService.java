@@ -3,7 +3,9 @@ package sg.edu.nus.iss.phoenix.schedule.service;
 import sg.edu.nus.iss.phoenix.radioprogram.service.*;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -136,4 +138,40 @@ public class ScheduleService {
                 throw e;
             }
          }
+
+    public ArrayList<ProgramSlot> processCopy(SPSearchObject src, SPSearchObject dest, long diffDays) throws Exception 
+    {
+            
+            ArrayList<ProgramSlot> srcSlots = null;
+            ArrayList<ProgramSlot> destSlots = new ArrayList<ProgramSlot>();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
+            UserTransaction utx = null;
+            try {
+                
+                srcSlots=searchProgramSlots(src);
+                for(ProgramSlot slot:srcSlots)
+                {
+                    ProgramSlot newSlot = new ProgramSlot();
+                    newSlot.setYear(Integer.parseInt(dest.getYear()));
+                    newSlot.setWeekNum(Integer.parseInt(dest.getWeek()));
+                    cal.setTime(slot.getDateOfProgram()); 
+                    cal.add(Calendar.DATE, (int)diffDays); // Adding days
+                    newSlot.setDateOfProgram(sdf.parse(sdf.format(cal.getTime())));
+                    destSlots.add(newSlot);
+                }
+                    
+                    utx = (UserTransaction)InitialContext.doLookup("java:comp/UserTransaction");
+                    utx.begin();
+                    scdao.deleteAllProgramSlotByWeek(Integer.parseInt(dest.getYear()),Integer.parseInt(dest.getWeek()));
+                    scdao.copyWeeklySchedule(srcSlots,destSlots);
+                
+                    utx.commit();
+                return searchProgramSlots(dest);
+            }  
+            catch (SQLException e) {
+                utx.rollback();
+                throw e;
+            }
+    }
 }

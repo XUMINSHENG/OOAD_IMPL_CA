@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
@@ -174,4 +175,8 @@ public interface ScheduleDAO {
 
         public List<ProgramSlot> searchScheduledProgramSlot(int year, int week)
                         throws NotFoundException, SQLException;
+
+    public void copyWeeklySchedule(ArrayList<ProgramSlot> srcSlots, ArrayList<ProgramSlot> destSlots) throws SQLException;
+
+    public void deleteAllProgramSlotByWeek(int year, int weeknum) throws SQLException;
 }
