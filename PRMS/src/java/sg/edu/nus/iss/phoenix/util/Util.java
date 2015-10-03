@@ -9,6 +9,7 @@ import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -42,5 +43,19 @@ public class Util {
         DateFormat formatter = new SimpleDateFormat(C_Time_Format); 
         return formatter.format(time);
     }
-    
+    public static Calendar DateAddTime(Date date, Time time)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal = CalAddTime(cal,time);
+        return cal;
+    }
+    public static Calendar CalAddTime(Calendar cal,Time time)
+    {
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(time);
+        cal.add(Calendar.HOUR,cal2.get(Calendar.HOUR));
+        cal.add(Calendar.MINUTE, cal2.get(Calendar.MINUTE));
+        return cal;
+    }
 }
