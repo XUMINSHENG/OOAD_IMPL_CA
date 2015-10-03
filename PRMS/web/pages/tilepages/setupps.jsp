@@ -27,7 +27,8 @@
             var presenterName = getQueryString("presenter-name");
             var insert = getQueryString("insert");
             var duration = getQueryString("duration");
-            function srp(){           
+            var paras;
+            function updateData(){
                         dateOfProgram = document.getElementById("date").value;
                         startTime = document.getElementById("st").value;
                         programName = getQueryString("program-name");
@@ -35,36 +36,24 @@
                         presenterName = getQueryString("presenter-name");
                         insert = getQueryString("insert");
                         duration = document.getElementById("duration").value;
-                        window.location.href="selectrp?dateOfProgram="+dateOfProgram+
+                        paras = dateOfProgram+
                         "&startTime="+startTime+"&program-name="+ programName+
                         "&producer-name="+producerName+"&duration="+duration+
                         "&presenter-name="+presenterName+"&insert="+insert;
+            }
+            
+            
+            function srp(){           
+                        updateData();
+                        window.location.href="selectrp?dateOfProgram="+paras;
             }
             function spro(){
-                        dateOfProgram = document.getElementById("date").value;
-                        startTime = document.getElementById("st").value;
-                        programName = getQueryString("program-name");
-                        producerName = getQueryString("producer-name");
-                        presenterName = getQueryString("presenter-name");
-                        insert = getQueryString("insert");
-                        duration = document.getElementById("duration").value;
-                        window.location.href="selectProducer?dateOfProgram="+dateOfProgram+
-                        "&startTime="+startTime+"&program-name="+ programName+
-                        "&producer-name="+producerName+"&duration="+duration+
-                        "&presenter-name="+presenterName+"&insert="+insert;
+                        updateData();
+                        window.location.href="selectProducer?dateOfProgram="+paras;
             }
             function spre(){
-                        dateOfProgram = document.getElementById("date").value;
-                        startTime = document.getElementById("st").value;
-                        programName = getQueryString("program-name");
-                        producerName = getQueryString("producer-name");
-                        presenterName = getQueryString("presenter-name");
-                        insert = getQueryString("insert");
-                        duration = document.getElementById("duration").value;
-                        window.location.href="selectPresenter?dateOfProgram="+dateOfProgram+
-                        "&startTime="+startTime+"&program-name="+ programName+
-                        "&producer-name="+producerName+"&duration="+duration+
-                        "&presenter-name="+presenterName+"&insert="+insert;
+                        updateData();
+                        window.location.href="selectPresenter?dateOfProgram="+paras;
             }
             function val()
             {
