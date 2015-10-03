@@ -31,6 +31,10 @@ public class UserDaoImpl implements UserDao {
     private DataSource phoenix;
     Connection connection;
 
+    /**
+     * DAO Implementation Constructor. Used to initialize the data source which
+     * contains the Phoenix resource pool.
+     */
     public UserDaoImpl() {
         super();
         // TODO Auto-generated constructor stub
@@ -39,26 +43,26 @@ public class UserDaoImpl implements UserDao {
         } catch (NamingException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#createValueObject()
+    /**
+     * createValueObject-method. Creates a new object for the User class.
+     *
+     * @return new User object.
      */
     @Override
     public User createValueObject() {
         return new User();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#getObject(java.sql
-     * .Connection, int)
+    /**
+     * getObject-method. Creates a new User object and sets all its attributes.
+     *
+     * @param id
+     * @return User object
+     * @throws NotFoundException
+     * @throws SQLException
      */
     @Override
     public User getObject(String id) throws NotFoundException, SQLException {
@@ -69,12 +73,13 @@ public class UserDaoImpl implements UserDao {
         return valueObject;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#load(java.sql.Connection
-     * , sg.edu.nus.iss.phoenix.authenticate.entity.User)
+    /**
+     * load-method. Get a Users from the user table
+     *
+     * @param valueObject
+     * @throws NotFoundException
+     * @throws SQLException
+     *
      */
     @Override
     public void load(User valueObject) throws NotFoundException, SQLException {
@@ -93,16 +98,16 @@ public class UserDaoImpl implements UserDao {
             if (stmt != null) {
                 stmt.close();
             }
-            //closeConnection();
+            closeConnection();
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#loadAll(java.sql
-     * .Connection)
+    /**
+     * loadAll-method. Get all the Users from the user table.
+     *
+     * @return List of users
+     * @throws SQLException
+     *
      */
     @Override
     public List<User> loadAll() throws SQLException {
@@ -115,12 +120,12 @@ public class UserDaoImpl implements UserDao {
         return searchResults;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#create(java.sql.
-     * Connection, sg.edu.nus.iss.phoenix.authenticate.entity.User)
+    /**
+     * create-method. Used to add a new User object into the user table.
+     *
+     * @param valueObject
+     * @throws SQLException
+     *
      */
     @Override
     public synchronized void create(User valueObject) throws SQLException {
@@ -148,7 +153,7 @@ public class UserDaoImpl implements UserDao {
 
                 }
             }
-            // stmt.setString(5, valueObject.getRoles().get(0).getRole());
+
             stmt.setString(5, s_role);
 
             stmt.setString(6, valueObject.getJoiningDate());
@@ -159,24 +164,6 @@ public class UserDaoImpl implements UserDao {
                 throw new SQLException("PrimaryKey Error when updating DB!");
             }
 
-//                        for(int i=0;i<a_role.size();i++){
-//                            String switchRole = a_role.get((i)).getRole().toString();
-//                            
-//                            switch (switchRole){
-//                                case "presenter":
-//                                    insertIntoPresenter(valueObject);
-//                                    break;
-//                                case "producer":
-//                                    insertIntoProducer(valueObject);
-//                                    break;
-//                                case "station manager":
-//                                    insertIntoStationManager(valueObject);
-//                                    break;
-//                                default:
-//                                    break;
-//                                    
-//                            }
-//                        }
         } finally {
             if (stmt != null) {
                 stmt.close();
@@ -186,23 +173,22 @@ public class UserDaoImpl implements UserDao {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#save(java.sql.Connection
-     * , sg.edu.nus.iss.phoenix.authenticate.entity.User)
+    /**
+     * save-method. Used to update the User object in the user table.
+     *
+     * @param valueObject
+     * @throws NotFoundException
+     * @throws SQLException
+     *
      */
     @Override
     public void save(User valueObject) throws NotFoundException, SQLException {
         String sql = "UPDATE user SET role = ?, address =?,  password = ?,  joining_date = ?  WHERE (id = ? ) ";
-        //String sql = "UPDATE `program-slot` SET `program-name` = ?, `producer-name` = ?, `presenter-name` = ? WHERE (`dateOfProgram` = ? ) AND (`startTime` = ?); ";
 
         PreparedStatement stmt = null;
         connection = openConnection();
         try {
             stmt = this.connection.prepareStatement(sql);
-            //stmt.setString(1, valueObject.getRoles().get(0).getRole());
             stmt.setString(2, valueObject.getAddress());
             stmt.setString(3, valueObject.getPassword());
             stmt.setString(4, valueObject.getJoiningDate());
@@ -218,40 +204,21 @@ public class UserDaoImpl implements UserDao {
 
                 }
             }
-            // stmt.setString(5, valueObject.getRoles().get(0).getRole());
+
             stmt.setString(5, valueObject.getId());
             stmt.setString(1, s_role);
 
-            //stmt.setString(3, valueObject.getName());
             int rowcount = databaseUpdate(stmt);
             if (rowcount == 0) {
-                // System.out.println("Object could not be saved! (PrimaryKey not found)");
+
                 throw new NotFoundException(
                         "Object could not be saved! (PrimaryKey not found)");
             }
             if (rowcount > 1) {
-                // System.out.println("PrimaryKey Error when updating DB! (Many objects were affected!)");
+
                 throw new SQLException(
                         "PrimaryKey Error when updating DB! (Many objects were affected!)");
             }
-//                        for(int i=0;i<a_role.size();i++){
-//                            String switchRole = a_role.get((i)).getRole().toString();
-//                            
-//                            switch (switchRole){
-//                                case "presenter":
-//                                    updateIntoPresenter(valueObject);
-//                                    break;
-//                                case "producer":
-//                                    updateIntoProducer(valueObject);
-//                                    break;
-//                                case "station manager":
-//                                    updateIntoStationManager(valueObject);
-//                                    break;
-//                                default:
-//                                    break;
-//                                    
-//                            }
-//                        }
 
         } finally {
             if (stmt != null) {
@@ -261,12 +228,13 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#delete(java.sql.
-     * Connection, sg.edu.nus.iss.phoenix.authenticate.entity.User)
+    /**
+     * delete-method. Used to delete an User object in the user table.
+     *
+     * @param valueObject
+     * @throws NotFoundException
+     * @throws SQLException
+     *
      */
     @Override
     public void delete(User valueObject) throws NotFoundException, SQLException {
@@ -298,12 +266,10 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#deleteAll(java.sql
-     * .Connection)
+    /**
+     * deleteAll-method. Used to delete all the User objects in the user table.
+     * @throws SQLException
+     *
      */
     @Override
     public void deleteAll() throws SQLException {
@@ -324,12 +290,11 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#countAll(java.sql
-     * .Connection)
+   /**
+     * countAll-method. Used to get the total numbers of Users from the user table.
+     * @return number of users(int)
+     * @throws SQLException
+     *
      */
     @Override
     public int countAll() throws SQLException {
@@ -359,6 +324,12 @@ public class UserDaoImpl implements UserDao {
         return allRows;
     }
 
+    /**
+     * searchMatching-method. Used to get the matching user object for the given id.
+     * @param uid
+     * @return User Object
+     * @throws SQLException
+     */
     @Override
     public User searchMatching(String uid) throws SQLException {
         try {
@@ -368,12 +339,12 @@ public class UserDaoImpl implements UserDao {
         }
         return (null);
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#searchMatching(java
-     * .sql.Connection, sg.edu.nus.iss.phoenix.authenticate.entity.User)
+    
+    /**
+     * searchMatching-method. Used to get the matching user object for the given id.
+     * @param valueObject
+     * @return User Object
+     * @throws SQLException
      */
 
     @Override
@@ -437,7 +408,9 @@ public class UserDaoImpl implements UserDao {
      * value indicates how many rows were affected. This method will also make
      * sure that if cache is used, it will reset when data changes.
      *
-     * @param stmt This parameter contains the SQL statement to be excuted.
+     * @param stmt This parameter contains the SQL statement to be executed.
+     * @return
+     * @throws java.sql.SQLException
      */
     protected int databaseUpdate(PreparedStatement stmt) throws SQLException {
 
@@ -454,6 +427,8 @@ public class UserDaoImpl implements UserDao {
      *
      * @param stmt This parameter contains the SQL statement to be excuted.
      * @param valueObject Class-instance where resulting data will be stored.
+     * @throws sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException
+     * @throws java.sql.SQLException
      */
     protected void singleQuery(PreparedStatement stmt, User valueObject)
             throws NotFoundException, SQLException {
@@ -471,13 +446,9 @@ public class UserDaoImpl implements UserDao {
                 valueObject.setAddress(result.getString("address"));
                 valueObject.setRoles(createRoles(result.getString("role")));
                 valueObject.setJoiningDate(result.getDate("joining_date").toString());
-                //Role e = new Role(result.getString("role"));
-                //ArrayList<Role> roles = new ArrayList<Role>();
-                //roles.add(e);
-                //valueObject.setRoles(roles);
 
             } else {
-                // System.out.println("User Object Not Found!");
+
                 throw new NotFoundException("User Object Not Found!");
             }
         } finally {
@@ -497,7 +468,9 @@ public class UserDaoImpl implements UserDao {
      * resultset will be converted to the List of valueObjects. If no rows were
      * found, an empty List will be returned.
      *
-     * @param stmt This parameter contains the SQL statement to be excuted.
+     * @param stmt This parameter contains the SQL statement to be executed.
+     * @return
+     * @throws java.sql.SQLException
      */
     protected List<User> listQuery(PreparedStatement stmt) throws SQLException {
 
@@ -513,10 +486,6 @@ public class UserDaoImpl implements UserDao {
                 temp.setName(result.getString("name"));
                 temp.setAddress(result.getString("address"));
                 temp.setRoles(createRoles(result.getString("role")));
-                //Role e = new Role(result.getString("role"));
-                //ArrayList<Role> roles = new ArrayList<Role>();
-                //roles.add(e);
-                //temp.setRoles(roles);
 
                 searchResults.add(temp);
             }
@@ -534,6 +503,11 @@ public class UserDaoImpl implements UserDao {
         return (List<User>) searchResults;
     }
 
+    /**
+     * createRoles-method. Used Get the List of Role object from roles string 
+     * @param roles
+     * @return ArrayList of Role object
+     */
     private ArrayList<Role> createRoles(final String roles) {
         ArrayList<Role> roleList = new ArrayList<Role>();
         String[] _r = roles.trim().split(DELIMITER);
@@ -543,6 +517,10 @@ public class UserDaoImpl implements UserDao {
         return (roleList);
     }
 
+    /**
+     * openConnection_method. Used to create a new connection to MySQL Database
+     * @return Connection
+     */
     private Connection openConnection() {
         Connection conn = null;
         try {
@@ -560,6 +538,11 @@ public class UserDaoImpl implements UserDao {
         }
         return conn;
     }
+    
+     /**
+     * closeConnection_method. Used to close a connection to MySQL Database
+     * 
+     */
 
     private void closeConnection() {
         try {
@@ -570,73 +553,13 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    private void insertIntoPresenter(User user) throws SQLException {
 
-        System.out.println("inside presenter: " + user.getName() + user.getId());
-        String sql = "";
-        PreparedStatement stmt = null;
-        try {
-            sql = "INSERT INTO presenter ( name,`user-id`) VALUES (?, ?) ";
-            stmt = this.connection.prepareStatement(sql);
-            stmt.setString(1, user.getName());
-            stmt.setString(2, user.getId());
-
-            int rowcount = databaseUpdate(stmt);
-            if (rowcount != 1) {
-                // System.out.println("PrimaryKey Error when updating DB!");
-                throw new SQLException("PrimaryKey Error when updating DB!");
-            }
-
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            closeConnection();
-        }
-
-    }
-
-    private void insertIntoProducer(User user) throws SQLException {
-        System.out.println("inside presenter: " + user.getName() + user.getId());
-        String sql = "";
-        PreparedStatement stmt = null;
-        try {
-            sql = "INSERT INTO producer ( name,`user-id`) VALUES (?, ?) ";
-            stmt = this.connection.prepareStatement(sql);
-            stmt.setString(1, user.getName());
-            stmt.setString(2, user.getId());
-
-            int rowcount = databaseUpdate(stmt);
-            if (rowcount != 1) {
-                // System.out.println("PrimaryKey Error when updating DB!");
-                throw new SQLException("PrimaryKey Error when updating DB!");
-            }
-
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            closeConnection();
-        }
-    }
-
-    private void insertIntoStationManager(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void updateIntoPresenter(User valueObject) {
-        //UPDATE user SET role = ?, address =?,  password = ?,  joining_date = ?  WHERE (id = ? ) ";
-
-    }
-
-    private void updateIntoProducer(User valueObject) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void updateIntoStationManager(User valueObject) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    /**
+     * deassign-method. Used to assign a user as in-active in the User table.
+     * @param user
+     * @throws NotFoundException
+     * @throws SQLException
+     */
     @Override
     public void deassign(User user) throws NotFoundException, SQLException {
 
@@ -663,6 +586,12 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+     /**
+     * reassign-method. Used to assign a user as active in the User table.
+     * @param user
+     * @throws NotFoundException
+     * @throws SQLException
+     */
     @Override
     public void reassign(User user) throws NotFoundException, SQLException {
 
@@ -688,11 +617,11 @@ public class UserDaoImpl implements UserDao {
 
                 }
             }
-            // stmt.setString(5, valueObject.getRoles().get(0).getRole());
+
             stmt.setString(2, s_role);
             int rowcount = databaseUpdate(stmt);
             if (rowcount != 1) {
-                // System.out.println("PrimaryKey Error when updating DB!");
+
                 throw new SQLException("PrimaryKey Error when updating DB!");
             }
 
