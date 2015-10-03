@@ -36,7 +36,7 @@ public class ProducerDAOImpl implements ProducerDAO {
         } catch (NamingException ex) {
             Logger.getLogger(ProducerDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-      //  connection = openConnection();
+        //  connection = openConnection();
     }
 
     private Connection openConnection() {
@@ -327,4 +327,30 @@ public class ProducerDAOImpl implements ProducerDAO {
         return searchResults;
     }
 
+    public String checkIfActive(String id) throws NotFoundException, SQLException {
+        String sql = "SELECT isActive FROM producer WHERE (`user-id` = ? ) ";
+        PreparedStatement stmt = null;
+        connection = openConnection();
+        ResultSet result = null;
+        String isActive = "N";
+
+        try {
+            stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, id);
+            result = stmt.executeQuery();
+            String flag = result.toString();
+            if (flag == "Y") {
+                isActive = "Y";
+            } else {
+                isActive = "N";
+            }
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
+        return isActive;
+
+    }
 }

@@ -586,6 +586,8 @@ public class UserDaoImpl implements UserDao {
             closeConnection();
         }
     }
+   
+            
 
      /**
      * reassign-method. Used to assign a user as active in the User table.
@@ -633,4 +635,34 @@ public class UserDaoImpl implements UserDao {
             closeConnection();
         }
     }
+     
+    
+    public String checkIfActive(User valueObject ) throws NotFoundException, SQLException {
+        String sql = "SELECT isActive FROM user WHERE (id = ? ) ";
+        PreparedStatement stmt = null;
+        connection = openConnection();
+        ResultSet result = null;
+        String isActive="N";
+
+        try {
+            stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, valueObject.getId());       
+            result = stmt.executeQuery();
+            String flag = result.toString();
+            if(flag == "Y"){
+                isActive="Y";
+            }else{
+                isActive="N";
+            }
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        closeConnection();
+        }
+        return isActive;
+    }
+    
+    
+    
 }

@@ -337,5 +337,32 @@ public class PresenterDAOImpl implements PresenterDAO {
         System.out.println("exited loadAll()");
         return searchResults;
     }
+    
+    public String checkIfActive(String id) throws NotFoundException, SQLException {
+        String sql = "SELECT isActive FROM presenter WHERE (`user-id` = ? ) ";
+        PreparedStatement stmt = null;
+        connection = openConnection();
+        ResultSet result = null;
+        String isActive = "N";
+
+        try {
+            stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, id);
+            result = stmt.executeQuery();
+            String flag = result.toString();
+            if (flag == "Y") {
+                isActive = "Y";
+            } else {
+                isActive = "N";
+            }
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
+        return isActive;
+
+    }
 
 }

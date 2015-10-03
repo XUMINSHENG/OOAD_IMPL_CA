@@ -6,12 +6,11 @@
 package sg.edu.nus.iss.phoenix.test.increment1;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
@@ -35,16 +34,14 @@ import sg.edu.nus.iss.phoenix.authenticate.entity.Role;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.user.dao.impl.UserDAOImpl;
-import sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDaoImpl;
-import sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDaoImpl;
-import sg.edu.nus.iss.phoenix.presenter.dao.impl.PresenterDAOImpl;
-import sg.edu.nus.iss.phoenix.producer.dao.impl.ProducerDAOImpl;
-import sg.edu.nus.iss.phoenix.user.controller.AddModifyUserCmd;
 import sg.edu.nus.iss.phoenix.user.controller.DeleteUserCmd;
 import sg.edu.nus.iss.phoenix.user.controller.EnterUserDetailsCmd;
 import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
 import sg.edu.nus.iss.phoenix.user.entity.Presenter;
 import sg.edu.nus.iss.phoenix.user.entity.Producer;
+import sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDaoImpl;
+import sg.edu.nus.iss.phoenix.presenter.dao.impl.PresenterDAOImpl;
+import sg.edu.nus.iss.phoenix.producer.dao.impl.ProducerDAOImpl;
 
 /**
  *
@@ -60,6 +57,10 @@ public class DeleteUserCmdTest {
     private HttpServletResponse response;
     private RequestDispatcher rd;
     private String userID;
+    private Object connection;
+    private UserDaoImpl udimpl = new UserDaoImpl();
+    private PresenterDAOImpl presimpl = new PresenterDAOImpl();
+    private ProducerDAOImpl prodimpl = new ProducerDAOImpl();
 
     public DeleteUserCmdTest() {
     }
@@ -100,11 +101,7 @@ public class DeleteUserCmdTest {
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
         rd = mock(RequestDispatcher.class);
-//        try {
-//            Runtime.getRuntime().exec("cmd /c start loadDefaultDb.bat");
-//        } catch (IOException ex) {
-//            Logger.getLogger(AddModifyUserCmdTest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+
     }
 
     @After
@@ -139,16 +136,17 @@ public class DeleteUserCmdTest {
         }
         return (roleList);
     }
+     
     
    @Test
-    public void Test3() throws Exception {
+    public void Test1_CheckPageNavigation() throws Exception {
         //Step 1: Create a user
         User user_test = new User();
-        String name="BlahUser";
+        String name="User1User";
         String address="clementi";
         String date = "2012-09-09";
         String roleList = "presenter";
-        String id = "BlahUser";
+        String id = "User1User";
         String password="password";
         
         user_test.setAddress(address);
@@ -187,32 +185,187 @@ public class DeleteUserCmdTest {
             fail("When calling delete perform");
             return;
         }
-//        verify(request).getSession();
-//        verify(session).getAttribute("user");
-//        verify(request).getParameter("name");
-//        verify(request).getParameterValues("rolelist");
-//        verify(request).getParameter("address");
-//        verify(request).getParameter("password");
-//        verify(request).getParameter("joiningdate");
-//        verify(request).getParameter("ins");
+
         
         ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
         verify(request).setAttribute(nameCaptor.capture(), valueCaptor.capture());
 
         assertEquals("forwardPath", "/pages/cruduser.jsp", forwardPath);
-//        assertEquals("varName", "errorMsg", nameCaptor.getValue());
-//        assertEquals("errorMsg",
-//                "One or more input fields is missing, please fill all the details while creating a user!",
-//                valueCaptor.getValue());
 
         
-        //blah blah blah test
+    }
+    
+    @Test
+    public void Test2_CheckUserFlagValue() throws Exception {
         
-        //finally
-       // deleteUser(user_test);
+        User user_test = new User();
+        String name="User_Userflag";
+        String address="clementi";
+        String date = "2012-09-09";
+        String roleList = "presenter";
+        String id = "User_Userflag";
+        String password="password";
         
+        
+        user_test.setAddress(address);
+        user_test.setId(id);
+        user_test.setJoiningDate(date);
+        user_test.setName(name);
+        user_test.setPassword(password);
+        user_test.setRoles(createRoles(roleList));        
+        createUser(user_test);
+        
+        String[] role = new String[1];
+        role[0] = "presenter";
+        DeleteUserCmd del = new DeleteUserCmd();
+        
+        when(user.hasRole("admin")).thenReturn(true);
+        when(session.getAttribute("user")).thenReturn(user);
+        when(request.getSession()).thenReturn(session);
+        when(request.getParameter("name"))
+                .thenReturn(name);
+        when(request.getParameterValues("rolelist"))
+                .thenReturn(role); 
+        when(request.getParameter("address"))
+                .thenReturn(address);
+        when(request.getParameter("password"))
+                .thenReturn(password);
+        when(request.getParameter("joiningdate"))
+                .thenReturn(date);
+        when(request.getParameter("ins"))
+                .thenReturn("true");
+      
+        String forwardPath;
+        try {
+            forwardPath = del.perform(null, request, response);
+        } catch (Exception ex) {
+            fail("When calling delete perform");
+            return;
+        }
+        
+        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
+        verify(request).setAttribute(nameCaptor.capture(), valueCaptor.capture());
+        
+        assertEquals("N", udimpl.checkIfActive(user_test));
+
+    }
+    
+    @Test
+    public void Test3_CheckPresenterFlagValue() throws Exception {
+        
+        User user_test = new User();
+        String name="User_Presflag";
+        String address="clementi";
+        String date = "2012-09-09";
+        String roleList = "presenter";
+        String id = "User_Presflag";
+        String password="password";
+        
+        
+        user_test.setAddress(address);
+        user_test.setId(id);
+        user_test.setJoiningDate(date);
+        user_test.setName(name);
+        user_test.setPassword(password);
+        user_test.setRoles(createRoles(roleList));        
+        createUser(user_test);
+        
+        String[] role = new String[1];
+        role[0] = "presenter";
+        DeleteUserCmd del = new DeleteUserCmd();
+        
+        when(user.hasRole("admin")).thenReturn(true);
+        when(session.getAttribute("user")).thenReturn(user);
+        when(request.getSession()).thenReturn(session);
+        when(request.getParameter("name"))
+                .thenReturn(name);
+        when(request.getParameterValues("rolelist"))
+                .thenReturn(role); 
+        when(request.getParameter("address"))
+                .thenReturn(address);
+        when(request.getParameter("password"))
+                .thenReturn(password);
+        when(request.getParameter("joiningdate"))
+                .thenReturn(date);
+        when(request.getParameter("ins"))
+                .thenReturn("true");
+      
+        String forwardPath;
+        try {
+            forwardPath = del.perform(null, request, response);
+        } catch (Exception ex) {
+            fail("When calling delete perform");
+            return;
+        }
+        
+        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
+        verify(request).setAttribute(nameCaptor.capture(), valueCaptor.capture());
+        
+        assertEquals("N", presimpl.checkIfActive(user_test.getId()));
+
+    }
+    
+    
+    
+    @Test
+    public void Test4_CheckProducerFlagValue() throws Exception {
+        
+        User user_test = new User();
+        String name="User_Prodflag";
+        String address="clementi";
+        String date = "2012-09-09";
+        String roleList = "producer";
+        String id = "User_Prodflag";
+        String password="password";
+        
+        
+        user_test.setAddress(address);
+        user_test.setId(id);
+        user_test.setJoiningDate(date);
+        user_test.setName(name);
+        user_test.setPassword(password);
+        user_test.setRoles(createRoles(roleList));        
+        createUser(user_test);
+        
+        String[] role = new String[1];
+        role[0] = "producer";
+        DeleteUserCmd del = new DeleteUserCmd();
+        
+        when(user.hasRole("admin")).thenReturn(true);
+        when(session.getAttribute("user")).thenReturn(user);
+        when(request.getSession()).thenReturn(session);
+        when(request.getParameter("name"))
+                .thenReturn(name);
+        when(request.getParameterValues("rolelist"))
+                .thenReturn(role); 
+        when(request.getParameter("address"))
+                .thenReturn(address);
+        when(request.getParameter("password"))
+                .thenReturn(password);
+        when(request.getParameter("joiningdate"))
+                .thenReturn(date);
+        when(request.getParameter("ins"))
+                .thenReturn("true");
+      
+        String forwardPath;
+        try {
+            forwardPath = del.perform(null, request, response);
+        } catch (Exception ex) {
+            fail("When calling delete perform");
+            return;
+        }
+        
+        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
+        verify(request).setAttribute(nameCaptor.capture(), valueCaptor.capture());
+        
+        assertEquals("N", prodimpl.checkIfActive(user_test.getId()));
+
     }
 }
+
 
  
