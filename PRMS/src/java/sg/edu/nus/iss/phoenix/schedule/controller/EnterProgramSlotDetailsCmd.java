@@ -3,6 +3,7 @@ package sg.edu.nus.iss.phoenix.schedule.controller;
 
 import at.nocturne.api.Action;
 import at.nocturne.api.Perform;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -30,32 +31,33 @@ import sg.edu.nus.iss.phoenix.radioprogram.delegate.ProgramDelegate;
 import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectScheduledProgramDelegate;
 
 /**
- *<p>This class represent the Action class that handles 
- * HttpServletRequest which is collect details and sent to PhoenixFrontController 
- * to Create or Modify a {@link ProgramSlot}.</p>
- * 
- * <p>The method <code>perform() </code> which implements the {@link Perform} 
- * Interface will be invoked when a request is sent to <strong>deleteps</strong>
+ * <p>
+ * This class represent the Action class that handles HttpServletRequest which
+ * is collect details and sent to PhoenixFrontController to Create or Modify a
+ * {@link ProgramSlot}.</p>
+ *
+ * <p>
+ * The method <code>perform() </code> which implements the {@link Perform}
+ * Interface will be invoked when a request is sent to <strong>setupps</strong>
  * URL </p>
- * 
+ *
  * @author Liu xinzhuo
  * @version 3.2 2015/10/04
  */
-
 @Action("enterps")
 public class EnterProgramSlotDetailsCmd implements Perform {
 
     /**
-     * 
+     *
      * @param path the path of of invoking this Action
-     * @param req the HttpServletRequest that sent from browser in order to 
-     *            transmit sufficient data to perform intended task
-     * @param resp the HttpServletResponse will return process result back to 
-     *             browser
+     * @param req the HttpServletRequest that sent from browser in order to
+     * transmit sufficient data to perform intended task
+     * @param resp the HttpServletResponse will return process result back to
+     * browser
      * @return the path of web page to display result
      * @throws IOException if an error has occurred in IO of System
      * @throws ServletException if an error has occurred in Servlet
-     * 
+     *
      */
     @Override
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -84,24 +86,17 @@ public class EnterProgramSlotDetailsCmd implements Perform {
         String producerName = req.getParameter("producer");
         String presenterName = req.getParameter("presenter");
         String insert = req.getParameter("ins");
-
-        //Val null
-        if (Util.IsNull(dateOfProgram) || Util.IsNull(startTime)
-                || Util.IsNull(duration) || Util.IsNull(radioProgramName)
-                || Util.IsNull(producerName) || Util.IsNull(presenterName)
-                || Util.IsNull(insert)) {
-            req.setAttribute("errorMsg", "Null Input Error!");
-            return "/pages/error.jsp";
-        }
-        //Val date and time
-        if (valDate(dateOfProgram) == false || valTime(startTime) == false
-                || valTime(duration) == false || valInsert(insert) == false) {
-            req.setAttribute("errorMsg", "Invalid input");
-            return "/pages/error.jsp";
-        }
-
-        if (valDurationTime(duration) == false) {
-            req.setAttribute("errorMsg", "Duration Format Error! It should be 'HH:30:00'or 'HH:00:00'! ");
+        
+        List<RadioProgram> rpList = pdel.findRPList(radioProgramName);
+        List<Producer> proList = prodel.FetchProducersByName(producerName);
+        List<Presenter> preList = predel.FetchPresentersByName(presenterName);
+        
+        // validate
+        boolean validation = validate(dateOfProgram, startTime, duration,
+                radioProgramName, producerName, presenterName, insert, req,
+                rpList, proList, preList);
+        
+        if (validation == false) {
             return "/pages/error.jsp";
         }
 
@@ -113,29 +108,14 @@ public class EnterProgramSlotDetailsCmd implements Perform {
             ps.setWeekNum(cal.get(Calendar.WEEK_OF_YEAR));
             ps.setStartTime(Util.stringToTime(startTime));
             ps.setDuration(Util.stringToTime(duration));
+            ps.setProgram(rpList.get(0));
+            ps.setProducer(proList.get(0));
+            ps.setPresenter(preList.get(0));
         } catch (ParseException ex) {
-            Logger.getLogger(DeleteProgramSlotCmd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
             req.setAttribute("errorMsg", "Invalid input");
             return "/pages/error.jsp";
         }
-        List<RadioProgram> rpList = pdel.findRPList(radioProgramName);
-        if (rpList.size() != 1) {
-            req.setAttribute("errorMsg", "Invalid input");
-            return "/pages/error.jsp";
-        }
-        RadioProgram trp = pdel.findRP(radioProgramName);
-        ps.setProgram(trp);
-
-        List<Producer> proList = prodel.FetchProducersByName(producerName);
-        List<Presenter> preList = predel.FetchPresentersByName(presenterName);
-
-        if (!(valList(proList) && valList(preList))) {
-            req.setAttribute("errorMsg", "Invalid input");
-            return "/pages/error.jsp";
-        }
-
-        ps.setProducer(proList.get(0));
-        ps.setPresenter(preList.get(0));
 
         Logger.getLogger(getClass().getName()).log(Level.INFO, "Insert Flag: " + insert);
 
@@ -145,12 +125,12 @@ public class EnterProgramSlotDetailsCmd implements Perform {
                     return "/pages/error.jsp";
                 }
                 sdel.processCreate(ps);
-            } catch (SQLException ex) {
-                Logger.getLogger(DeleteProgramSlotCmd.class.getName()).log(Level.SEVERE, null, ex);
-                req.setAttribute("errorMsg", ex.getMessage());
+            } catch (MySQLIntegrityConstraintViolationException ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+                req.setAttribute("errorMsg", "Annual Schedule for this date is not exist! Please Create it first");
                 return "/pages/error.jsp";
-            } catch (ParseException ex) {
-                Logger.getLogger(EnterProgramSlotDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException | SQLException ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
                 req.setAttribute("errorMsg", ex.getMessage());
                 return "/pages/error.jsp";
             }
@@ -158,7 +138,7 @@ public class EnterProgramSlotDetailsCmd implements Perform {
             try {
                 sdel.processModify(ps);
             } catch (NotFoundException | SQLException ex) {
-                Logger.getLogger(DeleteProgramSlotCmd.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
                 req.setAttribute("errorMsg", ex.getMessage());
                 return "/pages/error.jsp";
             }
@@ -173,8 +153,9 @@ public class EnterProgramSlotDetailsCmd implements Perform {
         rd.forward(req, resp);
         return "";
     }
+
     /**
-     * 
+     *
      * @param dateString the String which need to match the rexDate
      * @return the result if dateString is matched the rexDate
      */
@@ -184,8 +165,9 @@ public class EnterProgramSlotDetailsCmd implements Perform {
         Matcher dateMatcher = datePattern.matcher(dateString);
         return dateMatcher.matches();
     }
+
     /**
-     * 
+     *
      * @param timeString the String which need to match the rexTime
      * @return the result if dateString is matched the rexTime
      */
@@ -195,10 +177,11 @@ public class EnterProgramSlotDetailsCmd implements Perform {
         Matcher timeMatcher = timePattern.matcher(timeString);
         return timeMatcher.matches();
     }
+
     /**
-     * 
+     *
      * @param timeString the String which need to match the rexTime
-     * @return the result if dateString is matched the rexDuration 
+     * @return the result if dateString is matched the rexDuration
      */
     private boolean valDurationTime(String timeString) {
         String rexDuration = "^(([0-1][0-9])|(2[0-3])):[0|3][0]:[0][0]$";
@@ -206,25 +189,27 @@ public class EnterProgramSlotDetailsCmd implements Perform {
         Matcher timeMatcher = timePattern.matcher(timeString);
         return timeMatcher.matches();
     }
+
     /**
-     * 
-     * @param target the {@link ProgramSlot} which the startTime and duration need to be validited
-     * @param req the HttpServletRequest that sent from browser in order to 
-     *            transmit sufficient data to perform intended task
-     * @return the result of over lap and over week's validation 
+     *
+     * @param target the {@link ProgramSlot} which the startTime and duration
+     * need to be validited
+     * @param req the HttpServletRequest that sent from browser in order to
+     * transmit sufficient data to perform intended task
+     * @return the result of over lap and over week's validation
      * @throws ParseException if an error occor in the process of parsing
      */
     private boolean valOverLapOverWeek(ProgramSlot target, HttpServletRequest req) throws ParseException {
-        
+
         ReviewSelectScheduledProgramDelegate del = new ReviewSelectScheduledProgramDelegate();
         List<ProgramSlot> psList = del.searchScheduledProgramSlot(target.getYear(), target.getWeekNum());
-        
+
         Calendar start = Util.DateAddTime(target.getDateOfProgram(), target.getStartTime());
         Calendar end = Util.CalAddTime(start, target.getDuration());
-        
+
         start.setFirstDayOfWeek(Calendar.MONDAY);
         end.setFirstDayOfWeek(Calendar.MONDAY);
-        
+
         if (start.get(Calendar.WEEK_OF_YEAR) != end.get(Calendar.WEEK_OF_YEAR)) {
             req.setAttribute("errorMsg", "Program Slot Over Week!");
             return false;
@@ -239,21 +224,76 @@ public class EnterProgramSlotDetailsCmd implements Perform {
         }
         return true;
     }
+
     /**
-     * 
+     *
      * @param insert the data String of insert
      * @return the result if the insert's validation
      */
     private boolean valInsert(String insert) {
         return insert.equals("true") || insert.equals("false");
     }
+
     /**
-     * 
+     *
      * @param list data list
      * @return the result if the size of data list is 1
      */
     private boolean valList(List list) {
         return list.size() == 1;
     }
+    /**
+     * 
+     * @param dateOfProgram the date of program String
+     * @param startTime the startTime String
+     * @param duration the duration String
+     * @param radioProgramName the radio program name String
+     * @param producerName the producer name String
+     * @param presenterName the presenter name
+     * @param insert the insert statue
+     * @param req the req for setting ErrorMsg
+     * @param rpList the List of radio program which searched by program name
+     * @param proList the List of producer which searched by producer name
+     * @param preList the List of presenter which searched by presenter name
+     * @return the validation result 
+     */
+    private boolean validate(String dateOfProgram, String startTime,
+            String duration, String radioProgramName, String producerName,
+            String presenterName, String insert, HttpServletRequest req,
+            List<RadioProgram> rpList,
+            List<Producer> proList,
+            List<Presenter> preList) {
+        //Val Null Input 
+        if (Util.IsNull(dateOfProgram) || Util.IsNull(startTime)
+                || Util.IsNull(duration) || Util.IsNull(radioProgramName)
+                || Util.IsNull(producerName) || Util.IsNull(presenterName)
+                || Util.IsNull(insert)) {
+            req.setAttribute("errorMsg", "Null Input Error!");
+            return false;
+        }
 
+        //Val date and time
+        if (valDate(dateOfProgram) == false || valTime(startTime) == false
+                || valTime(duration) == false || valInsert(insert) == false) {
+            req.setAttribute("errorMsg", "Invalid input");
+            return false;
+        }
+
+        //Val duration Time
+        if (valDurationTime(duration) == false) {
+            req.setAttribute("errorMsg", "Duration Format Error! It should be 'HH:30:00'or 'HH:00:00'! ");
+            return false;
+        }
+
+        //Val the foreign Key
+
+        if (!(valList(rpList)&&valList(proList)&&valList(preList))) {
+            req.setAttribute("errorMsg", "Invalid input");
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
 }

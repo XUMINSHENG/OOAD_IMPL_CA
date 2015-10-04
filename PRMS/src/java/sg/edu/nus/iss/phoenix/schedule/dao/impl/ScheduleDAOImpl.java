@@ -142,8 +142,9 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 				// System.out.println("PrimaryKey Error when updating DB!");
 				throw new SQLException("PrimaryKey Error when updating DB!");
 			}
-                } catch(Exception ex){
+                } catch(SQLException ex){
                     ex.printStackTrace();
+                    throw ex;
 		} finally {
 			if (stmt != null)
 				stmt.close();

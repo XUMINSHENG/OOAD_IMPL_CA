@@ -7,8 +7,6 @@ package sg.edu.nus.iss.phoenix.test.increment1;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -21,8 +19,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import static org.mockito.Mockito.*;
-import sg.edu.nus.iss.phoenix.schedule.controller.DeleteProgramSlotCmd;
-import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -30,12 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 import org.junit.Before;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
-import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.dao.impl.ScheduleDAOImpl;
-import sg.edu.nus.iss.phoenix.user.entity.Presenter;
-import sg.edu.nus.iss.phoenix.user.entity.Producer;
-import sg.edu.nus.iss.phoenix.util.Util;
 import sg.edu.nus.iss.phoenix.schedule.controller.EnterProgramSlotDetailsCmd;
 
 /**
@@ -1418,5 +1409,63 @@ public class EnterProgramSlotDetailsCmdTest {
                 "Program Slot Over Week!", 
                 valueCaptor.getValue());
     }
+    
+    @Test
+    public void performForeignKeyNotExistTest() throws ServletException, IOException {
+        when(user.hasRole("manager"))
+                .thenReturn(true);
+        when(session.getAttribute("user"))
+                .thenReturn(user);
+        
+        when(req.getSession())
+                .thenReturn(session);
+        
+        when(req.getParameter("dateOfProgram"))
+                .thenReturn("1900-01-01");
+        when(req.getParameter("startTime"))
+                .thenReturn("22:00:00");
+        when(req.getParameter("name"))
+                .thenReturn("news");
+        when(req.getParameter("duration"))
+                .thenReturn("00:30:00");
+        when(req.getParameter("producer"))
+                .thenReturn("wally, the bludger");
+        when(req.getParameter("presenter"))
+                .thenReturn("dilbert, the hero");
+        when(req.getParameter("ins"))
+                .thenReturn("true");
+        when(req.getRequestDispatcher("managesc"))
+                .thenReturn(rd);
+        
+        String forwardPath;
+        try {
+            forwardPath = EnterProgramSlotDetailsCmd.perform(null, req, resp);
+        } catch (IOException | ServletException ex) {
+            fail("When calling perform");
+            return;
+        }
+        
+        verify(req).getSession();
+        verify(session).getAttribute("user");
+        verify(user).hasRole("manager");
+        
+        verify(req).getParameter("dateOfProgram");
+        verify(req).getParameter("startTime");
+        verify(req).getParameter("name");
+        verify(req).getParameter("duration");
+        verify(req).getParameter("producer");
+        verify(req).getParameter("presenter");
+        verify(req).getParameter("ins");
+        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
+
+        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
+        
+        assertEquals("forwardPath", "/pages/error.jsp", forwardPath);
+        assertEquals("varName", "errorMsg", nameCaptor.getValue());
+        assertEquals("errorMsg" , 
+                "Annual Schedule for this date is not exist! Please Create it first", 
+                valueCaptor.getValue());
+    }    
     
 }
