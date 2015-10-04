@@ -24,7 +24,7 @@ import sg.edu.nus.iss.phoenix.user.entity.Producer;
  */
 public class ProducerDAOImpl implements ProducerDAO {
 
-    private final static String dataSourceName = "jdbc/phoenix";
+    
     private DataSource phoenix;
     Connection connection;
 
@@ -32,7 +32,7 @@ public class ProducerDAOImpl implements ProducerDAO {
         super();
         // TODO Auto-generated constructor stub
         try {
-            this.phoenix = (DataSource) InitialContext.doLookup(dataSourceName);
+            this.phoenix = (DataSource) InitialContext.doLookup(DBConstants.dataSourceName);
         } catch (NamingException ex) {
             Logger.getLogger(ProducerDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }

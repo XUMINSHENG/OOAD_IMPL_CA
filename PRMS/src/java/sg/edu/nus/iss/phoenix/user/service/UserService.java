@@ -7,9 +7,12 @@ package sg.edu.nus.iss.phoenix.user.service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import sg.edu.nus.iss.phoenix.authenticate.entity.User;
-import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
-import sg.edu.nus.iss.phoenix.user.service.UserService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.UserTransaction;
 import sg.edu.nus.iss.phoenix.core.dao.DAOFactoryImpl;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.authenticate.dao.UserDao;
@@ -30,6 +33,7 @@ public class UserService {
     UserDao usrdao;
     PresenterDAO presdao;
     ProducerDAO proddao;
+    UserTransaction utx = null;
 
     public UserService() {
         super();
@@ -38,6 +42,7 @@ public class UserService {
         usrdao = factory.getUserDAO();
         presdao = factory.getPresenterDAO();
         proddao = factory.getProducerDAO();
+
     }
 
     public ArrayList<User> findAllUsers() {
@@ -52,14 +57,16 @@ public class UserService {
 
     }
 
-    public void processCreate(User user) throws SQLException, NotFoundException {
+    public void processCreate(User user) throws SQLException, NotFoundException, Exception {
 
         String id = user.getId();
         ArrayList<Role> a_role = user.getRoles();
         String s_role = "";
         Presenter presenter = null;
         Producer producer = null;
+        utx = (UserTransaction) InitialContext.doLookup("java:comp/UserTransaction");
         try {
+            utx.begin();
             usrdao.create(user);
             presenter = presdao.getObject(id);
             producer = proddao.getObject(id);
@@ -70,35 +77,48 @@ public class UserService {
                     presdao.create(presenter);
                 }
                 if (s_role.equals("producer")) {
-                   proddao.create(producer);
+                    proddao.create(producer);
                 }
 
             }
+            utx.commit();
 
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            System.out.println("User already exusting with a 'N' flag");
+            utx.rollback();
+            utx = (UserTransaction) InitialContext.doLookup("java:comp/UserTransaction");
+            utx.begin();
+            System.out.println("User already existing with a 'N' flag");
             for (int i = 0; i < a_role.size(); i++) {
                 s_role = a_role.get((i)).getRole().toString();
                 usrdao.reassign(user);
                 if (s_role.equals("presenter")) {
-                    try{
-                    
-                    presdao.reassign(id);
-                    }catch(SQLException exception0){
+                    try {
+
+                        presdao.reassign(id);
+                        utx.commit();
+                    } catch (SQLException exception0) {
+                        utx.rollback();
+                        utx = (UserTransaction) InitialContext.doLookup("java:comp/UserTransaction");
+                        utx.begin();
                         //when the presenter doesnt exist in the presenter table, create first
                         presenter = presdao.getObject(id);
                         presdao.create(presenter);
+                        utx.commit();
                     }
                 }
                 if (s_role.equals("producer")) {
-                    try{
-                    proddao.reassign(id);
-                    }catch(SQLException exception1){
+                    try {
+                        proddao.reassign(id);
+                        utx.commit();
+                    } catch (SQLException exception1) {
+                        utx.rollback();
+                        utx = (UserTransaction) InitialContext.doLookup("java:comp/UserTransaction");
+                        utx.begin();
                         //when the producer doesnt exist in the producer table, create first
-                        producer = proddao.getObject(id);                        
+                        producer = proddao.getObject(id);
                         proddao.create(producer);
-                        
+                        utx.commit();
+
                     }
                 }
 
@@ -108,66 +128,72 @@ public class UserService {
         } catch (NotFoundException e) {
             System.out.println("HERE 1");
             e.printStackTrace();
+            utx.rollback();
         }
     }
 
-    public void processModify(User user) {
+    public void processModify(User user) throws Exception {
 
         String id = user.getId();
-        int flagpres =0;
-        int flagprod=0;
-
+        int flagpres = 0;
+        int flagprod = 0;
+        utx = (UserTransaction) InitialContext.doLookup("java:comp/UserTransaction");
         try {
+            utx.begin();
             usrdao.save(user);
             Presenter presenter = presdao.getObject(id);
             Producer producer = proddao.getObject(id);
             ArrayList<Role> a_role = user.getRoles();
             String s_role = "";
-           
+
             for (int i = 0; i < a_role.size(); i++) {
                 s_role = a_role.get((i)).getRole().toString();
 
                 if (s_role.equals("presenter")) {
                     System.out.println("PRESENTER IF");
-                    flagpres =1;
+                    flagpres = 1;
                     presdao.save(presenter);
-                    
-                    
+
                 }
                 if (s_role.equals("producer")) {
                     System.out.println("producer IF");
-                    flagprod =1;
-                   proddao.save(producer);
+                    flagprod = 1;
+                    proddao.save(producer);
                 }
 
             }
-            if(flagpres == 0){
+            if (flagpres == 0) {
                 presdao.deassign(id);
             }
-            if(flagprod ==0){
+            if (flagprod == 0) {
                 proddao.deassign(id);
             }
-
             
+            utx.commit();
+
         } catch (NotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            utx.rollback();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            utx.rollback();
         }
 
     }
 
-    public void processDeassign(String id) {
+    public void processDeassign(String id) throws Exception {
 
         try {
             //User user = new User(name);
             User user = usrdao.getObject(id);
+            utx = (UserTransaction)InitialContext.doLookup("java:comp/UserTransaction");
 
             ArrayList<Role> a_role = user.getRoles();
             String s_role = "";
 
+            utx.begin();
             for (int i = 0; i < a_role.size(); i++) {
                 s_role = a_role.get((i)).getRole().toString();
 
@@ -181,32 +207,45 @@ public class UserService {
             }
 
             usrdao.deassign(user);
+            utx.commit();
         } catch (NotFoundException e) {
             e.printStackTrace();
+            utx.rollback();
         } catch (SQLException e) {
             e.printStackTrace();
+            utx.rollback();
         }
     }
 
-    public void processCreate_presenter(Presenter pres) {
+    public void processCreate_presenter(Presenter pres) throws Exception {
+        
+        utx = (UserTransaction)InitialContext.doLookup("java:comp/UserTransaction");
+        utx.begin();
         try {
             presdao.create(pres);
+            utx.commit();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            utx.rollback();
         }
     }
 
-    public void processModify_presenter(Presenter pres) {
+    public void processModify_presenter(Presenter pres) throws Exception{
 
+        utx = (UserTransaction)InitialContext.doLookup("java:comp/UserTransaction");
+        utx.begin();
         try {
             presdao.save(pres);
+            utx.commit();
         } catch (NotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            utx.rollback();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            utx.rollback();
         }
 
     }

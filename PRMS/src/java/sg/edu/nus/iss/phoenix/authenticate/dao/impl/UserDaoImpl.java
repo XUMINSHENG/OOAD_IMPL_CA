@@ -27,7 +27,7 @@ public class UserDaoImpl implements UserDao {
     private static final String DELIMITER = ":";
     private static final Logger logger = Logger.getLogger(UserDaoImpl.class.getName());
 
-    private final static String dataSourceName = "jdbc/phoenix";
+    
     private DataSource phoenix;
     Connection connection;
 
@@ -39,7 +39,7 @@ public class UserDaoImpl implements UserDao {
         super();
         // TODO Auto-generated constructor stub
         try {
-            this.phoenix = (DataSource) InitialContext.doLookup(dataSourceName);
+            this.phoenix = (DataSource) InitialContext.doLookup(DBConstants.dataSourceName);
         } catch (NamingException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -49,7 +49,7 @@ public class UserDaoImpl implements UserDao {
     /**
      * createValueObject-method. Creates a new object for the User class.
      *
-     * @return new User object.
+     * @return User A new User object.
      */
     @Override
     public User createValueObject() {
@@ -59,8 +59,8 @@ public class UserDaoImpl implements UserDao {
     /**
      * getObject-method. Creates a new User object and sets all its attributes.
      *
-     * @param id
-     * @return User object
+     * @param id Uses the user 'id' to get user object from the table
+     * @return User A user object with the given id
      * @throws NotFoundException
      * @throws SQLException
      */
@@ -76,7 +76,7 @@ public class UserDaoImpl implements UserDao {
     /**
      * load-method. Get a Users from the user table
      *
-     * @param valueObject
+     * @param valueObject An user object, which is used to fetch from the table
      * @throws NotFoundException
      * @throws SQLException
      *
@@ -105,7 +105,7 @@ public class UserDaoImpl implements UserDao {
     /**
      * loadAll-method. Get all the Users from the user table.
      *
-     * @return List of users
+     * @return List<User> List of users
      * @throws SQLException
      *
      */
@@ -124,7 +124,7 @@ public class UserDaoImpl implements UserDao {
     /**
      * create-method. Used to add a new User object into the user table.
      *
-     * @param valueObject
+     * @param valueObject A user object that needs to be stored in the user table
      * @throws SQLException
      *
      */
@@ -177,7 +177,7 @@ public class UserDaoImpl implements UserDao {
     /**
      * save-method. Used to update the User object in the user table.
      *
-     * @param valueObject
+     * @param valueObject A user object that needs to be updated in the user table
      * @throws NotFoundException
      * @throws SQLException
      *
@@ -232,7 +232,7 @@ public class UserDaoImpl implements UserDao {
     /**
      * delete-method. Used to delete an User object in the user table.
      *
-     * @param valueObject
+     * @param valueObject A user object that needs to be deleted from the user table
      * @throws NotFoundException
      * @throws SQLException
      *
@@ -293,7 +293,7 @@ public class UserDaoImpl implements UserDao {
 
    /**
      * countAll-method. Used to get the total numbers of Users from the user table.
-     * @return number of users(int)
+     * @return integer number of users
      * @throws SQLException
      *
      */
@@ -327,8 +327,8 @@ public class UserDaoImpl implements UserDao {
 
     /**
      * searchMatching-method. Used to get the matching user object for the given id.
-     * @param uid
-     * @return User Object
+     * @param uid User id to be searched
+     * @return User User object from the matching results
      * @throws SQLException
      */
     @Override
@@ -343,8 +343,8 @@ public class UserDaoImpl implements UserDao {
     
     /**
      * searchMatching-method. Used to get the matching user object for the given id.
-     * @param valueObject
-     * @return User Object
+     * @param valueObject A user object that needs to be searched
+     * @return List<User> A list of user objects 
      * @throws SQLException
      */
 
@@ -410,8 +410,8 @@ public class UserDaoImpl implements UserDao {
      * sure that if cache is used, it will reset when data changes.
      *
      * @param stmt This parameter contains the SQL statement to be executed.
-     * @return
-     * @throws java.sql.SQLException
+     * @return integer The row count of the table
+     * @throws SQLException
      */
     protected int databaseUpdate(PreparedStatement stmt) throws SQLException {
 
@@ -470,8 +470,8 @@ public class UserDaoImpl implements UserDao {
      * found, an empty List will be returned.
      *
      * @param stmt This parameter contains the SQL statement to be executed.
-     * @return
-     * @throws java.sql.SQLException
+     * @return List<User> Contains a the list of User objects
+     * @throws SQLException
      */
     protected List<User> listQuery(PreparedStatement stmt) throws SQLException {
 
@@ -506,8 +506,8 @@ public class UserDaoImpl implements UserDao {
 
     /**
      * createRoles-method. Used Get the List of Role object from roles string 
-     * @param roles
-     * @return ArrayList of Role object
+     * @param roles The role(s) of an user
+     * @return ArrayList<Role> ArrayList of Role object
      */
     private ArrayList<Role> createRoles(final String roles) {
         ArrayList<Role> roleList = new ArrayList<Role>();
@@ -520,7 +520,7 @@ public class UserDaoImpl implements UserDao {
 
     /**
      * openConnection_method. Used to create a new connection to MySQL Database
-     * @return Connection
+     * @return Connection 
      */
     private Connection openConnection() {
         Connection conn = null;
@@ -557,7 +557,7 @@ public class UserDaoImpl implements UserDao {
 
     /**
      * deassign-method. Used to assign a user as in-active in the User table.
-     * @param user
+     * @param User The user object which needs to de-assigned to in-Active
      * @throws NotFoundException
      * @throws SQLException
      */
@@ -591,7 +591,7 @@ public class UserDaoImpl implements UserDao {
 
      /**
      * reassign-method. Used to assign a user as active in the User table.
-     * @param user
+     * @param user The user object which needs to re-assigned to Active
      * @throws NotFoundException
      * @throws SQLException
      */
@@ -638,8 +638,8 @@ public class UserDaoImpl implements UserDao {
      
     /**
      * checkIfActive-method. Used get the value of isActive field from the user table for a given id. 
-     * @param valueObject
-     * @return
+     * @param valueObject The user object which needs to be checked whether it is Active or not
+     * @return String "Y" or "N"
      * @throws NotFoundException
      * @throws SQLException 
      */

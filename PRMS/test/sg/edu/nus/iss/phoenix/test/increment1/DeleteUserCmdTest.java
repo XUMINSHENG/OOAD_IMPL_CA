@@ -33,7 +33,6 @@ import static org.mockito.Mockito.when;
 import sg.edu.nus.iss.phoenix.authenticate.entity.Role;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
-import sg.edu.nus.iss.phoenix.user.dao.impl.UserDAOImpl;
 import sg.edu.nus.iss.phoenix.user.controller.DeleteUserCmd;
 import sg.edu.nus.iss.phoenix.user.controller.EnterUserDetailsCmd;
 import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
@@ -85,7 +84,7 @@ public class DeleteUserCmdTest {
             ic.bind("jdbc/phoenix", ds);
 
         } catch (NamingException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex.getMessage().toString());
         }
     }
