@@ -38,6 +38,7 @@ import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
 /**
  *
  * @author XIE JIABAO
+ * @version 1.0 2015/10/03
  */
 public class ManageScheduleCmdTest {
     private ManageScheduleCmd manageScheduleCmd = new ManageScheduleCmd();
