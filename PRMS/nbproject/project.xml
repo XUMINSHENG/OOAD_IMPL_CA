@@ -84,7 +84,11 @@
                 </library>
                 <library dirs="200">
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <file>${libs.UnitTestLib.classpath}</file>
+=======
+                    <file>${libs.UnitTestingLib.classpath}</file>
+>>>>>>> master
 =======
                     <file>${libs.UnitTestingLib.classpath}</file>
 >>>>>>> master
