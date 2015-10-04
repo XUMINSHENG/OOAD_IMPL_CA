@@ -147,6 +147,7 @@ public class ProducerDAOImpl implements ProducerDAO {
         ArrayList<Producer> searchResults = new ArrayList<Producer>();
         ResultSet result = null;
 
+        connection = openConnection();
         try {
             result = stmt.executeQuery();
             while (result.next()) {
@@ -321,9 +322,11 @@ public class ProducerDAOImpl implements ProducerDAO {
     @Override
     public List<Producer> searchByName(String name) throws SQLException {
         String sql = "SELECT * FROM Producer where isActive='Y' and name LIKE '%" + name + "%'";
-        List<Producer> searchResults = listQuery(this.connection
-                .prepareStatement(sql));
+        connection = openConnection();
+        PreparedStatement stmt = this.connection.prepareStatement(sql);
+        List<Producer> searchResults = listQuery(stmt);
         System.out.println("exited loadAll()");
+        closeConnection();
         return searchResults;
     }
 

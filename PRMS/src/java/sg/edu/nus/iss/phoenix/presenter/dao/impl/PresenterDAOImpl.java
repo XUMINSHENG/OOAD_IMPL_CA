@@ -122,6 +122,7 @@ public class PresenterDAOImpl implements PresenterDAO {
 
         ArrayList<Presenter> searchResults = new ArrayList<Presenter>();
         ResultSet result = null;
+        connection = openConnection();
 
         try {
             result = stmt.executeQuery();
@@ -332,9 +333,11 @@ public class PresenterDAOImpl implements PresenterDAO {
     @Override
     public List<Presenter> searchByName(String name) throws SQLException {
         String sql = "SELECT * FROM Presenter where isActive='Y' and name LIKE '%" + name + "%'";
-        List<Presenter> searchResults = listQuery(this.connection
-                .prepareStatement(sql));
+        connection = openConnection();
+        PreparedStatement stmt = connection.prepareStatement(sql);
+        List<Presenter> searchResults = listQuery(stmt);
         System.out.println("exited loadAll()");
+        closeConnection();
         return searchResults;
     }
     

@@ -478,6 +478,7 @@ public class UserDaoImpl implements UserDao {
         ArrayList<User> searchResults = new ArrayList<User>();
         ResultSet result = null;
 
+        connection = openConnection();
         try {
             result = stmt.executeQuery();
             while (result.next()) {
