@@ -33,13 +33,13 @@ import sg.edu.nus.iss.phoenix.util.Util;
  */
 public class ScheduleDAOImpl implements ScheduleDAO {
 
-        private final static String dataSourceName = "jdbc/phoenix";
+        
         private DataSource phoenix;
-        Connection connection;
+        private Connection connection;
         
         public ScheduleDAOImpl() {
             try {
-                this.phoenix = (DataSource)InitialContext.doLookup(dataSourceName);
+                this.phoenix = (DataSource)InitialContext.doLookup(DBConstants.dataSourceName);
             } catch (NamingException ex) {
                 Logger.getLogger(ScheduleDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
