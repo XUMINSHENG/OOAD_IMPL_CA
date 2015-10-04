@@ -136,8 +136,14 @@ insert into `phoenix`.`annual-schedule` values(2015, "dilbert");
 insert into `phoenix`.`weekly-schedule` values(2015, 1, "dilbert");
 insert into `phoenix`.`weekly-schedule` values(2015, 37, "dilbert");  
 insert into `phoenix`.`weekly-schedule` values(2015, 38, "dilbert");
+insert into `phoenix`.`weekly-schedule` values(2015, 40, "dilbert");
 insert into `phoenix`.`program-slot` values(2015,1,"2015/01/01", "19:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");    
 insert into `phoenix`.`program-slot` values(2015,37,"2015/09/10", "08:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
 insert into `phoenix`.`program-slot` values(2015,38,"2015/09/15", "07:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
 insert into `phoenix`.`program-slot` values(2015,38,"2015/09/15", "19:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
+insert into `phoenix`.`program-slot` values(2015,38,"2015/09/16", "07:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
+insert into `phoenix`.`program-slot` values(2015,38,"2015/09/16", "19:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
+insert into `phoenix`.`program-slot` values(2015,38,"2015/09/17", "07:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
+insert into `phoenix`.`program-slot` values(2015,38,"2015/09/17", "19:30:00", '00:30:00', "news", "wally, the bludger", "dilbert, the hero");  
+INSERT INTO `phoenix`.`program-slot` (`year`,`weeknum`,`dateOfProgram`,`startTime`,`duration`,`program-name`,`producer-name`,`presenter-name`) VALUES (2015,40,'2015-10-02','00:30:00','00:30:00','noose','wally, the bludger','dilbert, the hero');
 
