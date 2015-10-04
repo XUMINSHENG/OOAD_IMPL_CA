@@ -39,7 +39,7 @@ import sg.edu.nus.iss.phoenix.util.Util;
  *
  * @author Xu Minsheng
  */
-public class DeleteProgramSlotCmdTest {
+public class CopyScheduleCmdTest {
     
     // Action Class is stateless
     private DeleteProgramSlotCmd deleteProgramSlotCmd = new DeleteProgramSlotCmd();

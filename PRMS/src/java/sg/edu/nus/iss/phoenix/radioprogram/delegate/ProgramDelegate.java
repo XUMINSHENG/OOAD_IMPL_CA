@@ -28,6 +28,13 @@ public class ProgramDelegate {
 		return (service.searchPrograms(rp)).get(0);	
 		
 	}
+        
+        public ArrayList<RadioProgram> findRPList(String rpName) {
+		RadioProgram rp = new RadioProgram(rpName);
+		ProgramService service = new ProgramService();
+		return (service.searchPrograms(rp));	
+	}
+        
 	public ArrayList<RadioProgram> findAllRP() {
 		ProgramService service = new ProgramService();
 		return service.findAllRP();

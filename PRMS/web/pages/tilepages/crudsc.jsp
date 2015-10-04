@@ -31,14 +31,7 @@
                 <c:param name="insert" value="true"/>
         </c:url>
         
-        <c:url var="cpurl" scope="page" value="/nocturne/copysc">
-        	<c:param name="dateOfProgram" value=""/>
-                <c:param name="startTime" value=""/>
-                <c:param name="duration" value=""/>
-                <c:param name="program-name" value=""/>
-                <c:param name="producer-name" value=""/>
-                <c:param name="presenter-name" value=""/>
-                <c:param name="insert" value="false"/>
+        <c:url var="cpurl" scope="page" value="/nocturne/copysched">
         </c:url>
         
         <a href="${url}"><fmt:message key="label.crudsc.createAnSc"/></a>
@@ -47,7 +40,7 @@
         <a href="${addurl}"><fmt:message key="label.crudsc.add"/></a>
         &nbsp;
         &nbsp;
-        <a href="${url}"><fmt:message key="label.crudsc.copy"/></a>
+        <a href="${cpurl}"><fmt:message key="label.crudsc.copy"/></a>
         <br/><br/>
         
             <form action="${pageContext.request.contextPath}/nocturne/managesc"
@@ -83,7 +76,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input type="hidden" id="previous_week" value="${weekNum}">
+                                                <input type="hidden" name="current_week" id="current_week" value="${current_week}">
                                                 <div id="select_week">
                                                 
                                                 </div>
@@ -107,7 +100,7 @@
                 <tr>
                     <th colspan="6">
                         <h3>
-                            <c:out value="${ws.getYear()}"/> Year - <c:out value="${ws.getWeek()}"/> Week Schedule (<c:out value="${ws.getStartDate()}" /> - <c:out value="${ws.getEndDate()}" />)
+                            <c:out value="${ws.getYear()}"/> Year - <c:out value="${ws.getWeek()}"/> Week Schedule (<fmt:formatDate pattern="yyyy-MM-dd" value="${ws.getStartDate()}" /> - <fmt:formatDate pattern="yyyy-MM-dd" value="${ws.getEndDate()}" />)
                         </h3>
                     </th>
                     <th>
@@ -133,18 +126,18 @@
                 <tr class="${status.index%2==0?'even':'odd'}">
                     <td class="nowrap"><fmt:formatDate pattern="yyyy-MM-dd" value="${pitem.dateOfProgram}" /></td>
                     <td class="nowrap"><c:out value="${pitem.program.name}" /></td>
-                    <td class="nowrap"><fmt:formatDate pattern="hh:mm:ss" value="${pitem.startTime}" /></td>
+                    <td class="nowrap"><fmt:formatDate pattern="HH:mm:ss" value="${pitem.startTime}" /></td>
                     <td class="nowrap"><fmt:formatDate pattern="HH:mm:ss" value="${pitem.duration}" /></td>
-                    <td class="nowrap"><c:out value="${pitem.producer.name}" /></td>
                     <td class="nowrap"><c:out value="${pitem.presenter.name}" /></td>
+                    <td class="nowrap"><c:out value="${pitem.producer.name}" /></td>
                     <td class="nowrap">
                         <c:url var="updurl" scope="page" value="/nocturne/addeditps">
                             <c:param name="dateOfProgram" value="${pitem.dateOfProgram}"/>
                             <c:param name="startTime" value="${pitem.startTime}"/>
                             <c:param name="duration" value="${pitem.duration}"/>
                             <c:param name="program-name" value="${pitem.program.name}"/>
-                            <c:param name="producer-name" value="${pitem.producer.name}"/>
                             <c:param name="presenter-name" value="${pitem.presenter.name}"/>
+                            <c:param name="producer-name" value="${pitem.producer.name}"/>
                             <c:param name="insert" value="false"/>
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.crudsc.edit"/></a>
@@ -181,43 +174,36 @@
                                                 }else{
                                                     var firstDate = new Date(year,0,1);
                                                     var lastDate = new Date(year,11,31);
-                                                    var weeknum = Math.ceil(((lastDate - firstDate)/ 84600000)/7);
+                                                    console.log(Math.ceil((lastDate.getTime() - firstDate.getTime())/ 86400000));
+                                                    var weeknum = Math.round((((lastDate - firstDate)/ 86400000) + 1)/7);
+                                                    console.log(weeknum);
                                                     var weekHtml = '';
                                                     weekHtml += '<fmt:message key="fieldLabel.week" />';
                                                     weekHtml += '<select name="weekNum" id="weekNum" style="width:150px;" onchange="changeWeek()"><option value="0"> --Please select week-- </option>';
                                                     var i;
-                                                    var pre = document.getElementById("previous_week").value;
-                                                    console.log(pre);
+                                                    var cur = document.getElementById("current_week").value;
+                                                    console.log(weeknum);
                                                     for( i = 1; i <= weeknum; i++ ) {
-                                                        if( pre == i )
+                                                        if( cur == i )
                                                             weekHtml += '<option value="' + i + '" selected>' + i + '</option>';
-                                                        weekHtml += '<option value="' + i + '" >' + i + '</option>';
+                                                        else
+                                                            weekHtml += '<option value="' + i + '" >' + i + '</option>';
                                                     }
                                                     weekHtml += '</select>';
                                                 
                                                     var e1 = document.getElementById("select_week");
                                                     e1.innerHTML = weekHtml;
                                                     document.getElementById("submit_btn").style.display = "inline-block";
-                                                }
-                                                
+                                                }    
                                             }
                                             
                                             function changeWeek(){
                                                 var e = document.getElementById("weekNum");
                                                 var week = e.options[e.selectedIndex].value;
-                                                document.getElementById("previous_week").value = week;
+                                                document.getElementById("current_week").value = week;
                                                 console.log(week);
                                             }
                                             
-                                            function getSelectedWeek(){
-                                                var week = -1;
-                                                var e = document.getElementById("weekNum");
-                                                console.log(e);
-                                                if(e == null || typeof(e) == "undefined")
-                                                    return week;
-                                                week = e.options(e.selectedIndex).value;
-                                                return week;
-                                            }
                                         </script>
 </body>
 </html>

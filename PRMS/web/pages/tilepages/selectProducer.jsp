@@ -20,7 +20,7 @@
 		<fmt:message key="title.selectProducer" />
 	</h2>
 	<form action="${pageContext.request.contextPath}/nocturne/selectProducer"
-		method=post>
+		method=get>
 		<center>
 			<table class="framed">
 				<tr>
@@ -28,6 +28,13 @@
 					<th width="55%"><fmt:message key="caption.desc" /></th>
 				</tr>
 				<tr>
+                                        <input type="hidden" name="dateOfProgram" value="${param["dateOfProgram"]}">
+                                        <input type="hidden" name="startTime" value="${param["startTime"]}">
+                                        <input type="hidden" name="program-name" value="${param["program-name"]}">
+                                        <input type="hidden" name="presenter-name" value="${param["duration"]}">
+                                        <input type="hidden" name="producer-name" value="${param["producer-name"]}">
+                                        <input type="hidden" name="presenter-name" value="${param["presenter-name"]}">
+                                        <input type="hidden" name="insert" value="${param["insert"]}">
 					<td><fmt:message key="label.Producer.name" /></td>
                                         <td><input type="text" name="name" size=45 maxlength=45 value="${name}"></td>
 				</tr>
@@ -61,7 +68,8 @@
             <tbody>
             <tr>
                 <th><fmt:message key="label.Producer.userId" /></th>
-                <th><fmt:message key="label.Producer.name" /></th>			
+                <th><fmt:message key="label.Producer.name" /></th>
+                <th><fmt:message key="label.Select" /></th>
             </tr>                    
             <c:choose>
                 <c:when test="${! empty  selProducerList}">
@@ -69,6 +77,18 @@
 				<tr class="${status.index%2==0?'even':'odd'}">
 					<td class="nowrap">${producer.userId}</td>
 					<td class="nowrap">${producer.name}</td>
+                                        <td>
+                                            <c:url var="get" scope="page" value="/nocturne/addeditps">
+                                            <c:param name="dateOfProgram" value="${param['dateOfProgram']}"/>
+                                            <c:param name="startTime" value="${param['startTime']}"/>
+                                            <c:param name="program-name" value="${param['program-name']}"/>
+                                            <c:param name="duration" value="${param['duration']}"/>
+                                            <c:param name="producer-name" value="${producer.name}"/>
+                                            <c:param name="presenter-name" value="${param['presenter-name']}"/>
+                                            <c:param name="insert" value="${param['insert']}"/>
+                                            </c:url>
+                                            <a href="${get}"><fmt:message key="label.Select"/></a>
+                                        </td>
 				</tr>
 			</c:forEach>
                 </c:when>
