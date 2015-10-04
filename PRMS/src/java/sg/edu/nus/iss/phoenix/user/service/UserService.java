@@ -87,41 +87,48 @@ public class UserService {
             utx.rollback();
             utx = (UserTransaction) InitialContext.doLookup("java:comp/UserTransaction");
             utx.begin();
-            System.out.println("User already existing with a 'N' flag");
-            for (int i = 0; i < a_role.size(); i++) {
-                s_role = a_role.get((i)).getRole().toString();
-                usrdao.reassign(user);
-                if (s_role.equals("presenter")) {
-                    try {
+            if (("Y").equals(usrdao.checkIfActive(user))) {
+                System.out.println("Implement the code of the error ");
+                throw e;
 
-                        presdao.reassign(id);
-                        utx.commit();
-                    } catch (SQLException exception0) {
-                        utx.rollback();
-                        utx = (UserTransaction) InitialContext.doLookup("java:comp/UserTransaction");
-                        utx.begin();
-                        //when the presenter doesnt exist in the presenter table, create first
-                        presenter = presdao.getObject(id);
-                        presdao.create(presenter);
-                        utx.commit();
+            }
+            if (("N").equals(usrdao.checkIfActive(user))) {
+                System.out.println("User already existing with a 'N' flag");
+                for (int i = 0; i < a_role.size(); i++) {
+                    s_role = a_role.get((i)).getRole().toString();
+                    usrdao.reassign(user);
+                    if (s_role.equals("presenter")) {
+                        try {
+
+                            presdao.reassign(id);
+                            utx.commit();
+                        } catch (SQLException exception0) {
+                            utx.rollback();
+                            utx = (UserTransaction) InitialContext.doLookup("java:comp/UserTransaction");
+                            utx.begin();
+                            //when the presenter doesnt exist in the presenter table, create first
+                            presenter = presdao.getObject(id);
+                            presdao.create(presenter);
+                            utx.commit();
+                        }
                     }
-                }
-                if (s_role.equals("producer")) {
-                    try {
-                        proddao.reassign(id);
-                        utx.commit();
-                    } catch (SQLException exception1) {
-                        utx.rollback();
-                        utx = (UserTransaction) InitialContext.doLookup("java:comp/UserTransaction");
-                        utx.begin();
-                        //when the producer doesnt exist in the producer table, create first
-                        producer = proddao.getObject(id);
-                        proddao.create(producer);
-                        utx.commit();
+                    if (s_role.equals("producer")) {
+                        try {
+                            proddao.reassign(id);
+                            utx.commit();
+                        } catch (SQLException exception1) {
+                            utx.rollback();
+                            utx = (UserTransaction) InitialContext.doLookup("java:comp/UserTransaction");
+                            utx.begin();
+                            //when the producer doesnt exist in the producer table, create first
+                            producer = proddao.getObject(id);
+                            proddao.create(producer);
+                            utx.commit();
 
+                        }
                     }
-                }
 
+                }
             }
 
             e.printStackTrace();

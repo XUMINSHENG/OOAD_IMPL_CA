@@ -195,4 +195,6 @@ public interface UserDao {
      */
     public abstract void reassign(User user)
             throws NotFoundException, SQLException;
+    
+    public abstract String checkIfActive(User valueObject ) throws NotFoundException, SQLException;
 }

@@ -644,20 +644,23 @@ public class UserDaoImpl implements UserDao {
      * @throws NotFoundException
      * @throws SQLException 
      */
-    
-    public String checkIfActive(User valueObject ) throws NotFoundException, SQLException {
+    @Override
+    public String checkIfActive(User valueObject) throws NotFoundException, SQLException {
         String sql = "SELECT isActive FROM user WHERE (id = ? ) ";
         PreparedStatement stmt = null;
         connection = openConnection();
         ResultSet result = null;
         String isActive="N";
+        String flag = "";
 
         try {
             stmt = this.connection.prepareStatement(sql);
             stmt.setString(1, valueObject.getId());       
             result = stmt.executeQuery();
-            String flag = result.toString();
-            if(flag == "Y"){
+            if (result.next()) {
+                flag = result.getString("isActive");
+            }
+            if ("Y".equals(flag)) {
                 isActive="Y";
             }else{
                 isActive="N";

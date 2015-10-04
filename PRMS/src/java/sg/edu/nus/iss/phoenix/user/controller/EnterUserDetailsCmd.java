@@ -108,7 +108,10 @@ public class EnterUserDetailsCmd implements Perform {
             //  del.processCreate_presenter(presenter);
                 //  del.processCreate_producer(producer);
             } catch (SQLException ex) {
-                Logger.getLogger(EnterUserDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
+                 request.setAttribute("errorMsg",
+                    "Duplicate user, already exists in the DB!");
+            return "/pages/error.jsp";
+                //Logger.getLogger(EnterUserDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NotFoundException ex) {
                 Logger.getLogger(EnterUserDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
             }catch(Exception e){
