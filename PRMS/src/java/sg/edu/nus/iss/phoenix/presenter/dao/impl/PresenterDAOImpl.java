@@ -81,6 +81,7 @@ public class PresenterDAOImpl implements PresenterDAO {
         ResultSet result = null;
 
         try {
+            this.connection = openConnection();
             result = stmt.executeQuery();
 
             if (result.next()) {
@@ -103,10 +104,18 @@ public class PresenterDAOImpl implements PresenterDAO {
 
     @Override
     public List<Presenter> loadAll() throws SQLException {
-        String sql = "SELECT * FROM Presenter where isActive='Y'";
-        List<Presenter> searchResults = listQuery(this.connection
+        List<Presenter> searchResults =null;
+        try {
+            this.connection = openConnection();
+            
+            String sql = "SELECT * FROM Presenter where isActive='Y'";
+            searchResults = listQuery(this.connection
                 .prepareStatement(sql));
-        System.out.println("exited loadAll()");
+            System.out.println("exited loadAll()");
+        } finally {
+            closeConnection();
+        }
+        
         return searchResults;
     }
 

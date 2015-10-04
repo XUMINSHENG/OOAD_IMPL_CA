@@ -105,6 +105,7 @@ public class ProducerDAOImpl implements ProducerDAO {
         ResultSet result = null;
 
         try {
+            this.connection = openConnection();
             result = stmt.executeQuery();
 
             if (result.next()) {
@@ -127,10 +128,18 @@ public class ProducerDAOImpl implements ProducerDAO {
 
     @Override
     public List<Producer> loadAll() throws SQLException {
-        String sql = "SELECT * FROM Producer where isActive='Y'";
-        List<Producer> searchResults = listQuery(this.connection
-                .prepareStatement(sql));
-        System.out.println("exited loadAll()");
+        List<Producer> searchResults = null;
+        try {
+            this.connection = openConnection();
+            
+            String sql = "SELECT * FROM Producer where isActive='Y'";
+            searchResults = listQuery(this.connection
+                    .prepareStatement(sql));
+            System.out.println("exited loadAll()");
+        } finally {
+            closeConnection();
+        }
+        
         return searchResults;
     }
 
