@@ -21,18 +21,37 @@ import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.entity.SPSearchObject;
 
 /**
+ * <p>This class represent the Action class that handles 
+ * HttpServletRequest which is sent to PhoenixFrontController to review scheduled program slots 
+ * {@link ProgramSlot}.</p>
+ * 
+ * <p>The method <code>perform() </code> which implements the {@link Perform} 
+ * Interface will be invoked when a request is sent to <strong>searchsp</strong>
+ * URL </p>
  *
  * @author xiejiabao
+ * @version 1.0 2015/10/03
  */
 @Action("searchsp")
 public class SearchScheduledProgramCmd implements Perform {
+    /**
+     * 
+     * @param path the path of of invoking this Action
+     * @param req the HttpServletRequest that sent from browser in order to 
+     *            transmit sufficient data to perform intended task
+     * @param resp the HttpServletResponse will return process result back to 
+     *             browser
+     * @return the path of web page to display result
+     * @throws IOException if an error has occurred in IO of System
+     * @throws ServletException if an error has occurred in Servlet
+     */
     @Override
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
  
-//        User user = (User)req.getSession().getAttribute("user");
-//        if ((null==user)||!user.hasRole("manager")){
-//            return "/pages/error.jsp";
-//        }
+        User user = (User)req.getSession().getAttribute("user");
+        if ((null==user)||!user.hasRole("manager")){
+            return "/pages/error.jsp";
+        }
                 
         ScheduleDelegate del = new ScheduleDelegate();
         SPSearchObject rpso = new SPSearchObject();
