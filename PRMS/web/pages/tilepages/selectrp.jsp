@@ -62,7 +62,12 @@
                                                 <c:param name="dateOfProgram" value="${param['dateOfProgram']}"/>
                                                 <c:param name="startTime" value="${param['startTime']}"/>
                                                 <c:param name="program-name" value="${rprogram.name}"/>
+                                                <c:if test="${param['insert'] == 'true'}">
                                                 <c:param name="duration" value="${rprogram.typicalDuration}"/>
+                                                </c:if>
+                                                <c:if test="${param['insert'] == 'false'}">
+                                                <c:param name="duration" value="${param['duration']}"/>                                                
+                                                </c:if>
                                                 <c:param name="producer-name" value="${param['producer-name']}"/>
                                                 <c:param name="presenter-name" value="${param['presenter-name']}"/>
                                                 <c:param name="insert" value="${param['insert']}"/>

@@ -10,6 +10,8 @@ public class DBConstants {
 	 
 	//Not yet refactored!!!!!!!!!!!!!!!!!!!
 	
+    public static final String dataSourceName = "jdbc/phoenix";
+        
 	// Table names
     public static final String usersTableName = "user";
     public static final String rolesTableName = "role";

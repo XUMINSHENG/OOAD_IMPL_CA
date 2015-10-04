@@ -5,6 +5,9 @@ import java.sql.Time;
 import sg.edu.nus.iss.phoenix.radioprogram.delegate.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RPSearchObject;
@@ -70,8 +73,13 @@ public class ScheduleDelegate {
 		service.processDelete(year, weekNum, dateOfProgram, startTime);
 	}
         
-        public void processCopy() {
+        public ArrayList<ProgramSlot> processCopy(SPSearchObject src, SPSearchObject dest,long diffDays) throws Exception {
 		ScheduleService service = new ScheduleService();
-		//service.processCopy();
+            try {
+                return service.processCopy(src,dest,diffDays);
+            } catch (Exception ex) {
+                Logger.getLogger(ScheduleDelegate.class.getName()).log(Level.SEVERE, null, ex);
+                throw ex;
+            }
 	}
 }

@@ -1,0 +1,1 @@
+INSERT INTO `program-slot` (`year`,`weeknum`,`dateOfProgram`,`startTime`,`duration`,`program-name`,`producer-name`,`presenter-name`) VALUES (2015,40,'2015-10-02','00:30:00','00:30:00','noose','wally, the bludger','dilbert, the hero');

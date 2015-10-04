@@ -33,13 +33,13 @@ import sg.edu.nus.iss.phoenix.util.Util;
  */
 public class ScheduleDAOImpl implements ScheduleDAO {
 
-        private final static String dataSourceName = "jdbc/phoenix";
+        
         private DataSource phoenix;
-        Connection connection;
+        private Connection connection;
         
         public ScheduleDAOImpl() {
             try {
-                this.phoenix = (DataSource)InitialContext.doLookup(dataSourceName);
+                this.phoenix = (DataSource)InitialContext.doLookup(DBConstants.dataSourceName);
             } catch (NamingException ex) {
                 Logger.getLogger(ScheduleDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -142,8 +142,9 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 				// System.out.println("PrimaryKey Error when updating DB!");
 				throw new SQLException("PrimaryKey Error when updating DB!");
 			}
-                } catch(Exception ex){
+                } catch(SQLException ex){
                     ex.printStackTrace();
+                    throw ex;
 		} finally {
 			if (stmt != null)
 				stmt.close();
@@ -309,22 +310,20 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 			sql.append("AND `program-name` LIKE '").append(valueObject.getName())
 					.append("%' ");
 		}
-
-//		if (valueObject.getDescription() != null) {
-//			if (first) {
-//				first = false;
-//			}
-//			sql.append("AND `desc` LIKE '").append(valueObject.getDescription())
-//					.append("%' ");
-//		}
-//
-//		if (valueObject.getTypicalDuration() != null) {
-//			if (first) {
-//				first = false;
-//			}
-//			sql.append("AND `typicalDuration` = '")
-//					.append(valueObject.getTypicalDuration()).append("' ");
-//		}
+		if (valueObject.getYear()!= null) {
+			if (first) {
+				first = false;
+			}
+			sql.append("AND `year` = '").append(Integer.parseInt(valueObject.getYear()))
+					.append("%' ");
+		}
+		if (valueObject.getWeek()!= null) {
+			if (first) {
+				first = false;
+			}
+			sql.append("AND `weeknum` = '").append(Integer.parseInt(valueObject.getWeek()))
+					.append("%' ");
+		}
 
 		sql.append("ORDER BY `dateOfProgram` ASC ");
 
@@ -775,6 +774,59 @@ public class ScheduleDAOImpl implements ScheduleDAO {
     @Override
     public AnnualSchedule getAnnualSchedule(int year) throws NotFoundException, SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void copyWeeklySchedule(ArrayList<ProgramSlot> srcSlots, ArrayList<ProgramSlot> destSlots) throws SQLException 
+    {
+            String  sql = "INSERT INTO `program-slot`"
+                                + "(`year`,`weeknum`,`dateOfProgram`,`startTime`, `duration`, `program-name`, `producer-name`, `presenter-name`) "
+                                + "VALUES (?,?,?,?,?,?,?,?); ";
+
+            PreparedStatement stmt=null;
+            openConnection();
+            try {
+                for (int i=0;i<srcSlots.size();i++){
+                    stmt = this.connection.prepareStatement(sql);
+                    stmt.setInt(1, destSlots.get(i).getYear());
+                    stmt.setInt(2, destSlots.get(i).getWeekNum());
+                    stmt.setString(3, Util.dateToString(destSlots.get(i).getDateOfProgram()));
+                    stmt.setTime(4, srcSlots.get(i).getStartTime());
+                    stmt.setTime(5, srcSlots.get(i).getDuration());
+                    stmt.setString(6, srcSlots.get(i).getProgram().getName());
+                    stmt.setString(7, srcSlots.get(i).getProducer().getName());
+                    stmt.setString(8, srcSlots.get(i).getPresenter().getName());
+
+                    int rowcount = databaseUpdate(stmt);
+                }
+                
+            } finally {
+                if (stmt != null)
+                    stmt.close();
+                closeConnection();
+            }
+    }
+
+    @Override
+    public void deleteAllProgramSlotByWeek(int year, int weeknum) throws SQLException {
+            String sql = "DELETE FROM `program-slot` "
+                        + "WHERE (`year` = ? ) "
+                        + "AND (`weekNum` = ? ) ";
+
+            PreparedStatement stmt=null;
+            openConnection();
+            try {
+                    stmt = this.connection.prepareStatement(sql);
+                    stmt.setInt(1, year);
+                    stmt.setInt(2, weeknum);
+
+                    int rowcount = databaseUpdate(stmt);
+                
+            } finally {
+                if (stmt != null)
+                    stmt.close();
+                closeConnection();
+            }
     }
 
 }
