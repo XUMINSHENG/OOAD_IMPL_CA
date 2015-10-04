@@ -111,10 +111,16 @@ public class EnterUserDetailsCmd implements Perform {
                 Logger.getLogger(EnterUserDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NotFoundException ex) {
                 Logger.getLogger(EnterUserDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
+            }catch(Exception e){
+                e.printStackTrace();
             }
         } else {
-            System.out.println("inside modify");
-            del.processModify(user);
+            try {
+                System.out.println("inside modify");
+                del.processModify(user);
+            } catch (Exception ex) {
+                Logger.getLogger(EnterUserDetailsCmd.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         UserDelegate delegate = new UserDelegate();
