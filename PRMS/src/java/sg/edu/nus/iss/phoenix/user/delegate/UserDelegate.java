@@ -27,25 +27,25 @@ public class UserDelegate {
 
     }
 
-    public void processCreate(User user) throws SQLException, NotFoundException {
+    public void processCreate(User user) throws SQLException, NotFoundException,Exception {
         UserService service = new UserService();
         service.processCreate(user);
 
     }
 
-    public void processModify(User user) {
+    public void processModify(User user) throws Exception{
         UserService service = new UserService();
         service.processModify(user);
 
     }
 
-    public void processCreate_presenter(Presenter presenter) {
+    public void processCreate_presenter(Presenter presenter) throws Exception{
         UserService service = new UserService();
         service.processCreate_presenter(presenter);
 
     }
 
-    public void processModify_presenter(Presenter presenter) {
+    public void processModify_presenter(Presenter presenter)throws Exception{ 
         UserService service = new UserService();
         service.processCreate_presenter(presenter);
 
@@ -67,7 +67,7 @@ public class UserDelegate {
 
     }
 
-    public void processDeassign(String id) {
+    public void processDeassign(String id) throws Exception{
         UserService service = new UserService();
        
         service.processDeassign(id);
