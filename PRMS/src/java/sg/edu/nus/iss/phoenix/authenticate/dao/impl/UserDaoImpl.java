@@ -27,7 +27,7 @@ public class UserDaoImpl implements UserDao {
     private static final String DELIMITER = ":";
     private static final Logger logger = Logger.getLogger(UserDaoImpl.class.getName());
 
-    private final static String dataSourceName = "jdbc/phoenix";
+    
     private DataSource phoenix;
     Connection connection;
 
@@ -39,7 +39,7 @@ public class UserDaoImpl implements UserDao {
         super();
         // TODO Auto-generated constructor stub
         try {
-            this.phoenix = (DataSource) InitialContext.doLookup(dataSourceName);
+            this.phoenix = (DataSource) InitialContext.doLookup(DBConstants.dataSourceName);
         } catch (NamingException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
