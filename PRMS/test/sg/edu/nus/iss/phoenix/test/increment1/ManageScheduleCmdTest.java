@@ -25,6 +25,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -101,6 +102,11 @@ public class ManageScheduleCmdTest {
                 .thenReturn("2015");
         when(req.getParameter("current_week"))
                 .thenReturn("38");
+        when(req.getAttribute("year"))
+                .thenReturn("2015");
+        when(req.getAttribute("current_week"))
+                .thenReturn("38");
+        
         when(req.getRequestDispatcher("managesc"))
                 .thenReturn(rd);
         // perform test
@@ -119,27 +125,31 @@ public class ManageScheduleCmdTest {
         verify(req).getParameter("year");
         verify(req).getParameter("current_week");
         
-        ArgumentCaptor<String> annualNameCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
-        ArgumentCaptor<String> weeklyNameCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<WeeklySchedule> weeklyScheduleCaptor = ArgumentCaptor.forClass(WeeklySchedule.class);
+        ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<Object> valueCaptor = ArgumentCaptor.forClass(Object.class);
+        
+        
+        verify(req, atLeast(1)).setAttribute(stringCaptor.capture(), valueCaptor.capture());
+        verify(req, atLeast(1)).setAttribute("year", 2015);
+        verify(req, atLeast(1)).setAttribute("current_week", 38);
+        
+        List<String> stringList = stringCaptor.getAllValues();
+        String weeklyName = stringList.get(0);
+        List<Object> valueList = valueCaptor.getAllValues();
         
         List<AnnualSchedule> expectedList = new ArrayList<AnnualSchedule>();
         AnnualSchedule expAnnualSchedule = new AnnualSchedule(2015);
+        expAnnualSchedule.setAssignedBy("dilbert");
         expectedList.add(expAnnualSchedule);
         
         WeeklySchedule expWeeklySchedule = new WeeklySchedule(2015,38);
         
-        verify(req).setAttribute(annualNameCaptor.capture(), listCaptor.capture());
-        verify(req).setAttribute(weeklyNameCaptor.capture(), weeklyScheduleCaptor.capture());
-        verify(req).setAttribute("year", 2015);
-        verify(req).setAttribute("current_week", 38);
-        verify(rd).forward(req, resp);
-        assertEquals("forwardPath", "", forwardPath);
-        assertEquals("AnnualSchedule Name", "yearlist", annualNameCaptor.getValue());
-        assertEquals("AnnualSchedule List" , expectedList, listCaptor.getValue());
-        assertEquals("WeeklySchedule Name", "ws", weeklyNameCaptor.getValue());
-        assertEquals("WeeklySchedule", expWeeklySchedule, weeklyScheduleCaptor.getValue());
+        assertEquals("forwardPath", "/pages/crudsc.jsp", forwardPath);
+        assertEquals("WeeklySchedule Name", "ws", weeklyName);
+        assertEquals("WeeklySchedule", expWeeklySchedule, (WeeklySchedule)valueList.get(0));
+        assertEquals("AnnualSchedule Name", "yearlist", stringCaptor.getValue());
+        assertEquals("AnnualSchedule List" , expectedList, valueCaptor.getValue());
+        
     }
     
     @Test
@@ -174,17 +184,8 @@ public class ManageScheduleCmdTest {
         verify(session).getAttribute("user");
         verify(user).hasRole("manager");
         verify(req).getParameter("year");
-
-        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
-
-        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
-        
-        assertEquals("forwardPath", "/pages/error.jsp", forwardPath);
-        assertEquals("varName", "errorMsg", nameCaptor.getValue());
-        assertEquals("errorMsg" , 
-                "Invalid input", 
-                valueCaptor.getValue());
+      
+        assertEquals("forwardPath", "/pages/crudsc.jsp", forwardPath);
     }
     
     @Test
@@ -219,17 +220,8 @@ public class ManageScheduleCmdTest {
         verify(session).getAttribute("user");
         verify(user).hasRole("manager");
         verify(req).getParameter("year");
-
-        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
-
-        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
         
-        assertEquals("forwardPath", "/pages/error.jsp", forwardPath);
-        assertEquals("varName", "errorMsg", nameCaptor.getValue());
-        assertEquals("errorMsg" , 
-                "Invalid input", 
-                valueCaptor.getValue());
+        assertEquals("forwardPath", "/pages/crudsc.jsp", forwardPath);
     }
     
     @Test
@@ -265,17 +257,8 @@ public class ManageScheduleCmdTest {
         verify(user).hasRole("manager");
         verify(req).getParameter("year");
         verify(req).getParameter("current_week");
-
-        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
-
-        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
         
-        assertEquals("forwardPath", "/pages/error.jsp", forwardPath);
-        assertEquals("varName", "errorMsg", nameCaptor.getValue());
-        assertEquals("errorMsg" , 
-                "Invalid input", 
-                valueCaptor.getValue());
+        assertEquals("forwardPath", "/pages/crudsc.jsp", forwardPath);
     }
     
     @Test
@@ -311,17 +294,8 @@ public class ManageScheduleCmdTest {
         verify(user).hasRole("manager");
         verify(req).getParameter("year");
         verify(req).getParameter("current_week");
-
-        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
-
-        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
         
-        assertEquals("forwardPath", "/pages/error.jsp", forwardPath);
-        assertEquals("varName", "errorMsg", nameCaptor.getValue());
-        assertEquals("errorMsg" , 
-                "Invalid input", 
-                valueCaptor.getValue());
+        assertEquals("forwardPath", "/pages/crudsc.jsp", forwardPath);
     }
     
     @Test
@@ -350,16 +324,16 @@ public class ManageScheduleCmdTest {
         verify(req).getSession();
         verify(session).getAttribute("user");
 
-        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
-
-        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
+//        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
+//        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
+//
+//        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
         
         assertEquals("forwardPath", "/pages/error.jsp", forwardPath);
-        assertEquals("varName", "errorMsg", nameCaptor.getValue());
-        assertEquals("errorMsg" , 
-                "You do not have the privileges to perform this operation", 
-                valueCaptor.getValue());
+//        assertEquals("varName", "errorMsg", nameCaptor.getValue());
+//        assertEquals("errorMsg" , 
+//                "You do not have the privileges to perform this operation", 
+//                valueCaptor.getValue());
     }
     
     @Test
@@ -388,15 +362,15 @@ public class ManageScheduleCmdTest {
         verify(session).getAttribute("user");
         verify(user).hasRole("manager");
 
-        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
-
-        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
+//        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
+//        ArgumentCaptor<String> valueCaptor = ArgumentCaptor.forClass(String.class);
+//
+//        verify(req).setAttribute(nameCaptor.capture(), valueCaptor.capture());
         
         assertEquals("forwardPath", "/pages/error.jsp", forwardPath);
-        assertEquals("varName", "errorMsg", nameCaptor.getValue());
-        assertEquals("errorMsg" , 
-                "You do not have the privileges to perform this operation", 
-                valueCaptor.getValue());
+//        assertEquals("varName", "errorMsg", nameCaptor.getValue());
+//        assertEquals("errorMsg" , 
+//                "You do not have the privileges to perform this operation", 
+//                valueCaptor.getValue());
     }
 }

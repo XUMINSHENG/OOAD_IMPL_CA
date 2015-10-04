@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class WeeklySchedule implements Cloneable, Serializable {
 
@@ -193,4 +194,30 @@ public class WeeklySchedule implements Cloneable, Serializable {
 //        return df.format(endOfWeek);
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final WeeklySchedule other = (WeeklySchedule) obj;
+        if (this.year != other.year) {
+            return false;
+        }
+        if (this.week != other.week) {
+            return false;
+        }
+       
+        return true;
+    }
+
+    
 }

@@ -58,9 +58,16 @@ public class ManageScheduleCmd implements Perform {
         List<AnnualSchedule> yearList = del.reviewSelectAnnualSchedule();
         
 //        get data from request
-        if(getValueFromReq(req,"year")!= null && getValueFromReq(req,"current_week")!= null){
-            year = Integer.parseInt(getValueFromReq(req,"year"));
-            week = Integer.parseInt(getValueFromReq(req,"current_week"));
+        String newYear = getValueFromReq(req,"year");
+        String newWeek = getValueFromReq(req,"current_week");
+        if(newYear != null && newWeek != null){
+            try{
+                year = Integer.parseInt(newYear);
+                week = Integer.parseInt(newWeek);
+            }catch(Exception e){
+                year = 0;
+                week = 0;
+            }
             if( year < 0 || week < 0 || week > 53 ){
                 year = 0;
                 week = 0;
