@@ -42,6 +42,7 @@ import sg.edu.nus.iss.phoenix.user.entity.Producer;
 import sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDaoImpl;
 import sg.edu.nus.iss.phoenix.presenter.dao.impl.PresenterDAOImpl;
 import sg.edu.nus.iss.phoenix.producer.dao.impl.ProducerDAOImpl;
+import javax.transaction.UserTransaction;
 
 /**
  *
@@ -90,6 +91,8 @@ public class DeleteUserCmdTest {
             ic.createSubcontext("java:");
             ic.createSubcontext("java:comp");
             ic.bind("java:comp/UserTransaction",utx);
+            
+            
             
         } catch (NamingException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);

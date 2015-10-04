@@ -33,11 +33,14 @@ import static org.mockito.Mockito.when;
 import sg.edu.nus.iss.phoenix.authenticate.entity.Role;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
-
+import javax.transaction.UserTransaction;
 import sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDaoImpl;
 import sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDaoImpl;
 import sg.edu.nus.iss.phoenix.user.controller.AddModifyUserCmd;
 import sg.edu.nus.iss.phoenix.user.controller.EnterUserDetailsCmd;
+import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
+import sg.edu.nus.iss.phoenix.user.entity.Presenter;
+import sg.edu.nus.iss.phoenix.user.entity.Producer;
 
 /**
  *
@@ -75,6 +78,11 @@ public class AddModifyUserCmdTest {
             ds.setPassword("password");
 
             ic.bind("jdbc/phoenix", ds);
+            
+             UserTransaction utx = mock(UserTransaction.class);
+            ic.createSubcontext("java:");
+            ic.createSubcontext("java:comp");
+            ic.bind("java:comp/UserTransaction",utx);
 
         } catch (NamingException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -93,17 +101,12 @@ public class AddModifyUserCmdTest {
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
         rd = mock(RequestDispatcher.class);
-//        try {
-//            Runtime.getRuntime().exec("cmd /c start loadDefaultDb.bat");
-//        } catch (IOException ex) {
-//            Logger.getLogger(AddModifyUserCmdTest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+
     }
 
     @After
     public void tearDown() throws NotFoundException, SQLException {
-//        UserDaoImpl ud = new UserDaoImpl();
-//        ud.delete(user);
+
 
     }
 
@@ -129,7 +132,7 @@ public class AddModifyUserCmdTest {
         String[] role = new String[1];
         role[0] = "presenter";
 
-        userID = "Supper";
+        userID = "Test2_User";
 
         when(user.hasRole("admin"))
                 .thenReturn(true);
@@ -138,13 +141,13 @@ public class AddModifyUserCmdTest {
         when(request.getSession())
                 .thenReturn(session);
         when(request.getParameter("name"))
-                .thenReturn("Supper");
+                .thenReturn(userID);
         when(request.getParameterValues("rolelist"))
                 .thenReturn(role);
         when(request.getParameter("address"))
                 .thenReturn("clementi");
         when(request.getParameter("password"))
-                .thenReturn("Supper");
+                .thenReturn("password");
         when(request.getParameter("joiningdate"))
                 .thenReturn("2015-01-02");
         when(request.getParameter("ins"))
@@ -173,9 +176,9 @@ public class AddModifyUserCmdTest {
         String roleList = "";
         roleList = "presenter";
         local_user.setAddress("clementi");
-        local_user.setName("Supper");
+        local_user.setName(userID);
         local_user.setJoiningDate("2015-01-02");
-        local_user.setPassword("Supper");
+        local_user.setPassword("password");
         local_user.setRoles(createRoles(roleList));
 
         ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
@@ -184,15 +187,14 @@ public class AddModifyUserCmdTest {
 
         List<User> expected = new ArrayList();
         User expUser = new User();
-        expUser.setName("Supper");
+        expUser.setName(userID);
         expUser.setAddress("clementi");
         expUser.setRoles(createRoles(roleList));
-        expUser.setPassword("Supper");
+        expUser.setPassword("password");
         expUser.setJoiningDate("2015-01-02");
 
         assertEquals("forwardPath", "/pages/cruduser.jsp", forwardPath);
-//        assertEquals("UserData", "rps", stringCaptor.getValue());
-//        assertEquals("User", expected, listCaptor.getValue());
+
 
     }
 
@@ -279,7 +281,8 @@ public class AddModifyUserCmdTest {
                 valueCaptor.getValue());
 
     }
-
+    
+    
     private ArrayList<Role> createRoles(final String roles) {
         ArrayList<Role> roleList = new ArrayList<Role>();
         String[] _r = roles.trim().split(":");
