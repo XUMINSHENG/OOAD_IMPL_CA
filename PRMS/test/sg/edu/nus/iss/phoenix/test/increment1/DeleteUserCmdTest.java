@@ -20,6 +20,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.UserTransaction;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -72,7 +73,9 @@ public class DeleteUserCmdTest {
                     "org.apache.naming.java.javaURLContextFactory");
             System.setProperty(Context.URL_PKG_PREFIXES,
                     "org.apache.naming");
+            
             InitialContext ic = new InitialContext();
+            
             ic.createSubcontext("jdbc");
 
             // Construct DataSource
@@ -82,7 +85,12 @@ public class DeleteUserCmdTest {
             ds.setPassword("password");
 
             ic.bind("jdbc/phoenix", ds);
-
+            
+            UserTransaction utx = mock(UserTransaction.class);
+            ic.createSubcontext("java:");
+            ic.createSubcontext("java:comp");
+            ic.bind("java:comp/UserTransaction",utx);
+            
         } catch (NamingException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex.getMessage().toString());
