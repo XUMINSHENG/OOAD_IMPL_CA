@@ -144,6 +144,7 @@ public class ManageScheduleCmdTest {
         expectedList.add(expAnnualSchedule);
         
         WeeklySchedule expWeeklySchedule = new WeeklySchedule(2015,38);
+        expWeeklySchedule.setAssignedBy("dilbert");
         
         assertEquals("forwardPath", "/pages/crudsc.jsp", forwardPath);
         assertEquals("WeeklySchedule Name", "ws", weeklyName);

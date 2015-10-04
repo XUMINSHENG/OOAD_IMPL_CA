@@ -196,7 +196,10 @@ public class WeeklySchedule implements Cloneable, Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
+        int hash = 5;
+        hash = 29 * hash + this.year;
+        hash = 29 * hash + this.week;
+        hash = 29 * hash + Objects.hashCode(this.assignedBy);
         return hash;
     }
 
@@ -215,9 +218,15 @@ public class WeeklySchedule implements Cloneable, Serializable {
         if (this.week != other.week) {
             return false;
         }
-       
+        if (!Objects.equals(this.assignedBy, other.assignedBy)) {
+            return false;
+        }
         return true;
     }
+
+    
+
+    
 
     
 }
