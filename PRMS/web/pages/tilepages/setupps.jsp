@@ -15,6 +15,10 @@
 <fmt:setBundle basename="ApplicationResources" />
 <title><fmt:message key="title.setupps" /></title>
 <script type="text/javascript">
+            function cancel()
+            {
+                window.location.href="<c:url value="/nocturne/managesc"/>";
+            }
             function getQueryString(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
             var r = window.location.search.substr(1).match(reg);
@@ -223,8 +227,8 @@
 				
 			</table>
 		</center>
-                                        <input type="button" value="Submit" name="Submit" onclick="val();"> <input type="reset"
-			value="Reset">
+                                        <input type="button" value="Submit" name="Submit" onclick="val();"> 
+                                        <input type="button" value="Cancel" name="Cancel" onclick="cancel();" >
 	</form>
 
 </body>
