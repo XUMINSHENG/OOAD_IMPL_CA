@@ -636,6 +636,13 @@ public class UserDaoImpl implements UserDao {
         }
     }
      
+    /**
+     * checkIfActive-method. Used get the value of isActive field from the user table for a given id. 
+     * @param valueObject
+     * @return
+     * @throws NotFoundException
+     * @throws SQLException 
+     */
     
     public String checkIfActive(User valueObject ) throws NotFoundException, SQLException {
         String sql = "SELECT isActive FROM user WHERE (id = ? ) ";
